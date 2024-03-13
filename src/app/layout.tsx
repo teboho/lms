@@ -10,7 +10,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "savvyshelf",
-  description: "Web application to manage your library",
+  description: "Manage your library the modern way",
 };
 
 export default function RootLayout({
@@ -19,15 +19,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <Layout>
-      <Header>
-        <NavBar />
-      </Header>
+    <html lang="en">
+    <body>
       <Layout>
-        <Sider width={"25%"}>side...</Sider>
-        <Content>{children}</Content>
+        <Header>
+          <NavBar />
+        </Header>
+        <Layout>
+          <Sider width={"25%"} style={{background: "red"}}>side...</Sider>
+          <Content>{children}</Content>
+        </Layout>
+        <Footer>footer...</Footer>
       </Layout>
-      <Footer>footer...</Footer>
-    </Layout>
+    </body>
+    </html>
   );
 }
