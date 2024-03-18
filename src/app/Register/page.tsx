@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { useMainStyles } from "./style";
-import { Layout, Flex, Form, Input, Button, Row, Col, Tag } from "antd";
+import { Layout, Flex, Form, Input, Button, Row, Col, Tag, Typography } from "antd";
 import { Header, Content, Footer } from "antd/lib/layout/layout";
 import Sider from "antd/lib/layout/Sider";
 import moduleStyles from "./register.module.css";
@@ -46,80 +46,102 @@ const MyFormItem = ({ name, ...props }: MyFormItemProps) => {
 
     return <Form.Item name={concatName} {...props} />;
 }
-
+const { Title } = Typography;
+interface FormInputDataType {
+    name: {
+        firstname: string;
+        lastname: string;
+    };
+    email: string;
+    phone: string;
+    password: {
+        password: string;
+        confirm: string;
+    }
+}
 export default function Register(): React.ReactNode {
+    const [form] = Form.useForm<FormInputDataType>();
     const { styles, cx, theme } = useMainStyles();
 
-    const onFinish = (value: object): void => {
-        console.log("Hello World");
+    const onFinish = (values: object): void => {
+        console.log(values);
+    }
+
+    /**
+     * Get the data from the form and send it to the backend
+     * @param e event
+     */
+    const onComplete = (e) => {
+        console.log(form.getFieldValue("user"));
+        
     }
 
     return (
-        <Flex>
-            <Sider theme="light" width={"25%"}>
+        <Flex className={styles.form}>
+            <Sider width={"25%"} style={{background: "#004aad"}} className={cx(styles["left-sider"])}>
                 <Flex vertical>
-                    <Tag color="green">Step 1</Tag>
-                    <Tag color="">Step 2</Tag>
+                    <Tag color="green"><Title level={3}>Step 1: Fill in your details</Title></Tag>
+                    <Tag color="null"><Title level={3}>Step 2: Complete registration</Title></Tag>
                 </Flex>
             </Sider>
-            <Sider theme="light" width={"75%"}>
-                <h1>Register with your personal information</h1>
-            <Form name="form_item_path" layout="vertical" onFinish={onFinish}>
-                <MyFormItemGroup prefix={["user"]}>
-                    <Row gutter={5}>
-                        <MyFormItemGroup prefix={["name"]}>
-                            <Col span={12}>
-                                <MyFormItem name="firstName" label="First Name">
+            <Sider theme="light" width={"75%"} >
+                <Form className={cx(styles["the-form"])} name="form_item_path" layout="vertical" onFinish={onFinish} form={form}>
+                <Title className="">Register with your personal information</Title>
+                    <MyFormItemGroup prefix={["user"]}>
+                        <Row gutter={5}>
+                            <MyFormItemGroup prefix={["name"]}>
+                                <Col span={12}>
+                                    <MyFormItem name="firstName" label="First Name">
+                                        <Input />
+                                    </MyFormItem>
+                                </Col>
+                                <Col span={12}>
+                                    <MyFormItem name="lastname" label="Last Name">
+                                        <Input />
+                                    </MyFormItem>
+                                </Col>
+                            </MyFormItemGroup>
+                        </Row>
+                        <Row>           
+                            <Col span={24}>
+                            <MyFormItemGroup prefix={["email"]}>
+                                <MyFormItem name="email" label="Email">
                                     <Input />
                                 </MyFormItem>
+                            </MyFormItemGroup>
                             </Col>
-                            <Col span={12}>
-                                <MyFormItem name="lastname" label="Last Name">
+                        </Row>
+                        <Row>           
+                            <Col span={24}>
+                            <MyFormItemGroup prefix={["phone"]}>
+                                <MyFormItem name="phone" label="Phone number">
                                     <Input />
                                 </MyFormItem>
+                            </MyFormItemGroup>
                             </Col>
-                        </MyFormItemGroup>
-                    </Row>
-                    <Row>           
-                        <Col span={24}>
-                        <MyFormItemGroup prefix={["email"]}>
-                            <MyFormItem name="email" label="Email">
-                                <Input />
-                            </MyFormItem>
-                        </MyFormItemGroup>
-                        </Col>
-                    </Row>
-                    <Row>           
-                        <Col span={24}>
-                        <MyFormItemGroup prefix={["phone"]}>
-                            <MyFormItem name="phone" label="Phone number">
-                                <Input />
-                            </MyFormItem>
-                        </MyFormItemGroup>
-                        </Col>
-                    </Row>
-                    <Row gutter={5}>
-                        <MyFormItemGroup prefix={["password"]}>
-                            <Col span={12}>
-                                <MyFormItem name="password" label="Password">
-                                    <Input />
-                                </MyFormItem>
+                        </Row>
+                        <Row gutter={5}>
+                            <MyFormItemGroup prefix={["password"]}>
+                                <Col span={12}>
+                                    <MyFormItem name="password" label="Password">
+                                        <Input.Password />
+                                    </MyFormItem>
+                                </Col>
+                                <Col span={12}>
+                                    <MyFormItem name="confirm" label="Confirm">
+                                        <Input.Password />
+                                    </MyFormItem>
+                                </Col>
+                            </MyFormItemGroup>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <Button type="primary" onClick={onComplete}>Register</Button>
                             </Col>
-                            <Col span={12}>
-                                <MyFormItem name="confirm" label="Confirm">
-                                    <Input />
-                                </MyFormItem>
-                            </Col>
-                        </MyFormItemGroup>
-                    </Row>
-                    <Row>
-                        <Col>
-                            <Button type="primary">Register</Button>
-                        </Col>
-                        <Col><Button className={cx(styles.cancel)}>Cancel</Button></Col>
-                    </Row>
-                </MyFormItemGroup>
-            </Form>
+                            <Col><Button className={cx(styles.cancel)}>Cancel</Button></Col>
+                        </Row>
+                    </MyFormItemGroup>
+                </Form>
             </Sider>
         </Flex>
     );
