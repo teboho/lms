@@ -4,6 +4,7 @@ import type { MenuProps } from "antd";
 import Menu from "antd/lib/menu/menu";
 import Image from "next/image";
 import styles from './NavBar.module.css';
+import  { useStyles } from './styles';
 import Link from "next/link";
 
 const outItems: MenuProps['items'] = [
@@ -26,12 +27,12 @@ const outItems: MenuProps['items'] = [
 ];
 
 export default function NavBar() {
-
+    // const overStyles = useStyles();
     return (
             <Menu 
                 mode="horizontal"
                 items={outItems}
-                theme="light"
+                // theme="light"
             />
     );
 }

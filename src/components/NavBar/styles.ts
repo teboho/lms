@@ -4,4 +4,7 @@ export const useStyles = createStyles(({css, cx}) => ({
     logo: css`
         padding-top: 25px;
     `,
+    navbar: css`
+        background: red;
+    `
 }));
