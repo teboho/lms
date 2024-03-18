@@ -6,7 +6,7 @@ import { Header, Content,  } from "antd/lib/layout/layout";
 import NavBar from "@/components/NavBar";
 import Link from "next/link";
 
-export default function Home() {
+export default function Welcome() {
   return (
     <main className={styles.main}>
           <Flex align="center">

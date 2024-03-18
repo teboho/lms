@@ -1,10 +1,12 @@
 "use client";
-import React from "react";
+import React, { useContext } from "react";
 import { useMainStyles } from "./style";
 import { Layout, Flex, Form, Input, Button, Row, Col, Tag, Typography } from "antd";
 import { Header, Content, Footer } from "antd/lib/layout/layout";
 import Sider from "antd/lib/layout/Sider";
 import moduleStyles from "./register.module.css";
+import { AUTH_REQUEST_TYPE, AuthContext } from "@/providers/AuthProvider/context";
+
 // Can contain an array of strings or array of numbers
 const MyFormItemContext = React.createContext<(string | number)[]>([]);
 
@@ -30,9 +32,6 @@ const MyFormItemGroup = ({ prefix, children }: MyFormItemGroupProps) => {
     const prefixPath = React.useContext(MyFormItemContext); // an empty array...line 9
     const concatPath = React.useMemo(() => [...prefixPath, ...toArr(prefix)], [prefix, prefix]);
 
-
-
-
     return (
         <MyFormItemContext.Provider value={concatPath}>
             {children}
@@ -51,7 +50,6 @@ const MyFormItem = ({ name, ...props }: MyFormItemProps) => {
 }
 const { Title } = Typography;
 
-
 interface FormInputDataType {
     email: string;
     password: {
@@ -62,6 +60,7 @@ interface FormInputDataType {
 
 export default function Login(): React.ReactNode {
     const [form] = Form.useForm<FormInputDataType>();
+    const { login } = useContext(AuthContext);
     const { styles, cx, theme } = useMainStyles();
 
     const onFinish = (value: object): void => {
@@ -72,9 +71,14 @@ export default function Login(): React.ReactNode {
      * Get the data from the form and send it to the backend
      * @param e event
      */
-    const onComplete = (e) => {
-        console.log(form.getFieldValue("user"));
-        
+    const onComplete = (e: Event) => {
+        const authReq: AUTH_REQUEST_TYPE = {
+            password: form.getFieldValue("user").password.password,
+            userNameOrEmailAddress: form.getFieldValue("user").email.email,
+            rememberClient: true
+        }
+        // console.log(authReq);
+        login(authReq);
     }
 
     return (

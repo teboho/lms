@@ -71,7 +71,7 @@ export default function Register(): React.ReactNode {
      * Get the data from the form and send it to the backend
      * @param e event
      */
-    const onComplete = (e) => {
+    const onComplete = (e: Event) => {
         console.log(form.getFieldValue("user"));
         
     }
