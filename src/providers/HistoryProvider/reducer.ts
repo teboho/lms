@@ -1,25 +1,25 @@
 import { handleActions } from "redux-actions";
-import { AuthActionEnums } from "./actions";
-import { AUTH_CONTEXT_INITIAL_STATE } from "./context";
+import { HistoryActionEnums } from "./actions";
+import { History_CONTEXT_INITIAL_STATE } from "./context";
 
 /**
  * A reducer t
  */
-export const authReducer = handleActions(
+export const historyReducer = handleActions(
     {
         // this handler will change the value of the isPending in the state
-        [AuthActionEnums.PostAuthRequest]: (state, action) => ({
+        [HistoryActionEnums.PostHistoryRequest]: (state, action) => ({
             ...state,
             ...action.payload
         }),  // this handler will change the value of the isSuccess in the state
-        [AuthActionEnums.PostAuthSuccess]: (state, action) => ({
+        [HistoryActionEnums.PostHistorySuccess]: (state, action) => ({
             ...state,
             ...action.payload
         }), // this handler will change the value of the isError in the state
-        [AuthActionEnums.PostAuthError]: (state, action) => ({
+        [HistoryActionEnums.PostHistoryError]: (state, action) => ({
             ...state,
             ...action.payload
         })
     },
-    AUTH_CONTEXT_INITIAL_STATE
+    History_CONTEXT_INITIAL_STATE
 )

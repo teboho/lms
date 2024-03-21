@@ -1,39 +1,39 @@
 "use client";
 import { createAction } from "redux-actions";
-import { AUTH_CONTEXT_STATE_TYPE, AUTH_OBJ_TYPE } from "./context";
+import { History_CONTEXT_STATE_TYPE, History_OBJ_TYPE } from "./context";
 
 // experiment
-// export enum AuthActionEnums {
+// export enum HistoryActionEnums {
 //     SetToken = "SET_TOKEN",
 // }
 
-export const AuthActionEnums = {
-    PostAuthRequest: "POST_AUTH_REQUEST",
-    PostAuthSuccess: "POST_AUTH_SUCCESS",
-    PostAuthError: "POST_AUTH_ERROR"
+export const HistoryActionEnums = {
+    PostHistoryRequest: "POST_History_REQUEST",
+    PostHistorySuccess: "POST_History_SUCCESS",
+    PostHistoryError: "POST_History_ERROR"
 }
 
 /**
  * Sets the isInProgress to true
  * The results array is not there yet
  */
-export const postAuthRequestAction = createAction(
-    AuthActionEnums.PostAuthRequest,
-    (): AUTH_CONTEXT_STATE_TYPE => ({ isSuccess: false, isInProgress: true, isError: false, authObj: undefined})
+export const postHistoryRequestAction = createAction(
+    HistoryActionEnums.PostHistoryRequest,
+    (): History_CONTEXT_STATE_TYPE => ({ isSuccess: false, isInProgress: true, isError: false, HistoryObj: undefined})
 )
 
 /**
  * Sets the isSuccess to true but then all else to false
  */
-export const postAuthSuccessAction = createAction(
-    AuthActionEnums.PostAuthSuccess,
-    (authObj: AUTH_OBJ_TYPE): any => ({ isSuccess: true, isInProgress: false, isError: false, authObj})
+export const postHistorySuccessAction = createAction(
+    HistoryActionEnums.PostHistorySuccess,
+    (HistoryObj: History_OBJ_TYPE): any => ({ isSuccess: true, isInProgress: false, isError: false, HistoryObj})
 );
 
 /**
  * Sets the isError to true but then all else to false
  */
-export const postAuthErrorAction = createAction(
-    AuthActionEnums.PostAuthSuccess,
-    () => ({ isSuccess: false, isInProgress: false, isError: true, authObj: {}})
+export const postHistoryErrorAction = createAction(
+    HistoryActionEnums.PostHistorySuccess,
+    () => ({ isSuccess: false, isInProgress: false, isError: true, HistoryObj: {}})
 );
