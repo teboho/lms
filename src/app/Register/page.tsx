@@ -80,8 +80,8 @@ export default function Register(): React.ReactNode {
         <Flex className={styles.form}>
             <Sider width={"25%"} style={{background: "#004aad"}} className={cx(styles["left-sider"])}>
                 <Flex vertical>
-                    <Tag color="green"><Title level={3}>Step 1: Fill in your details</Title></Tag>
-                    <Tag color="null"><Title level={3}>Step 2: Complete registration</Title></Tag>
+                    <Tag color="green"><Title level={4}>Step 1: Fill in your details</Title></Tag>
+                    <Tag color="null"><Title level={4}>Step 2: Complete registration</Title></Tag>
                 </Flex>
             </Sider>
             <Sider theme="light" width={"75%"} >

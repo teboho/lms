@@ -1,22 +1,22 @@
 "use client"
 import { Provider, useReducer } from "react";
-import { AUTH_CONTEXT_INITIAL_STATE, AUTH_REQUEST_TYPE, AuthContext, AUTH_OBJ_TYPE } from "./context";
-import { authReducer } from "./reducer";
-import { postAuthErrorAction, postAuthRequestAction, postAuthSuccessAction } from "./actions";
+import { Book_CONTEXT_INITIAL_STATE, Book_REQUEST_TYPE, BookContext, Book_OBJ_TYPE } from "./context";
+import { BookReducer } from "./reducer";
+import { postBookErrorAction, postBookRequestAction, postBookSuccessAction } from "./actions";
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
-export default function AuthProvider({ children }: { children: React.ReactNode }) {
+export default function BookProvider({ children }: { children: React.ReactNode }) {
     // we will make the state with the reducers
-    const [authState, dispatch] = useReducer(authReducer, AUTH_CONTEXT_INITIAL_STATE);
+    const [BookState, dispatch] = useReducer(BookReducer, Book_CONTEXT_INITIAL_STATE);
 
     /**
      * 
      * @param loginObj login object
      */
-    function login(loginObj: AUTH_REQUEST_TYPE): void {
+    function login(loginObj: Book_REQUEST_TYPE): void {
         // conduct the fetch and dispatch based on the response
-        const endpoint = apiURL + "api/TokenAuth/Authenticate";
+        const endpoint = apiURL + "api/TokenBook/Bookenticate";
         console.log(endpoint);
         console.log(loginObj);
         
@@ -31,14 +31,14 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         .then(data => {
             console.log(data.result);
             if (data.result.success) {
-                const res: AUTH_OBJ_TYPE = data.result;
-                dispatch(postAuthSuccessAction(res));
+                const res: Book_OBJ_TYPE = data.result;
+                dispatch(postBookSuccessAction(res));
                 
             }
         })
         .catch(err => {
             console.log(err);
-            dispatch(postAuthErrorAction());
+            dispatch(postBookErrorAction());
         })
     }
     function logout(): void {
@@ -49,8 +49,8 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     }
 
     return (
-        <AuthContext.Provider value={{authObj: authState.authObj, login, logout, refreshToken}}>
+        <BookContext.Provider value={{BookObj: BookState.BookObj, login, logout, refreshToken}}>
             {children}
-        </AuthContext.Provider>
+        </BookContext.Provider>
     );
 }

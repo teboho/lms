@@ -60,7 +60,7 @@ interface FormInputDataType {
 
 export default function Login(): React.ReactNode {
     const [form] = Form.useForm<FormInputDataType>();
-    const { login } = useContext(AuthContext);
+    const { login, state } = useContext(AuthContext);
     const { styles, cx, theme } = useMainStyles();
 
     const onFinish = (value: object): void => {
@@ -79,14 +79,18 @@ export default function Login(): React.ReactNode {
         }
         // console.log(authReq);
         login(authReq);
+
+        // check if the localstorage has changed
+        // const accessToken = localStorage.getItem("accessToken");
+        // const 
     }
 
     return (
         <Flex className={styles.form}>
             <Sider width={"25%"} style={{background: "#004aad"}} className={cx(styles["left-sider"])}>
                 <Flex vertical>
-                    <Tag color="green"><Title level={3}>Step 1: Fill in your details</Title></Tag>
-                    <Tag color="null"><Title level={3}>Step 2: Complete login</Title></Tag>
+                    <Tag color="green"><Title level={4}>Step 1: Fill in your details</Title></Tag>
+                    <Tag color="null"><Title level={4}>Step 2: Complete login</Title></Tag>
                 </Flex>
             </Sider>
             <Sider theme="light" width={"75%"} >

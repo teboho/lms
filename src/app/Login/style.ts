@@ -20,7 +20,8 @@ export const useMainStyles = createStyles(({css, cx}) => ({
         padding: 20px;
     `,
     "left-sider": css`
-        padding: 50px;
+        padding: 20px;
+        padding-top: 250px;
         border-right: 1px solid #004aad;
         border-radius: 10% 30% 50% 70%; /*border-radius: 20px;*/
         background: #004aad;

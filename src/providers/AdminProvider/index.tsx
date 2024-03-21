@@ -1,22 +1,22 @@
 "use client"
 import { Provider, useReducer } from "react";
-import { AUTH_CONTEXT_INITIAL_STATE, AUTH_REQUEST_TYPE, AuthContext, AUTH_OBJ_TYPE } from "./context";
-import { authReducer } from "./reducer";
-import { postAuthErrorAction, postAuthRequestAction, postAuthSuccessAction } from "./actions";
+import { Admin_CONTEXT_INITIAL_STATE, Admin_REQUEST_TYPE, AdminContext, Admin_OBJ_TYPE } from "./context";
+import { AdminReducer } from "./reducer";
+import { postAdminErrorAction, postAdminRequestAction, postAdminSuccessAction } from "./actions";
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
-export default function AuthProvider({ children }: { children: React.ReactNode }) {
+export default function AdminProvider({ children }: { children: React.ReactNode }) {
     // we will make the state with the reducers
-    const [authState, dispatch] = useReducer(authReducer, AUTH_CONTEXT_INITIAL_STATE);
+    const [AdminState, dispatch] = useReducer(AdminReducer, Admin_CONTEXT_INITIAL_STATE);
 
     /**
      * 
      * @param loginObj login object
      */
-    function login(loginObj: AUTH_REQUEST_TYPE): void {
+    function login(loginObj: Admin_REQUEST_TYPE): void {
         // conduct the fetch and dispatch based on the response
-        const endpoint = apiURL + "api/TokenAuth/Authenticate";
+        const endpoint = apiURL + "api/TokenAdmin/Adminenticate";
         console.log(endpoint);
         console.log(loginObj);
         
@@ -31,14 +31,14 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         .then(data => {
             console.log(data.result);
             if (data.result.success) {
-                const res: AUTH_OBJ_TYPE = data.result;
-                dispatch(postAuthSuccessAction(res));
+                const res: Admin_OBJ_TYPE = data.result;
+                dispatch(postAdminSuccessAction(res));
                 
             }
         })
         .catch(err => {
             console.log(err);
-            dispatch(postAuthErrorAction());
+            dispatch(postAdminErrorAction());
         })
     }
     function logout(): void {
@@ -49,8 +49,8 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     }
 
     return (
-        <AuthContext.Provider value={{authObj: authState.authObj, login, logout, refreshToken}}>
+        <AdminContext.Provider value={{AdminObj: AdminState.AdminObj, login, logout, refreshToken}}>
             {children}
-        </AuthContext.Provider>
+        </AdminContext.Provider>
     );
 }
