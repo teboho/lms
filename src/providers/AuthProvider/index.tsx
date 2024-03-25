@@ -1,6 +1,6 @@
 "use client"
 import { Provider, useReducer } from "react";
-import { AUTH_CONTEXT_INITIAL_STATE, AUTH_REQUEST_TYPE, AuthContext, AUTH_OBJ_TYPE } from "./context";
+import { AUTH_CONTEXT_INITIAL_STATE, AUTH_REQUEST_TYPE, AuthContext, AUTH_OBJ_TYPE, REGISTER_REQ_TYPE } from "./context";
 import { authReducer } from "./reducer";
 import { postAuthErrorAction, postAuthRequestAction, postAuthSuccessAction } from "./actions";
 import { useRouter } from 'next/navigation';
@@ -18,6 +18,13 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         messageApi.open({
             type: "error",
             content: "Login Attempt Unsuccessful"
+        })
+    }
+
+    const success = (): void => {
+        messageApi.open({
+            type: "success",
+            content: "Registeration Attempt Successful"
         })
     }
 
@@ -59,8 +66,40 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         })
     }
 
-    function logout(): void {
+    function register(registerObj: REGISTER_REQ_TYPE): void {
+        // conduct the fetch and dispatch based on the response
+        const endpoint = apiURL + "api/services/app/User/Create";
+        
+        fetch(endpoint, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+            method: "POST",
+            body: JSON.stringify(registerObj),
+            mode: "cors"
+        }).then(res => res.json())
+        .then(data => {
+            console.log("data", data);
+            if (data.success) {
+                const res: AUTH_OBJ_TYPE = data.result;
+                dispatch(postAuthSuccessAction(res));
+                console.log("Register success");
 
+                success();
+                setTimeout(() => push("/Login"), 300);
+            } else {
+                console.log("Register is unsuccc");
+                fail();
+            }
+        })
+        .catch(err => {
+            console.log(err);
+            dispatch(postAuthErrorAction());
+        })
+    }
+
+    function logout(): void {
+        localStorage.clear();
     }
 
     function refreshToken() {
@@ -68,7 +107,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     }
 
     return (
-        <AuthContext.Provider value={{authObj: authState.authObj, login, logout, refreshToken, fail}}>
+        <AuthContext.Provider value={{authObj: authState.authObj, registerObj: authState.registerObj, login, logout, refreshToken, fail, register}}>
             {contextHolder}
             {children}
         </AuthContext.Provider>

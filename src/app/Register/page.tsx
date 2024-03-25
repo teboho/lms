@@ -1,10 +1,11 @@
 "use client";
-import React from "react";
+import React, { useContext } from "react";
 import { useMainStyles } from "./style";
 import { Layout, Flex, Form, Input, Button, Row, Col, Tag, Typography } from "antd";
 import { Header, Content, Footer } from "antd/lib/layout/layout";
 import Sider from "antd/lib/layout/Sider";
 import moduleStyles from "./register.module.css";
+import { AuthContext } from "@/providers/AuthProvider/context";
 // Can contain an array of strings or array of numbers
 const MyFormItemContext = React.createContext<(string | number)[]>([]);
 
@@ -62,6 +63,7 @@ interface FormInputDataType {
 export default function Register(): React.ReactNode {
     const [form] = Form.useForm<FormInputDataType>();
     const { styles, cx, theme } = useMainStyles();
+    const { register, state } = useContext(AuthContext);
 
     const onFinish = (values: object): void => {
         console.log(values);
@@ -72,8 +74,17 @@ export default function Register(): React.ReactNode {
      * @param e event
      */
     const onComplete = (e: Event) => {
-        console.log(form.getFieldValue("user"));
-        
+        const formstuff = form.getFieldValue("user");
+        const user = {
+            name: formstuff.name.name,
+            surname: formstuff.name.surname,
+            emailAddress: formstuff.email.email,
+            password: formstuff.password.password,
+            userName: formstuff.email.email,
+            isActive: true
+        }
+        console.log(user);
+        register(user);
     }
 
     return (
@@ -91,12 +102,12 @@ export default function Register(): React.ReactNode {
                         <Row gutter={5}>
                             <MyFormItemGroup prefix={["name"]}>
                                 <Col span={12}>
-                                    <MyFormItem name="firstName" label="First Name">
+                                    <MyFormItem name="name" label="First Name">
                                         <Input />
                                     </MyFormItem>
                                 </Col>
                                 <Col span={12}>
-                                    <MyFormItem name="lastname" label="Last Name">
+                                    <MyFormItem name="surname" label="Last Name">
                                         <Input />
                                     </MyFormItem>
                                 </Col>
@@ -111,7 +122,7 @@ export default function Register(): React.ReactNode {
                             </MyFormItemGroup>
                             </Col>
                         </Row>
-                        <Row>           
+                        {/* <Row>           
                             <Col span={24}>
                             <MyFormItemGroup prefix={["phone"]}>
                                 <MyFormItem name="phone" label="Phone number">
@@ -119,7 +130,7 @@ export default function Register(): React.ReactNode {
                                 </MyFormItem>
                             </MyFormItemGroup>
                             </Col>
-                        </Row>
+                        </Row> */}
                         <Row gutter={5}>
                             <MyFormItemGroup prefix={["password"]}>
                                 <Col span={12}>

@@ -19,7 +19,11 @@ export const authReducer = handleActions(
         [AuthActionEnums.PostAuthError]: (state, action) => ({
             ...state,
             ...action.payload
-        })
+        }),  // this handler will change the value of the isSuccess in the state
+        [AuthActionEnums.PostRegisterSuccess]: (state, action) => ({
+            ...state,
+            ...action.payload
+        }),
     },
     AUTH_CONTEXT_INITIAL_STATE
 )
