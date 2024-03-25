@@ -1,11 +1,13 @@
 "use client";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { useMainStyles } from "./style";
-import { Layout, Flex, Form, Input, Button, Row, Col, Tag, Typography } from "antd";
+import { Layout, Flex, Form, Input, Button, Row, Col, Tag, Typography, message } from "antd";
 import { Header, Content, Footer } from "antd/lib/layout/layout";
 import Sider from "antd/lib/layout/Sider";
 import moduleStyles from "./register.module.css";
 import { AUTH_REQUEST_TYPE, AuthContext } from "@/providers/AuthProvider/context";
+import { useRouter } from "next/navigation";
+import { stat } from "fs";
 
 // Can contain an array of strings or array of numbers
 const MyFormItemContext = React.createContext<(string | number)[]>([]);
@@ -62,9 +64,13 @@ export default function Login(): React.ReactNode {
     const [form] = Form.useForm<FormInputDataType>();
     const { login, state } = useContext(AuthContext);
     const { styles, cx, theme } = useMainStyles();
+    const  { push } = useRouter();
 
     const onFinish = (value: object): void => {
         console.log("Hello World");
+    }
+    const goHome = (value: object): void => {
+        push("/");
     }
 
     /**
@@ -77,12 +83,7 @@ export default function Login(): React.ReactNode {
             userNameOrEmailAddress: form.getFieldValue("user").email.email,
             rememberClient: true
         }
-        // console.log(authReq);
         login(authReq);
-
-        // check if the localstorage has changed
-        // const accessToken = localStorage.getItem("accessToken");
-        // const 
     }
 
     return (
@@ -119,7 +120,7 @@ export default function Login(): React.ReactNode {
                             <Col>
                                 <Button type="primary" onClick={onComplete}>Login</Button>
                             </Col>
-                            <Col><Button className={cx(styles.cancel)}>Cancel</Button></Col>
+                            <Col><Button className={cx(styles.cancel)} onClick={goHome}>Cancel</Button></Col>
                         </Row>
                     </MyFormItemGroup>
                 </Form>

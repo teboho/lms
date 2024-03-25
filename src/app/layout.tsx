@@ -8,6 +8,7 @@ import Sider from "antd/lib/layout/Sider";
 import NavBar from "@/components/NavBar";
 import MyFooter from "@/components/MyFooter";
 import AuthProvider from "@/providers/AuthProvider";
+import SessionProvider from "@/providers/SessionProvider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -24,20 +25,20 @@ export default function RootLayout({
     <html lang="en">
     <body>
       <AuthProvider>
-        <Layout>
-          <Header style={{background: "white"}}>
-            <NavBar />
-          </Header>
+        <SessionProvider>
           <Layout>
-            <Flex>
-              <Sider width={"100%"} style={{background: "white"}}>
-                <Content>{children}</Content>
-              </Sider>
-            </Flex>
+            <Header style={{background: "white"}}>
+              <NavBar />
+            </Header>
+            <Layout>
+              <Flex>
+                <Sider width={"100%"} style={{background: "white"}}>
+                  <Content>{children}</Content>
+                </Sider>
+              </Flex>
+            </Layout>
           </Layout>
-          {/* <Footer>footer</Footer> */}
-          {/* <MyFooter>footer...123</MyFooter> */}
-        </Layout>
+        </SessionProvider>
       </AuthProvider>
     </body>
     </html>

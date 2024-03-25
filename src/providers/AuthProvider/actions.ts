@@ -35,5 +35,5 @@ export const postAuthSuccessAction = createAction(
  */
 export const postAuthErrorAction = createAction(
     AuthActionEnums.PostAuthSuccess,
-    () => ({ isSuccess: false, isInProgress: false, isError: true, authObj: {}})
+    (): any => ({ isSuccess: false, isInProgress: false, isError: true, authObj: {}})
 );

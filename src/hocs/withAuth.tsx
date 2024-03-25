@@ -10,19 +10,20 @@ import { useRouter } from 'next/navigation';
 const withAuth = (WrappedComponent: ({children}: {children: React.ReactNode}) => React.ReactNode): React.ReactNode | ((props: {children: React.ReactNode}) => React.ReactNode) => {
 
     const WithAuth = (props: {children: React.ReactNode}): React.ReactNode => {
+        "use client";
         const router = useRouter();
-        const token = window.localStorage.getItem("accessToken");
-        console.log(token)
+        const token = localStorage.getItem("accessToken");
+        console.log(token, token)
 
         // check token validity
         if (token) {
             // Ath this rate we should redresh the token from here
-            // console.log(token)
+            console.log("token", token)
+            router.push("/Home");
         }
 
         if (token === undefined || token === null) {
-            router.push("/");
-            // return <h1>hmm</h1>
+            router.push("/Login");
         } 
         // Our inner component needs to return the wrapped component and provide it with its props
         return <WrappedComponent {...props} />;
