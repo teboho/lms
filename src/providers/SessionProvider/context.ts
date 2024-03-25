@@ -23,4 +23,4 @@ type getInfoType = () => void;
 /**
  * Default value that the provider will pass is an empty object
  */
-export const SessionContext = createContext({});
+export const SessionContext = createContext<{}>({});

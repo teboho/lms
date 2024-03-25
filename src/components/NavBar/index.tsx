@@ -1,20 +1,21 @@
-'use client'
-import React from "react";
+'use client';
+import React, { useContext, useState } from "react";
+import { Flex, Layout, Input, Button } from "antd";
 import type { MenuProps } from "antd";
 import Menu from "antd/lib/menu/menu";
-import Image from "next/image";
 import styles from './NavBar.module.css';
 import  { useStyles } from './styles';
+import { SearchProps } from "antd/es/input";
 import Link from "next/link";
+import Image from "next/image";
+import { useSearchParams, usePathname, useRouter } from "next/navigation";
+import { AuthContext } from "@/providers/AuthProvider/context";
 
 const outItems: MenuProps['items'] = [
     {
-        label: <Link href={"/"}><Image className={styles.image} src="/assets/images/LMS-logo1-transparent.png" width={30} height={30} alt="logo"/></Link>, 
-        key: 'home-icon'
-    },
-    {
         label: <Link href={"/"}>Home</Link>, 
-        key: 'home'
+        key: 'home',
+        icon: <Image src="/assets/images/LMS-logo1-transparent.png" width={30} height={30} alt="logo"/>
     },
     {
         label: <Link href={"/Login"}>Login</Link>,
@@ -26,13 +27,49 @@ const outItems: MenuProps['items'] = [
     }
 ];
 
+const { Search } = Input;
+
 export default function NavBar() {
-    // const overStyles = useStyles();
-    return (
-            <Menu 
-                mode="horizontal"
-                items={outItems}
-                // theme="light"
-            />
-    );
+    const searchParams = useSearchParams();
+    const pathname = usePathname();
+    const { replace } = useRouter();
+    const accessToken = localStorage.getItem("accessToken");
+    const { logout } = useContext(AuthContext);
+    const { styles, cx } = useStyles();
+    const [searchTerm, setSearchTerm] = useState("");
+
+    function handleSearch(term:string) {
+        setSearchTerm(prev => term);
+    }
+
+    const onSearch: SearchProps["onSearch"] = (value, _e, info) => {
+        console.log(searchTerm);
+    }
+
+    if (accessToken) {
+
+        const inItems: MenuProps['items'] = [
+            {
+                label: <Link href={"/"}>Home</Link>, 
+                key: 'home',
+                icon: <Image src="/assets/images/LMS-logo1-transparent.png" width={30} height={30} alt="logo"/>
+            }
+        ];
+
+        return (
+            <Flex className={cx(styles.flex)} justify="center" align="center">
+                {/* <Link href={"/"}><Image src="/assets/images/LMS-logo1-transparent.png" width={30} height={30} alt="logo"/></Link> */}
+                <Menu 
+                    mode="horizontal"
+                    items={inItems}
+                />
+                <Search className={cx(styles.search)} 
+                    placeholder="search for book" onChange={e => handleSearch(e.target.value)} 
+                    onSearch={onSearch} />
+                <Button onClick={logout}>Logout</Button>
+            </Flex>
+        );
+    }
+
+    return <Menu mode="horizontal" items={outItems} />;
 }

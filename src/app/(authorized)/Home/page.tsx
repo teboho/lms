@@ -1,11 +1,15 @@
-"use client"
+"use client";
+import { ReactNode, useContext, useEffect, useMemo } from "react";
 import withAuth from "@/hocs/withAuth";
 import { SessionContext } from "@/providers/SessionProvider/context";
-import { ReactNode, useContext, useEffect, useMemo } from "react";
+import { Flex, Layout, Input } from "antd";
+import type { SearchProps } from "antd/es/input";
+const { Content, Sider } = Layout;
+const { Search } = Input;
 
-const Home = ({ children }: { children: ReactNode }): ReactNode => {
+
+const Home = ({ searchParams } : { searchParams: { query?: string; page?: string;} }): ReactNode => {
     const { getInfo, sessionState } = useContext(SessionContext);
-    // Get whose currently loggedin
 
     useEffect(() => {
         getInfo();
@@ -14,14 +18,26 @@ const Home = ({ children }: { children: ReactNode }): ReactNode => {
     const user = useMemo(() => {
         return sessionState.user;
     }, [sessionState]);
-
+    
     return (
-        <>
-            <h1>Succesfully logged in as {JSON.stringify(user)}</h1>
-            <p>{user?.name}</p>
-            <p>{user?.surname}</p>
-            <p>{user?.id}</p>
-            <p>{user?.emailAddress}</p>
+        <>   
+            <Layout>
+              <Flex>
+                <Sider style={{background: "white"}}>
+                    {/* <h1>Succesfully logged in as {JSON.stringify(user)}</h1> */}
+                    <p>name: {user?.name}</p>
+                    <p>surname: {user?.surname}</p>
+                    <p>user id: {user?.id}</p>
+                    <p>email: {user?.emailAddress}</p>
+                </Sider>
+                <Content>
+                    <h1>Books</h1>     
+                    <div>
+                    </div>           
+                </Content>
+              </Flex>
+            </Layout>
+
         </>
     );
 }

@@ -23,7 +23,7 @@ const withAuth = (WrappedComponent: ({children}: {children: React.ReactNode}) =>
         }
 
         if (token === undefined || token === null) {
-            router.push("/Login");
+            router.push("/Login")
         } 
         // Our inner component needs to return the wrapped component and provide it with its props
         return <WrappedComponent {...props} />;

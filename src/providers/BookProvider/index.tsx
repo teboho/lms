@@ -1,6 +1,5 @@
 "use client"
 import { Provider, useReducer } from "react";
-import { Book_CONTEXT_INITIAL_STATE, Book_REQUEST_TYPE, BookContext, Book_OBJ_TYPE } from "./context";
 import { BookReducer } from "./reducer";
 import { postBookErrorAction, postBookRequestAction, postBookSuccessAction } from "./actions";
 
@@ -8,13 +7,13 @@ const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function BookProvider({ children }: { children: React.ReactNode }) {
     // we will make the state with the reducers
-    const [BookState, dispatch] = useReducer(BookReducer, Book_CONTEXT_INITIAL_STATE);
+    const [BookState, dispatch] = useReducer(BookReducer, {});
 
     /**
      * 
      * @param loginObj login object
      */
-    function login(loginObj: Book_REQUEST_TYPE): void {
+    function search(loginObj: Book_REQUEST_TYPE): void {
         // conduct the fetch and dispatch based on the response
         const endpoint = apiURL + "api/TokenBook/Bookenticate";
         console.log(endpoint);

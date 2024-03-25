@@ -6,5 +6,11 @@ export const useStyles = createStyles(({css, cx}) => ({
     `,
     navbar: css`
         background: red;
+    `,
+    search: css`
+        max-width: 350px;
+    `,
+    flex: css`
+        gap: 50px;
     `
 }));

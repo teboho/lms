@@ -100,6 +100,12 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
     function logout(): void {
         localStorage.clear();
+        push("/Login");
+        
+        messageApi.open({
+            type: "success",
+            content: "Logout Successful"
+        })
     }
 
     function refreshToken() {
