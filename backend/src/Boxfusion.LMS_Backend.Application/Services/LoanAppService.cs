@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services;
+using Abp.Authorization;
 using Abp.Domain.Repositories;
 using Boxfusion.LMS_Backend.Domain;
 using Boxfusion.LMS_Backend.Services.Dtos;
@@ -11,6 +12,8 @@ using System.Threading.Tasks;
 
 namespace Boxfusion.LMS_Backend.Services
 {
+
+    [AbpAuthorize]
     public class LoanAppService : AsyncCrudAppService<Loan, LoanDto, Guid>, ILoanAppService
     {
         public LoanAppService(IRepository<Loan, Guid> repository) : base(repository)
