@@ -3,3 +3,4 @@
 ################################################################################
 
 /backend/src/Boxfusion.LMS_Backend.Web.Host/App_Data/Logs/Logs.txt
+/frontend/.env
