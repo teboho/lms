@@ -60,6 +60,11 @@ namespace Boxfusion.LMS_Backend.Services.AskGoogle
             var author = _authorRepo.GetAll().Where(a => (a.FirstName.ToLower().Equals(firstname) && a.LastName.ToLower().Equals(lastname.ToLower()))).FirstOrDefault();
             return author;
         }
+        public Book SearchForBook(string name)
+        {
+            var book = _booksRepository.GetAll().Where(b => b.Name.ToLower().Equals(name.ToLower())).FirstOrDefault();
+            return book;
+        }
 
         public async Task<List<Category>> GetAllCategory()
         {
@@ -118,11 +123,11 @@ namespace Boxfusion.LMS_Backend.Services.AskGoogle
             return await response.Content.ReadAsStringAsync();
         }
 
-        public async Task<List<Tuple<Book, Category, Author>>> TestVolumes(string query)
+        public async Task<List<Tuple<Book, Category, Author>>> PoulateVolumes(string query)
         {
             var startIndex = _random.Next(0, 1000); // Adjust based on the number of available books
             HttpResponseMessage response = await client.GetAsync(
-                $"volumes?q={query}&startIndex={startIndex}&maxResults=10");
+                $"volumes?q={query}&startIndex={startIndex}&maxResults=30");
             var volumes = await response.Content.ReadFromJsonAsync<Result>();
             var books = new List<Tuple<Book, Category, Author>> ();
 
@@ -177,20 +182,24 @@ namespace Boxfusion.LMS_Backend.Services.AskGoogle
                             byte b = (byte)(random.Next(0, 3));
                             string strYear = v.VolumeInfo.PublishedDate == null ? "0000" : (v.VolumeInfo.PublishedDate.Split("-")[0]);
                             int intYear = int.Parse(strYear);
-                            Book book = new Book
+                            Book book = SearchForBook(v.VolumeInfo.Title);
+                            if (book == null)
                             {
-                                Name = v.VolumeInfo.Title,
-                                Description = v.VolumeInfo.Description == null ? v.VolumeInfo.Subtitle : v.VolumeInfo.Description,
-                                ImageURL = v.VolumeInfo.ImageLinks == null ? "" : (v.VolumeInfo.ImageLinks.Thumbnail != null ? v.VolumeInfo.ImageLinks.Thumbnail : ""),
-                                ISBN = v.VolumeInfo.IndustryIdentifiers == null ? "" : (v.VolumeInfo.IndustryIdentifiers[1].Identifier != null ? v.VolumeInfo.IndustryIdentifiers[1].Identifier : ""),
-                                Type = b,
-                                Year = intYear,
-                                AuthorId = author.Id,
-                                CategoryId = category.Id
-                            };
-                            // add book to db
-                            book = _booksRepository.Insert(book);
-                            CurrentUnitOfWork.SaveChanges();
+                                book = new Book
+                                {
+                                    Name = v.VolumeInfo.Title,
+                                    Description = v.VolumeInfo.Description == null ? v.VolumeInfo.Subtitle : v.VolumeInfo.Description,
+                                    ImageURL = v.VolumeInfo.ImageLinks == null ? "" : (v.VolumeInfo.ImageLinks.Thumbnail != null ? v.VolumeInfo.ImageLinks.Thumbnail : ""),
+                                    ISBN = v.VolumeInfo.IndustryIdentifiers == null ? "" : (v.VolumeInfo.IndustryIdentifiers[1].Identifier != null ? v.VolumeInfo.IndustryIdentifiers[1].Identifier : ""),
+                                    Type = b,
+                                    Year = intYear,
+                                    AuthorId = author.Id,
+                                    CategoryId = category.Id
+                                };
+                                // add book to db
+                                book = _booksRepository.Insert(book);
+                                CurrentUnitOfWork.SaveChanges();
+                            }
                             //books.Add(book);
                             Tuple<Book, Category, Author> tuple = new Tuple<Book, Category, Author>(book, category, author);
                             books.Add(tuple);
