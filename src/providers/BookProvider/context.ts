@@ -1,28 +1,33 @@
 "use client";
 import { createContext } from "react";
 
-export interface SEARCH_OBJ_TYPE {
-    "accessToken": string;
-    "encryptedAccessToken": string;
-    "expireInSeconds": number;
-    "userId": number;
-  }
+export interface BOOK_RESP_TYPE     {
+    "name": string,
+    "description": string,
+    "type": number,
+    "year": number,
+    "imageURL": string,
+    "isbn": string,
+    "categoryId": number,
+    "authorId": string,
+    "id": number
+}
 
-export interface SEARCH_CONTEXT_STATE_TYPE {
+export interface BOOK_CONTEXT_STATE_TYPE {
     isInProgress: boolean;
     isSuccess: boolean;
     isError: boolean;
-    results: object[];
+    results: BOOK_RESP_TYPE[];
 }
 
-export const SEARCH_CONTEXT_INITIAL_STATE = {
+export const BOOK_CONTEXT_INITIAL_STATE = {
     isInProgress: false,
     isError: false,
     isSuccess: false,
-    results: [{ }]
+    results: [{}]
 }
 
 /**
  * Default value that the provider will pass is an empty object
  */
-export const SearchContext = createContext({ });
+export const BookContext = createContext({ });

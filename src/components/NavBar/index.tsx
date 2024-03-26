@@ -10,6 +10,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { AuthContext } from "@/providers/AuthProvider/context";
+import { BookContext } from "@/providers/BookProvider/context";
 
 const outItems: MenuProps['items'] = [
     {
@@ -37,6 +38,8 @@ export default function NavBar() {
     const { logout } = useContext(AuthContext);
     const { styles, cx } = useStyles();
     const [searchTerm, setSearchTerm] = useState("");
+    
+    const { bookState, search } = useContext(BookContext);
 
     function handleSearch(term:string) {
         setSearchTerm(prev => term);
@@ -44,6 +47,7 @@ export default function NavBar() {
 
     const onSearch: SearchProps["onSearch"] = (value, _e, info) => {
         console.log(searchTerm);
+        search(searchTerm);
     }
 
     if (accessToken) {

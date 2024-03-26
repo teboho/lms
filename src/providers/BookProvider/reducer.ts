@@ -1,6 +1,6 @@
 import { handleActions } from "redux-actions";
 import { BookActionEnums } from "./actions";
-import { Book_CONTEXT_INITIAL_STATE } from "./context";
+import { BOOK_CONTEXT_INITIAL_STATE } from "./context";
 
 /**
  * A reducer t
@@ -8,18 +8,18 @@ import { Book_CONTEXT_INITIAL_STATE } from "./context";
 export const BookReducer = handleActions(
     {
         // this handler will change the value of the isPending in the state
-        [BookActionEnums.PostBookRequest]: (state, action) => ({
+        [BookActionEnums.GetBooksRequest]: (state, action) => ({
             ...state,
             ...action.payload
         }),  // this handler will change the value of the isSuccess in the state
-        [BookActionEnums.PostBookSuccess]: (state, action) => ({
+        [BookActionEnums.GetBooksSuccess]: (state, action) => ({
             ...state,
             ...action.payload
         }), // this handler will change the value of the isError in the state
-        [BookActionEnums.PostBookError]: (state, action) => ({
+        [BookActionEnums.GetBooksError]: (state, action) => ({
             ...state,
             ...action.payload
         })
     },
-    Book_CONTEXT_INITIAL_STATE
+    {}
 )

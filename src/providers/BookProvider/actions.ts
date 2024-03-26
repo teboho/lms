@@ -1,10 +1,11 @@
 "use client";
 import { createAction } from "redux-actions";
+import { BOOK_RESP_TYPE } from "./context";
 
 export const BookActionEnums = {
-    GetBooksRequest: "POST_Book_REQUEST",
-    GetBooksSuccess: "POST_Book_SUCCESS",
-    GetBooksError: "POST_Book_ERROR"
+    GetBooksRequest: "POST_BOOK_REQUEST",
+    GetBooksSuccess: "POST_BOOK_SUCCESS",
+    GetBooksError: "POST_BOOK_ERROR"
 }
 
 /**
@@ -13,7 +14,7 @@ export const BookActionEnums = {
  */
 export const getBooksRequestAction = createAction(
     BookActionEnums.GetBooksRequest,
-    (): any => ({ isSuccess: false, isInProgress: true, isError: false, BookObj: undefined})
+    () => ({ isSuccess: false, isInProgress: true, isError: false, booksObj: []})
 )
 
 /**
@@ -21,7 +22,7 @@ export const getBooksRequestAction = createAction(
  */
 export const getBooksSuccessAction = createAction(
     BookActionEnums.GetBooksSuccess,
-    (bookObj: any): any => ({ isSuccess: true, isInProgress: false, isError: false, bookObj})
+    (booksObj: BOOK_RESP_TYPE[]): any => ({ isSuccess: true, isInProgress: false, isError: false, results: booksObj})
 );
 
 /**
@@ -29,5 +30,5 @@ export const getBooksSuccessAction = createAction(
  */
 export const getBooksErrorAction = createAction(
     BookActionEnums.GetBooksSuccess,
-    () => ({ isSuccess: false, isInProgress: false, isError: true, BookObj: undefined})
+    () => ({ isSuccess: false, isInProgress: false, isError: true, booksObj: []})
 );

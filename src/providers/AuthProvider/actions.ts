@@ -1,11 +1,6 @@
 "use client";
 import { createAction } from "redux-actions";
-import { AUTH_CONTEXT_STATE_TYPE, AUTH_OBJ_TYPE, REGISTER_REQUEST_TYPE, REGISTER_RESP_TYPE } from "./context";
-
-// experiment
-// export enum AuthActionEnums {
-//     SetToken = "SET_TOKEN",
-// }
+import { AUTH_CONTEXT_STATE_TYPE, AUTH_OBJ_TYPE, REGISTER_RESP_TYPE } from "./context";
 
 export const AuthActionEnums = {
     PostAuthRequest: "POST_AUTH_REQUEST",

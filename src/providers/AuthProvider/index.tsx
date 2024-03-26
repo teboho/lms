@@ -6,7 +6,7 @@ import { postAuthErrorAction, postAuthRequestAction, postAuthSuccessAction } fro
 import { useRouter } from 'next/navigation';
 import { message } from "antd";
 
-const apiURL = process.env.NEXT_PUBLIC_API_URL;
+export const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
     // we will make the state with the reducers
@@ -34,7 +34,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
      */
     function login(loginObj: AUTH_REQUEST_TYPE): void {
         // conduct the fetch and dispatch based on the response
-        const endpoint = apiURL + "api/TokenAuth/Authenticate";
+        const endpoint = baseURL + "api/TokenAuth/Authenticate";
         
         fetch(endpoint, {
             headers: {
@@ -68,7 +68,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
     function register(registerObj: REGISTER_REQ_TYPE): void {
         // conduct the fetch and dispatch based on the response
-        const endpoint = apiURL + "api/services/app/User/Create";
+        const endpoint = baseURL + "api/services/app/User/Create";
         
         fetch(endpoint, {
             headers: {

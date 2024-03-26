@@ -1,54 +1,57 @@
 "use client"
 import { Provider, useReducer } from "react";
 import { BookReducer } from "./reducer";
-import { postBookErrorAction, postBookRequestAction, postBookSuccessAction } from "./actions";
-
-const apiURL = process.env.NEXT_PUBLIC_API_URL;
+import { BookContext } from "./context";
+import axios from "axios";
+import { baseURL } from "../AuthProvider";
+import { getBooksErrorAction, getBooksRequestAction, getBooksSuccessAction } from "./actions";
 
 export default function BookProvider({ children }: { children: React.ReactNode }) {
     // we will make the state with the reducers
-    const [BookState, dispatch] = useReducer(BookReducer, {});
+    const [bookState, dispatch] = useReducer(BookReducer, {
+        results: []
+    });
+    const accessToken = localStorage.getItem("accessToken");
+    // Axios instance
+    const instance = axios.create({
+        baseURL: baseURL,
+        headers: {
+            "Authorization": `Bearer ${accessToken}`,
+            "Content-Type": "application/json"
+        }
+    });
 
     /**
      * 
-     * @param loginObj login object
+     * @param term search term
      */
-    function search(loginObj: Book_REQUEST_TYPE): void {
+    function search(term: string): void {
         // conduct the fetch and dispatch based on the response
-        const endpoint = apiURL + "api/TokenBook/Bookenticate";
+        const endpoint = "api/services/app/Book/GetSearchBooks";
         console.log(endpoint);
-        console.log(loginObj);
+        console.log(term);
         
-        fetch(endpoint, {
-            headers: {
-                "Content-Type": "application/json",
-            },
-            method: "POST",
-            body: JSON.stringify(loginObj),
-            mode: "cors"
-        }).then(res => res.json())
-        .then(data => {
-            console.log(data.result);
-            if (data.result.success) {
-                const res: Book_OBJ_TYPE = data.result;
-                dispatch(postBookSuccessAction(res));
-                
-            }
-        })
-        .catch(err => {
-            console.log(err);
-            dispatch(postBookErrorAction());
-        })
-    }
-    function logout(): void {
-
-    }
-    function refreshToken() {
-
+        // before we make the http request, we set pending to true via dispatch
+        dispatch(getBooksRequestAction());
+        // the we make the call
+        instance.get(`${endpoint}?name=${term}`)
+            .then(res => {
+                console.log("results", res.data)
+                if (res.data.success) {
+                    // disptach for success
+                    if (res.data.result !== null)
+                    {
+                        dispatch(getBooksSuccessAction(res.data.result))
+                    }
+                } else {
+                    // dispatch for erroe
+                    dispatch(getBooksErrorAction());
+                }
+            })
     }
 
     return (
-        <BookContext.Provider value={{BookObj: BookState.BookObj, login, logout, refreshToken}}>
+        <BookContext.Provider value={{bookState, search}}>
             {children}
         </BookContext.Provider>
     );
