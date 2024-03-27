@@ -9,8 +9,10 @@ const { Content, Sider } = Layout;
 const { Search } = Input;
 import Image from "next/image";
 import {useStyles} from "./styles";
+import Preferences from "@/components/Preferences";
+import History from "@/components/History";
 
-const Home = ({ searchParams } : { searchParams: { query?: string; page?: string;} }): ReactNode => {
+const Home = ({ searchParams } : { searchParams: { query?: string; page?: string;} }): React.FC | React.ReactNode => {
     const { getInfo, sessionState } = useContext(SessionContext);
     const { bookState, search } = useContext(BookContext);
     const { styles, cx } = useStyles();
@@ -34,15 +36,18 @@ const Home = ({ searchParams } : { searchParams: { query?: string; page?: string
         <>   
             <Layout>
                 <Sider width={"25%"} style={{background: "white"}}>
-                    <p>name: {user?.name}</p>
-                    <p>surname: {user?.surname}</p>
-                    <p>user id: {user?.id}</p>
-                    <p>email: {user?.emailAddress}</p>
+                    <Preferences />
+                    <History />
                 </Sider>
                 <Sider style={{background: "white"}} className={cx(styles.right)} width={"75%"}>
                     <Content className={cx(styles.content)}>
                         <h1>Books</h1>     
-                        
+                        <div>
+                            <p>name: {user?.name}</p>
+                            <p>surname: {user?.surname}</p>
+                            <p>user id: {user?.id}</p>
+                            <p>email: {user?.emailAddress}</p>
+                        </div>
                         <List
                             className={cx(styles.list)}
                             dataSource={bookState.results}

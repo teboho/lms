@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
  * This hoc will protect pages which need the user to be logged in
  * @param {*} WrappedComponent the component to protect
  */
-const withAuth = (WrappedComponent: ({children}: {children: React.ReactNode}) => React.ReactNode): React.ReactNode | ((props: {children: React.ReactNode}) => React.ReactNode) => {
+const withAuth = (WrappedComponent: (({children}: {children: React.ReactNode}) => React.ReactNode) | React.FC): React.FC | ((props: {children: React.ReactNode}) => React.ReactNode) => {
 
     const WithAuth = (props: {children: React.ReactNode}): React.ReactNode => {
         "use client";
@@ -19,7 +19,7 @@ const withAuth = (WrappedComponent: ({children}: {children: React.ReactNode}) =>
         if (token) {
             // Ath this rate we should redresh the token from here
             console.log("token", token)
-            router.push("/Home");
+            // router.push(`${children.}`);
         }
 
         if (token === undefined || token === null) {

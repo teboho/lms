@@ -10,6 +10,7 @@ import MyFooter from "@/components/MyFooter";
 import AuthProvider from "@/providers/AuthProvider";
 import SessionProvider from "@/providers/SessionProvider";
 import BookProvider from "@/providers/BookProvider";
+import CategoryProvider from "@/providers/CategoryProvider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -27,7 +28,8 @@ export default function RootLayout({
     <body>
       <AuthProvider>
         <SessionProvider>
-          <BookProvider>
+          <CategoryProvider>
+            <BookProvider>
             <Layout>
               <Header style={{background: "white"}}>
                 <NavBar />
@@ -41,6 +43,7 @@ export default function RootLayout({
               </Layout>
             </Layout>
           </BookProvider>
+          </CategoryProvider>
         </SessionProvider>
       </AuthProvider>
     </body>

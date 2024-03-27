@@ -34,7 +34,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
      */
     function login(loginObj: AUTH_REQUEST_TYPE): void {
         // conduct the fetch and dispatch based on the response
-        const endpoint = baseURL + "api/TokenAuth/Authenticate";
+        const endpoint = baseURL + "/api/TokenAuth/Authenticate";
         
         fetch(endpoint, {
             headers: {
@@ -56,7 +56,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
                 push("/Home");
             } else {
-                console.log("Login is unsuccc");
+                console.log("Login is unsuccessful");
                 fail();
             }
         })
@@ -68,7 +68,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
     function register(registerObj: REGISTER_REQ_TYPE): void {
         // conduct the fetch and dispatch based on the response
-        const endpoint = baseURL + "api/services/app/User/Create";
+        const endpoint = baseURL + "/api/services/app/User/Create";
         
         fetch(endpoint, {
             headers: {
@@ -120,8 +120,12 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         return false;
     }
 
+    function getUserId() {
+        return authState.authObj.userId;
+    }
+
     return (
-        <AuthContext.Provider value={{authObj: authState.authObj, registerObj: authState.registerObj, login, logout, refreshToken, fail, register, isLoggedIn}}>
+        <AuthContext.Provider value={{authObj: authState.authObj, registerObj: authState.registerObj, login, logout, refreshToken, fail, register, isLoggedIn, getUserId}}>
             {contextHolder}
             {children}
         </AuthContext.Provider>

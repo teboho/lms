@@ -1,6 +1,7 @@
 'use client';
 import React, { useContext, useState } from "react";
 import { Flex, Layout, Input, Button } from "antd";
+import { DatabaseOutlined } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import Menu from "antd/lib/menu/menu";
 import styles from './NavBar.module.css';
@@ -30,7 +31,7 @@ const outItems: MenuProps['items'] = [
 
 const { Search } = Input;
 
-export default function NavBar() {
+const NavBar: React.FC = () => {
     const searchParams = useSearchParams();
     const pathname = usePathname();
     const { replace } = useRouter();
@@ -58,6 +59,11 @@ export default function NavBar() {
                 label: <Link href={"/"}>Home</Link>, 
                 key: 'home',
                 icon: <Image src="/assets/images/LMS-logo1-transparent.png" width={30} height={30} alt="logo"/>
+            },
+            {
+                label: <Link href={"/Survey"}>Survey</Link>, 
+                key: 'survey',
+                icon: <DatabaseOutlined />
             }
         ];
 
@@ -78,3 +84,5 @@ export default function NavBar() {
 
     return <Menu mode="horizontal" items={outItems} />;
 }
+
+export default NavBar;
