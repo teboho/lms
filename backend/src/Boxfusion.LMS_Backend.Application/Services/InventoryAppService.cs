@@ -13,9 +13,17 @@ using System.Threading.Tasks;
 namespace Boxfusion.LMS_Backend.Services
 {
 
+    /// <summary>
+    /// Inventory application service class
+    /// Inherits from AsyncCrudAppService thus providing CRUD operations
+    /// </summary>
     [AbpAuthorize]
     public class InventoryAppService : AsyncCrudAppService<Inventory, InventoryDto, Guid>, IInventoryAppService
     {
+        /// <summary>
+        /// Constructor for InventoryAppService
+        /// </summary>
+        /// <param name="repository">Inventory data repository object</param>
         public InventoryAppService(IRepository<Inventory, Guid> repository) : base(repository)
         {
         }
