@@ -12,6 +12,8 @@ import {useStyles} from "./styles";
 import Preferences from "@/components/Preferences";
 import History from "@/components/History";
 import { UserContext } from "@/providers/UserProvider/context";
+import Book from "@/components/Book";
+import SearchResults from "@/components/SearchResults";
 
 const Home = ({ searchParams } : { searchParams: { query?: string; page?: string;} }): React.FC | React.ReactNode => {
     const { getInfo, sessionState } = useContext(SessionContext);
@@ -35,12 +37,6 @@ const Home = ({ searchParams } : { searchParams: { query?: string; page?: string
         console.log(userState.user);
         return userState.user;
     }, [userState]);
-    
-    // use memo to get the values from the state
-    // useEffect(() => {
-    //     console.log(bookState.results)
-    //     // return results;
-    // }, [bookState]);
 
     return (
         <>   
@@ -60,20 +56,22 @@ const Home = ({ searchParams } : { searchParams: { query?: string; page?: string
                             <p>fullname: {fulluser?.fullName}</p>
                             <p>rolenames: {JSON.stringify(fulluser?.roleNames)}</p>
                         </div>
+                        <SearchResults books={bookState.results} searchTerm="..." />
                         <List
                             className={cx(styles.list)}
                             dataSource={bookState.results}
                             renderItem={(item, index) => (
-                                <List.Item key={`result_${index}`}
-                                    extra={
-                                        <img src={`${item.imageURL}`} width={250} height={250} alt="book image"/>
-                                    }
-                                >
-                                    <List.Item.Meta 
-                                        title={item.name}
-                                        description={item.description}
-                                    />
-                                </List.Item>
+                                // <List.Item key={`result_${index}`}
+                                //     extra={
+                                //         <img src={`${item.imageURL}`} width={250} height={250} alt="book image"/>
+                                //     }
+                                // >
+                                //     <List.Item.Meta 
+                                //         title={item.name}
+                                //         description={item.description}
+                                //     />
+                                // </List.Item>
+                                <Book book={item} />
                             )}
                         />
                     </Content>

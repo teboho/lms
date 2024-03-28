@@ -4,7 +4,9 @@ import { BookReducer } from "./reducer";
 import { BookContext } from "./context";
 import axios from "axios";
 import { baseURL } from "../AuthProvider";
-import { getBooksErrorAction, getBooksRequestAction, getBooksSuccessAction } from "./actions";
+import { getBooksErrorAction, getBooksRequestAction, getBooksSuccessAction,
+    getBookErrorAction, getBookRequestAction, getBookSuccessAction 
+} from "./actions";
 import { Preferences } from "@/app/(authorized)/Survey/page";
 
 export default function BookProvider({ children }: { children: React.ReactNode }) {
@@ -51,6 +53,33 @@ export default function BookProvider({ children }: { children: React.ReactNode }
             })
     }
 
+    /**
+     * 
+     * @param bookId book id
+     */
+    function getBook(bookId: string): void {
+        // conduct the fetch and dispatch based on the response
+        const endpoint = "api/services/app/Book/Get?Id=" + bookId;
+        
+        // before we make the http request, we set pending to true via dispatch
+        dispatch(getBookRequestAction());
+        // the we make the call
+        instance.get(`${endpoint}`)
+            .then(res => {
+                console.log("results", res.data)
+                if (res.data.success) {
+                    // disptach for success
+                    if (res.data.result !== null)
+                    {
+                        dispatch(getBookSuccessAction(res.data.result))
+                    }
+                } else {
+                    // dispatch for erroe
+                    dispatch(getBookErrorAction());
+                }
+            })
+    }
+
     function savePreferences(prefs: Preferences): void {
         // conduct the fetch and dispatch based on the response
         const endpoint = "/api/services/app/Preference/Create";
@@ -78,7 +107,7 @@ export default function BookProvider({ children }: { children: React.ReactNode }
     }
 
     return (
-        <BookContext.Provider value={{bookState, search, savePreferences}}>
+        <BookContext.Provider value={{bookState, search, savePreferences, getBook}}>
             {children}
         </BookContext.Provider>
     );

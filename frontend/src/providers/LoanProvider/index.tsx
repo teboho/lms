@@ -1,56 +1,18 @@
 "use client"
-import { Provider, useReducer } from "react";
-import { AUTH_CONTEXT_INITIAL_STATE, AUTH_REQUEST_TYPE, AuthContext, AUTH_OBJ_TYPE } from "./context";
-import { authReducer } from "./reducer";
-import { postAuthErrorAction, postAuthRequestAction, postAuthSuccessAction } from "./actions";
+import { useReducer } from "react";
+import { LOAN_CONTEXT_INITIAL_STATE, LOAN_REQUEST_TYPE, LoanContext, LOAN_OBJ_TYPE } from "./context";
+import { loanReducer } from "./reducer";
+import { postLoanErrorAction, postLoanRequestAction, postLoanSuccessAction } from "./actions";
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
-export default function AuthProvider({ children }: { children: React.ReactNode }) {
+export default function LoanProvider({ children }: { children: React.ReactNode }) {
     // we will make the state with the reducers
-    const [authState, dispatch] = useReducer(authReducer, AUTH_CONTEXT_INITIAL_STATE);
-
-    /**
-     * 
-     * @param loginObj login object
-     */
-    function login(loginObj: AUTH_REQUEST_TYPE): void {
-        // conduct the fetch and dispatch based on the response
-        const endpoint = apiURL + "api/TokenAuth/Authenticate";
-        console.log(endpoint);
-        console.log(loginObj);
-        
-        fetch(endpoint, {
-            headers: {
-                "Content-Type": "application/json",
-            },
-            method: "POST",
-            body: JSON.stringify(loginObj),
-            mode: "cors"
-        }).then(res => res.json())
-        .then(data => {
-            console.log(data.result);
-            if (data.result.success) {
-                const res: AUTH_OBJ_TYPE = data.result;
-                dispatch(postAuthSuccessAction(res));
-                
-            }
-        })
-        .catch(err => {
-            console.log(err);
-            dispatch(postAuthErrorAction());
-        })
-    }
-    function logout(): void {
-
-    }
-    function refreshToken() {
-
-    }
+    const [loanState, dispatch] = useReducer(loanReducer, LOAN_CONTEXT_INITIAL_STATE);
 
     return (
-        <AuthContext.Provider value={{authObj: authState.authObj, login, logout, refreshToken}}>
+        <LoanContext.Provider value={{loanObj: loanState.loanObj, login, logout, refreshToken}}>
             {children}
-        </AuthContext.Provider>
+        </LoanContext.Provider>
     );
 }

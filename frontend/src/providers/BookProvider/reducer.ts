@@ -1,6 +1,6 @@
 import { handleActions } from "redux-actions";
 import { BookActionEnums } from "./actions";
-import { BOOK_CONTEXT_INITIAL_STATE } from "./context";
+import { BOOK_CONTEXT_INITIAL_STATE, BOOK_CONTEXT_INITIAL_STATEL } from "./context";
 
 /**
  * A reducer t
@@ -21,5 +21,5 @@ export const BookReducer = handleActions(
             ...action.payload
         })
     },
-    {}
+    BOOK_CONTEXT_INITIAL_STATE
 )
