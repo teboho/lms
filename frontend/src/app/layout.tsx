@@ -8,11 +8,8 @@ import Sider from "antd/lib/layout/Sider";
 import NavBar from "@/components/NavBar";
 import MyFooter from "@/components/MyFooter";
 import AuthProvider from "@/providers/AuthProvider";
-import SessionProvider from "@/providers/SessionProvider";
 import BookProvider from "@/providers/BookProvider";
 import CategoryProvider from "@/providers/CategoryProvider";
-import UserProvider from "@/providers/UserProvider";
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "savvyshelf",
@@ -28,8 +25,6 @@ export default function RootLayout({
     <html lang="en">
     <body>
       <AuthProvider>
-        <SessionProvider>
-          <UserProvider>
             <CategoryProvider>
               <BookProvider>
               <Layout>
@@ -46,8 +41,6 @@ export default function RootLayout({
               </Layout>
             </BookProvider>
             </CategoryProvider>
-          </UserProvider>
-        </SessionProvider>
       </AuthProvider>
     </body>
     </html>

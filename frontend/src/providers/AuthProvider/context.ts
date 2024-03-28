@@ -1,19 +1,43 @@
 "use client";
-import { register } from "module";
 import { createContext } from "react";
 
-export interface AUTH_OBJ_TYPE {
+export interface AUTH_RESPONSE_TYPE {
     "accessToken": string;
     "encryptedAccessToken": string;
     "expireInSeconds": number;
     "userId": number;
-  }
+}
 
-export interface AUTH_CONTEXT_STATE_TYPE {
-    isInProgress: boolean;
+export interface REGISTER_RESPONSE_TYPE {
+    "userName": string,
+    "name": string,
+    "surname": string,
+    "emailAddress": string,
+    "isActive": boolean,
+    "fullName": string,
+    "lastLoginTime": string,
+    "creationTime": string,
+    "roleNames": string[],
+    "id": number
+}
+
+export interface UserType {
+    "id": number,
+    "name": string,
+    "surname": string,
+    "userName": string,
+    "emailAddress": string,
+    roleNames?: string[],
+    fullName?: string
+}
+
+export interface AUTH_STATE_TYPE {
+    isPending: boolean;
     isSuccess: boolean;
     isError: boolean;
-    authObj?: AUTH_OBJ_TYPE;
+    authObj?: AUTH_RESPONSE_TYPE | undefined;
+    registerObj?: REGISTER_RESPONSE_TYPE | undefined;
+    userObj: UserType;
 }
 
 export interface AUTH_REQUEST_TYPE {
@@ -22,32 +46,46 @@ export interface AUTH_REQUEST_TYPE {
     "rememberClient": boolean;
 }
 
-export interface REGISTER_RESP_TYPE {
-    "userName": string,
-    "name": string,
-    "surname": string,
-    "emailAddress": string,
-    "isActive": false,
-    "fullName": string,
-    "lastLoginTime": string,
-    "creationTime": string,
-    "roleNames": Array<string>,
-    "id": 0
-}
-export interface REGISTER_REQ_TYPE {
+export interface REGISTER_REQUEST_TYPE {
     "userName": string,
     "name": string,
     "surname": string,
     "emailAddress": string,
     "isActive": boolean,
-    "roleNames": [
-        string
-    ],
+    "roleNames": string[],
     "password": string
 }
 
-export const AUTH_CONTEXT_INITIAL_STATE = {
-    isInProgress: false,
+export const AUTH_REQUEST_INIT = {
+    "userNameOrEmailAddress": "",
+    "password": "",
+    "rememberClient": false
+}
+
+export const REGISTER_REQUEST_INIT = {
+    "userName": "",
+    "name": "",
+    "surname": "",
+    "emailAddress": "",
+    "isActive": false,
+    "roleNames": [
+        ""
+    ],
+    "password": ""
+}
+
+export const User_Init: UserType = {
+    "id": 0,
+    "name": "",
+    "surname": "",
+    "userName": "",
+    "emailAddress": "",
+    roleNames: [""],
+    fullName: ""
+}
+
+export const AUTH_INITIAL_STATE = {
+    isPending: false,
     isError: false,
     isSuccess: false,
     authObj: {
@@ -55,7 +93,7 @@ export const AUTH_CONTEXT_INITIAL_STATE = {
         "encryptedAccessToken": "",
         "expireInSeconds": 0,
         "userId": 0
-      },
+    },
     registerObj: {
         "userName": "",
         "name": "",
@@ -64,13 +102,43 @@ export const AUTH_CONTEXT_INITIAL_STATE = {
         "isActive": false,
         "fullName": "",
         "lastLoginTime": "",
-        "creationTime": "2024-03-25T11:34:09.5656397+02:00",
+        "creationTime": "",
         "roleNames": [""],
         "id": 0
-      },
+    },
+    userObj: User_Init
+}
+
+// auth value type
+export interface AuthValueType {
+    authObj?: AUTH_RESPONSE_TYPE | undefined;
+    registerObj?: REGISTER_RESPONSE_TYPE | undefined;
+    userObj: UserType | undefined;
+    login: (authObj: AUTH_REQUEST_TYPE) => void;
+    logout: () => void;
+    refreshToken: () => void;
+    fail: () => void;
+    register: (registerObj: REGISTER_REQUEST_TYPE) => void;
+    getUserInfo: (id: number) => void;
+    isLoggedIn: () => boolean;
+    getUserId: () => number;
 }
 
 /**
- * Default value that the provider will pass is an empty object
+ * Default value that the provider will pass down to the children
  */
-export const AuthContext = createContext({ });
+const AuthContext = createContext<AuthValueType>({
+    authObj: AUTH_INITIAL_STATE.authObj, 
+    registerObj: AUTH_INITIAL_STATE.registerObj, 
+    userObj: User_Init,
+    login: (authObj: AUTH_REQUEST_TYPE) => {}, 
+    logout: () => {}, 
+    refreshToken: () => {}, 
+    fail: () => {}, 
+    register: (registerObj: REGISTER_REQUEST_TYPE) => {}, 
+    getUserInfo: (id: number) => {},
+    isLoggedIn: () => false, 
+    getUserId: () => 0
+});
+
+export default AuthContext;

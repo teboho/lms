@@ -7,7 +7,7 @@ import { Header, Content,  } from "antd/lib/layout/layout";
 import NavBar from "@/components/NavBar";
 import Link from "next/link";
 import { useContext } from "react";
-import { AuthContext } from "@/providers/AuthProvider/context";
+import AuthContext from "@/providers/AuthProvider/context";
 import { redirect } from "next/navigation";
 
 /**
@@ -15,10 +15,11 @@ import { redirect } from "next/navigation";
  * Different users will see different things here
  */
 export default function Welcome() {
-  // check if the user is logged in and redirect to home if so
+  // check if the user is logged in and redirect to home if so    
   const {isLoggedIn} = useContext(AuthContext);
 
   if (isLoggedIn()) {
+    // Load session
     redirect("/Home");
   }
   

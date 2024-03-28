@@ -3,31 +3,29 @@ import { Provider, useContext, useEffect, useReducer } from "react";
 import { CategoryContext } from "./context";
 import { categoryReducer } from "./reducer";
 import { getCategoryErrorAction, getCategoryRequestAction, getCategorySuccessAction } from "./actions";
-import { baseURL } from "../AuthProvider";
-import axios from "axios";
-import { AuthContext } from "../AuthProvider/context";
+import { baseURL, makeAxiosInstance } from "../AuthProvider";
+import axios, { Axios, AxiosInstance } from "axios";
+import AuthContext from "../AuthProvider/context";
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function CategoryProvider({ children }: { children: React.ReactNode }) {
-    // we will make the state with the reducers
+    // we will make the state with the reduce3rs
     const [categoryState, dispatch] = useReducer(categoryReducer, {});
     const { authObj } = useContext(AuthContext);
-    
-    useEffect(() => {
-        getCategories();
-    }, [])
 
-    const instance = axios.create({
-        baseURL: baseURL,
-        headers: {
-            "Authorization": `Bearer ${authObj.accessToken}`,
-            "Content-Type": "application/json"
+    useEffect(() => {
+        const accessToken = localStorage.getItem("accessToken");
+        const instance = makeAxiosInstance(accessToken);
+
+        // get the categories
+        if (accessToken) {
+            getCategories(instance);
         }
-    });
+    }, []);
 
     // get the categories
-    function getCategories() {
+    function getCategories(instance: AxiosInstance) {
         // before we make the http request, we set pending to true via dispatch
         dispatch(getCategoryRequestAction());
         // the we make the call

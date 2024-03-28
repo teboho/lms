@@ -3,15 +3,15 @@ import { ReactNode, useState, useEffect, useMemo, useContext } from "react";
 import withAuth from "@/hocs/withAuth";
 import { Button, List, message, Steps, theme } from 'antd';
 import { redirect } from "next/navigation";
-import { AuthContext } from "@/providers/AuthProvider/context";
-import { BookContext } from "@/providers/BookProvider/context";
-import { SessionContext } from "@/providers/SessionProvider/context";
+import AuthContext from "@/providers/AuthProvider/context";
+import BookContext from "@/providers/BookProvider/context";
 import { CategoryContext } from "@/providers/CategoryProvider/context";
 
 export type Preferences = {
     primaryCategoryId: number;
     secondaryCategoryId: number;
     tertiaryCategoryId: number;
+    patronId: number;
 }
 
 const cats: {name: string, id: number}[] = [];
@@ -29,8 +29,7 @@ const Survey = (): React.FC | React.ReactNode => {
     const [current, setCurrent] = useState(0);
     const [chosen, setChosen] = useState([]);  
     const [deleted, setDeleted] = useState([]);  
-    const {authObj, getUserId} = useContext(AuthContext);
-    const { sessionState } = useContext(SessionContext);
+    const {userObj, getUserId} = useContext(AuthContext);
     const bookContextObject = useContext(BookContext);
     const categoryContextValue = useContext(CategoryContext);
 
@@ -39,8 +38,8 @@ const Survey = (): React.FC | React.ReactNode => {
     }, [])
     
     const user = useMemo(() => {
-        return sessionState.user;
-    }, [sessionState]);
+        return userObj;
+    }, [userObj]);
     
     const savePref = (prefNum:number, category: object) => {
         const _deleted = cats.splice(prefNum, 1); // delete the option from the choices

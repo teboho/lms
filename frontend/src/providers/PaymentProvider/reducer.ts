@@ -1,25 +1,25 @@
 import { handleActions } from "redux-actions";
-import { AuthActionEnums } from "./actions";
-import { AUTH_CONTEXT_INITIAL_STATE } from "./context";
+import { PaymentActionEnums } from "./actions";
+import { PAYMENT_CONTEXT_INITIAL_STATE } from "./context";
 
 /**
  * A reducer t
  */
-export const authReducer = handleActions(
+export const paymentReducer = handleActions(
     {
         // this handler will change the value of the isPending in the state
-        [AuthActionEnums.PostAuthRequest]: (state, action) => ({
+        [PaymentActionEnums.PostPaymentRequest]: (state, action) => ({
             ...state,
             ...action.payload
         }),  // this handler will change the value of the isSuccess in the state
-        [AuthActionEnums.PostAuthSuccess]: (state, action) => ({
+        [PaymentActionEnums.PostPaymentSuccess]: (state, action) => ({
             ...state,
             ...action.payload
         }), // this handler will change the value of the isError in the state
-        [AuthActionEnums.PostAuthError]: (state, action) => ({
+        [PaymentActionEnums.PostPaymentError]: (state, action) => ({
             ...state,
             ...action.payload
         })
     },
-    AUTH_CONTEXT_INITIAL_STATE
+    PAYMENT_CONTEXT_INITIAL_STATE
 )

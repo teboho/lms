@@ -1,6 +1,5 @@
 "use client";
 import { createAction } from "redux-actions";
-import { Payment_CONTEXT_STATE_TYPE, Payment_OBJ_TYPE } from "./context";
 
 // experiment
 // export enum PaymentActionEnums {
@@ -27,7 +26,7 @@ export const postPaymentRequestAction = createAction(
  */
 export const postPaymentSuccessAction = createAction(
     PaymentActionEnums.PostPaymentSuccess,
-    (PaymentObj: Payment_OBJ_TYPE): any => ({ isSuccess: true, isInProgress: false, isError: false, PaymentObj})
+    (PaymentObj): any => ({ isSuccess: true, isInProgress: false, isError: false, PaymentObj})
 );
 
 /**

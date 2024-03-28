@@ -1,7 +1,6 @@
 "use client";
 import { createAction } from "redux-actions";
-import { BOOK } from "./context";
-import Book from "@/components/Book";
+import { BookType } from "./context";
 
 export const BookActionEnums = {
     GetBooksRequest: "GET_BOOKS_REQUEST",
@@ -11,15 +10,17 @@ export const BookActionEnums = {
     GetBookRequest: "GET_BOOK_REQUEST",
     GetBookSuccess: "GET_BOOK_SUCCESS",
     GetBookError: "GET_BOOK_ERROR",
+
+    SetSearchTerm: "SET_SEARCH_TERM"
 }
 
 /**
- * Sets the isInProgress to true
+ * Sets the isPending to true
  * The results array is not there yet
  */
 export const getBooksRequestAction = createAction(
     BookActionEnums.GetBooksRequest,
-    () => ({ isSuccess: false, isInProgress: true, isError: false, booksObj: []})
+    (): any => ({ isSuccess: false, isPending: true, isError: false, booksObj: [], book: undefined, books: undefined })
 )
 
 /**
@@ -27,7 +28,7 @@ export const getBooksRequestAction = createAction(
  */
 export const getBooksSuccessAction = createAction(
     BookActionEnums.GetBooksSuccess,
-    (booksObj: BOOK[]): any => ({ isSuccess: true, isInProgress: false, isError: false, results: booksObj})
+    (books: BookType[]): any => ({ isSuccess: true, isPending: false, isError: false, books, book: undefined})
 );
 
 /**
@@ -35,16 +36,16 @@ export const getBooksSuccessAction = createAction(
  */
 export const getBooksErrorAction = createAction(
     BookActionEnums.GetBooksSuccess,
-    () => ({ isSuccess: false, isInProgress: false, isError: true, booksObj: []})
+    (): any => ({ isSuccess: false, isPending: false, isError: true, books: undefined, book: undefined })
 );
 
 /**
- * Sets the isInProgress to true
+ * Sets the isPending to true
  * The results array is not there yet
  */
 export const getBookRequestAction = createAction(
     BookActionEnums.GetBookRequest,
-    () => ({ isSuccess: false, isInProgress: true, isError: false, bookObj: undefined})
+    ():any => ({ isSuccess: false, isPending: true, isError: false, book: undefined, books: undefined })
 )
 
 /**
@@ -52,13 +53,23 @@ export const getBookRequestAction = createAction(
  */
 export const getBookSuccessAction = createAction(
     BookActionEnums.GetBookSuccess,
-    (bookObj: BOOK): any => ({ isSuccess: true, isInProgress: false, isError: false, bookObj: bookObj})
+    (book: BookType):any => ({ isSuccess: true, isPending: false, isError: false, book, books: [] as BookType[] })
 );
+
+
 
 /**
  * Sets the isError to true but then all else to false
  */
 export const getBookErrorAction = createAction(
     BookActionEnums.GetBookSuccess,
-    () => ({ isSuccess: false, isInProgress: false, isError: true, bookObj: undefined})
+    () => ({ isSuccess: false, isPending: false, isError: true, book: undefined, books: undefined })
+);
+
+/**
+ * Sets the searchTerm
+ */
+export const setSearchTermAction = createAction(
+    BookActionEnums.SetSearchTerm,
+    (searchTerm: string): any => ({ searchTerm })
 );

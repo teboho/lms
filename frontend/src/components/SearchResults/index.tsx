@@ -22,8 +22,8 @@ const SearchResults: React.FC<SearchResultsProps> = ({ books, searchTerm }) => {
     return (
         <>
             <Title>Search Results for {searchTerm}</Title>
-            <Flex direction="horizontal" size="large">
-                {books.map((book, index) => (
+            <Flex  gap={20} justify="center" align="center" wrap="wrap">
+                {books?.map((book, index) => (
                     <div key={`search_col_${index}`}>
                         <Book book={book} />
                     </div>

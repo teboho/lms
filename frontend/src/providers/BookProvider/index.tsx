@@ -1,19 +1,19 @@
 "use client"
-import { Provider, useReducer } from "react";
-import { BookReducer } from "./reducer";
-import { BookContext } from "./context";
+import { useReducer } from "react";
+import { bookReducer } from "./reducer";
+import BookContext, { BOOK_CONTEXT_INITIAL_STATE } from "./context";
 import axios from "axios";
 import { baseURL } from "../AuthProvider";
 import { getBooksErrorAction, getBooksRequestAction, getBooksSuccessAction,
-    getBookErrorAction, getBookRequestAction, getBookSuccessAction 
+    getBookErrorAction, getBookRequestAction, getBookSuccessAction, 
+    setSearchTermAction
 } from "./actions";
 import { Preferences } from "@/app/(authorized)/Survey/page";
 
 export default function BookProvider({ children }: { children: React.ReactNode }) {
     // we will make the state with the reducers
-    const [bookState, dispatch] = useReducer(BookReducer, {
-        results: []
-    });
+    const [bookState, dispatch] = useReducer(bookReducer, BOOK_CONTEXT_INITIAL_STATE);
+
     const accessToken = localStorage.getItem("accessToken");
     // Axios instance
     const instance = axios.create({
@@ -29,10 +29,11 @@ export default function BookProvider({ children }: { children: React.ReactNode }
      * @param term search term
      */
     function search(term: string): void {
-        // conduct the fetch and dispatch based on the response
         const endpoint = "api/services/app/Book/GetSearchBooks";
         console.log(endpoint);
         console.log(term);
+
+        dispatch(setSearchTermAction(term));
         
         // before we make the http request, we set pending to true via dispatch
         dispatch(getBooksRequestAction());
@@ -45,6 +46,33 @@ export default function BookProvider({ children }: { children: React.ReactNode }
                     if (res.data.result !== null)
                     {
                         dispatch(getBooksSuccessAction(res.data.result))
+                    }
+                } else {
+                    // dispatch for erroe
+                    dispatch(getBooksErrorAction());
+                }
+            })
+    }
+    /**
+     * get all books (we need to do by category)
+     */
+    function getAll(): void {
+        // conduct the fetch and dispatch based on the response
+        const endpoint = "api/services/app/Book/GetAll";
+        console.log(endpoint);
+        // console.log(term);
+        
+        // before we make the http request, we set pending to true via dispatch
+        dispatch(getBooksRequestAction());
+        // the we make the call
+        instance.get(`${endpoint}`)
+            .then(res => {
+                console.log("results", res.data)
+                if (res.data.success) {
+                    // disptach for success
+                    if (res.data.result !== null)
+                    {
+                        dispatch(getBooksSuccessAction(res.data.result.items))
                     }
                 } else {
                     // dispatch for erroe
@@ -66,7 +94,7 @@ export default function BookProvider({ children }: { children: React.ReactNode }
         // the we make the call
         instance.get(`${endpoint}`)
             .then(res => {
-                console.log("results", res.data)
+                console.log("book result", res.data.result)
                 if (res.data.success) {
                     // disptach for success
                     if (res.data.result !== null)
@@ -107,7 +135,7 @@ export default function BookProvider({ children }: { children: React.ReactNode }
     }
 
     return (
-        <BookContext.Provider value={{bookState, search, savePreferences, getBook}}>
+        <BookContext.Provider value={{books: bookState.books, book: bookState.book, searchTerm: bookState.searchTerm, search, savePreferences, getBook, getAll}}>
             {children}
         </BookContext.Provider>
     );

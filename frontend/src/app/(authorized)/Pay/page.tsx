@@ -4,9 +4,9 @@ import { useSearchParams } from "next/navigation";
 
 import withAuth from "@/hocs/withAuth";
 import { Button, List, message, Steps, theme } from 'antd';
-import BookContext from "@/providers/BookProvider/context";
+import { BookContext } from "@/providers/BookProvider/context";
 
-const Loan = (): React.FC | React.ReactNode => {
+const Pay = (): React.FC | React.ReactNode => {
     const { token } = theme.useToken();
     const searchParams = useSearchParams();
     const params = new URLSearchParams(searchParams);
@@ -19,11 +19,11 @@ const Loan = (): React.FC | React.ReactNode => {
 
     return (
         <>
-           <h1>Loan book {params.get("bookId")}</h1>
+           <h1>Pay book {params.get("bookId")}</h1>
 
            
         </>
     );
 }
 
-export default withAuth(Loan);
+export default withAuth(Pay);

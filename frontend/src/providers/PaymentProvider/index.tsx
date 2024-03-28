@@ -1,22 +1,22 @@
 "use client"
 import { Provider, useReducer } from "react";
-import { AUTH_CONTEXT_INITIAL_STATE, AUTH_REQUEST_TYPE, AuthContext, AUTH_OBJ_TYPE } from "./context";
-import { authReducer } from "./reducer";
-import { postAuthErrorAction, postAuthRequestAction, postAuthSuccessAction } from "./actions";
+import PaymentContext, { PAYMENT_CONTEXT_INITIAL_STATE, PAYMENT_REQUEST_TYPE, PAYMENT_OBJ_TYPE } from "./context";
+import { paymentReducer } from "./reducer";
+import { postPaymentSuccessAction, PaymentActionEnums, postPaymentErrorAction, postPaymentRequestAction } from "./actions";
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
-export default function AuthProvider({ children }: { children: React.ReactNode }) {
+export default function PaymentProvider({ children }: { children: React.ReactNode }) {
     // we will make the state with the reducers
-    const [authState, dispatch] = useReducer(authReducer, AUTH_CONTEXT_INITIAL_STATE);
+    const [paymentState, dispatch] = useReducer(paymentReducer, PAYMENT_CONTEXT_INITIAL_STATE);
 
     /**
      * 
      * @param loginObj login object
      */
-    function login(loginObj: AUTH_REQUEST_TYPE): void {
+    function login(loginObj: PAYMENT_REQUEST_TYPE): void {
         // conduct the fetch and dispatch based on the response
-        const endpoint = apiURL + "api/TokenAuth/Authenticate";
+        const endpoint = apiURL + "api/TokenPayment/Paymententicate";
         console.log(endpoint);
         console.log(loginObj);
         
@@ -31,14 +31,14 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         .then(data => {
             console.log(data.result);
             if (data.result.success) {
-                const res: AUTH_OBJ_TYPE = data.result;
-                dispatch(postAuthSuccessAction(res));
+                const res: PAYMENT_OBJ_TYPE = data.result;
+                dispatch(postPaymentSuccessAction(res));
                 
             }
         })
         .catch(err => {
             console.log(err);
-            dispatch(postAuthErrorAction());
+            dispatch(postPaymentErrorAction());
         })
     }
     function logout(): void {
@@ -49,8 +49,8 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     }
 
     return (
-        <AuthContext.Provider value={{authObj: authState.authObj, login, logout, refreshToken}}>
+        <PaymentContext.Provider value={{paymentObj: paymentState.paymentObj, login, logout, refreshToken}}>
             {children}
-        </AuthContext.Provider>
+        </PaymentContext.Provider>
     );
 }

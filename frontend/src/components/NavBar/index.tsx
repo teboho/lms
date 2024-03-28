@@ -1,5 +1,5 @@
 'use client';
-import React, { useContext, useState } from "react";
+import React, { useContext, useReducer, useState } from "react";
 import { Flex, Layout, Input, Button } from "antd";
 import { DatabaseOutlined } from "@ant-design/icons";
 import type { MenuProps } from "antd";
@@ -10,8 +10,10 @@ import { SearchProps } from "antd/es/input";
 import Link from "next/link";
 import Image from "next/image";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
-import { AuthContext } from "@/providers/AuthProvider/context";
-import { BookContext } from "@/providers/BookProvider/context";
+import AuthContext from "@/providers/AuthProvider/context";
+import BookContext from "@/providers/BookProvider/context";
+import { setSearchTermAction } from "@/providers/BookProvider/actions";
+import { bookReducer } from "@/providers/BookProvider/reducer";
 
 const outItems: MenuProps['items'] = [
     {
@@ -32,14 +34,12 @@ const outItems: MenuProps['items'] = [
 const { Search } = Input;
 
 const NavBar: React.FC = () => {
-    const searchParams = useSearchParams();
-    const pathname = usePathname();
     const { replace } = useRouter();
     const { logout } = useContext(AuthContext);
     const { styles, cx } = useStyles();
     const [searchTerm, setSearchTerm] = useState("");
     
-    const { bookState, search } = useContext(BookContext);
+    const { search } = useContext(BookContext);
 
     function handleSearch(term:string) {
         setSearchTerm(prev => term);
@@ -49,7 +49,7 @@ const NavBar: React.FC = () => {
     const onSearch: SearchProps["onSearch"] = (value, _e, info) => {
         console.log(searchTerm);
 
-        search(searchTerm, accessToken);
+        search(searchTerm);
     }
 
     if (accessToken) {
@@ -64,6 +64,11 @@ const NavBar: React.FC = () => {
                 label: <Link href={"/Survey"}>Survey</Link>, 
                 key: 'survey',
                 icon: <DatabaseOutlined />
+            },
+            {
+                label: <Link href={"/AllBooks"}>View All Books</Link>, 
+                key: 'allbooks',
+                icon: <DatabaseOutlined />
             }
         ];
 
@@ -77,7 +82,7 @@ const NavBar: React.FC = () => {
                 <Search className={cx(styles.search)} 
                     placeholder="search for book" onChange={e => handleSearch(e.target.value)} 
                     onSearch={onSearch} />
-                <Button onClick={logout}>Logout</Button>
+                <Button onClick={() => { logout(); }}>Logout</Button>
             </Flex>
         );
     }

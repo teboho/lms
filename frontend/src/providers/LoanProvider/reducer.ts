@@ -1,25 +1,25 @@
 import { handleActions } from "redux-actions";
-import { LoanActionEnums } from "./actions";
-import { LOAN_CONTEXT_INITIAL_STATE } from "./context";
+import { AuthActionEnums } from "./actions";
+import { AUTH_CONTEXT_INITIAL_STATE } from "./context";
 
 /**
  * A reducer t
  */
-export const loanReducer = handleActions(
+export const authReducer = handleActions(
     {
         // this handler will change the value of the isPending in the state
-        [LoanActionEnums.PostLoanRequest]: (state, action) => ({
+        [AuthActionEnums.PostAuthRequest]: (state, action) => ({
             ...state,
             ...action.payload
         }),  // this handler will change the value of the isSuccess in the state
-        [LoanActionEnums.PostLoanSuccess]: (state, action) => ({
+        [AuthActionEnums.PostAuthSuccess]: (state, action) => ({
             ...state,
             ...action.payload
         }), // this handler will change the value of the isError in the state
-        [LoanActionEnums.PostLoanError]: (state, action) => ({
+        [AuthActionEnums.PostAuthError]: (state, action) => ({
             ...state,
             ...action.payload
         })
     },
-    LOAN_CONTEXT_INITIAL_STATE
+    AUTH_CONTEXT_INITIAL_STATE
 )

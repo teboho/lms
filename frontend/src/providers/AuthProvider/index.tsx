@@ -1,18 +1,70 @@
 "use client"
-import { Provider, useReducer } from "react";
-import { AUTH_CONTEXT_INITIAL_STATE, AUTH_REQUEST_TYPE, AuthContext, AUTH_OBJ_TYPE, REGISTER_REQ_TYPE } from "./context";
+import { useEffect, useReducer } from "react";
+import AuthContext, { AUTH_INITIAL_STATE, AUTH_REQUEST_TYPE, AUTH_RESPONSE_TYPE, REGISTER_REQUEST_TYPE } from "./context";
 import { authReducer } from "./reducer";
-import { postAuthErrorAction, postAuthRequestAction, postAuthSuccessAction } from "./actions";
+import { clearAuthAction, getUserErrorAction, getUserRequestAction, getUserSuccessAction, postAuthErrorAction, postAuthRequestAction, postAuthSuccessAction } from "./actions";
 import { useRouter } from 'next/navigation';
 import { message } from "antd";
+import axios from "axios";
 
 export const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
+/**
+ * 
+ * @param accessToken access token
+ * @returns an axios instance
+ */
+export function makeAxiosInstance(accessToken:string) {
+    return axios.create({
+        baseURL: baseURL,
+        headers: {
+            "Authorization": `Bearer ${accessToken}`,
+            "Content-Type": "application/json"
+        }
+    });
+}
+
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
     // we will make the state with the reducers
-    const [authState, dispatch] = useReducer(authReducer, AUTH_CONTEXT_INITIAL_STATE);
+    const [authState, dispatch] = useReducer(authReducer, AUTH_INITIAL_STATE);
     const { push } = useRouter();
     const [messageApi, contextHolder] = message.useMessage();
+
+    useEffect(() => {
+        const accessToken = localStorage.getItem("accessToken");
+        // check if the user is logged in
+        if (accessToken) {
+            // if the user is logged in, then we should get the user info
+            const userId = parseInt(localStorage.getItem("userId"));
+            getUserInfo(userId);
+        }
+    }, []);
+
+    const getUserInfo = (id: number): void => {
+        // conduct the fetch and dispatch based on the response
+        const endpoint = `/api/services/app/User/Get?Id=${id}`;
+
+        const accessToken = localStorage.getItem("accessToken");
+        const instance = makeAxiosInstance(accessToken);
+
+        dispatch(getUserRequestAction());
+        instance.get(endpoint)
+            .then(response => {
+                const data = response.data;
+                console.log("User GET...", data);
+                if (data.success) {
+                    const res = data.result;
+                    dispatch(getUserSuccessAction(res));
+                    console.log("User GET success");
+                } else {
+                    console.log("User GET unsuccessful");
+                }
+            })
+            .catch(error => {
+                console.log(error);
+                dispatch(getUserErrorAction());
+            });
+    }
 
     const fail = (): void => {
         messageApi.open({
@@ -30,29 +82,35 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
     /**
      * 
-     * @param loginObj login object
+     * @param authObj login object
      */
-    function login(loginObj: AUTH_REQUEST_TYPE): void {
+    function login(authObj: AUTH_REQUEST_TYPE): void {
         // conduct the fetch and dispatch based on the response
         const endpoint = baseURL + "/api/TokenAuth/Authenticate";
         
+        dispatch(postAuthRequestAction());
         fetch(endpoint, {
             headers: {
                 "Content-Type": "application/json",
             },
             method: "POST",
-            body: JSON.stringify(loginObj),
+            body: JSON.stringify(authObj),
             mode: "cors"
         }).then(res => res.json())
         .then(data => {
             console.log("data", data);
             if (data.success) {
-                const res: AUTH_OBJ_TYPE = data.result;
+                const res: AUTH_RESPONSE_TYPE = data.result;
                 dispatch(postAuthSuccessAction(res));
                 console.log("Log in success");
 
+                console.log("saving token", res.accessToken, "|", res.encryptedAccessToken)
                 localStorage.setItem("accessToken", res.accessToken);
                 localStorage.setItem("encryptedAccessToken", res.encryptedAccessToken);
+                localStorage.setItem("expireInSeconds", res.expireInSeconds.toString());
+                localStorage.setItem("userId", res.userId.toString());
+
+                getUserInfo(res.userId);
 
                 push("/Home");
             } else {
@@ -66,10 +124,11 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         })
     }
 
-    function register(registerObj: REGISTER_REQ_TYPE): void {
+    function register(registerObj: REGISTER_REQUEST_TYPE): void {
         // conduct the fetch and dispatch based on the response
         const endpoint = baseURL + "/api/services/app/User/Create";
         
+        dispatch(postAuthRequestAction());
         fetch(endpoint, {
             headers: {
                 "Content-Type": "application/json",
@@ -81,7 +140,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         .then(data => {
             console.log("data", data);
             if (data.success) {
-                const res: AUTH_OBJ_TYPE = data.result;
+                const res: AUTH_RESPONSE_TYPE = data.result;
                 dispatch(postAuthSuccessAction(res));
                 console.log("Register success");
 
@@ -106,6 +165,8 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
             type: "success",
             content: "Logout Successful"
         })
+
+        dispatch(clearAuthAction());
     }
 
     function refreshToken() {
@@ -125,7 +186,20 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     }
 
     return (
-        <AuthContext.Provider value={{authObj: authState.authObj, registerObj: authState.registerObj, login, logout, refreshToken, fail, register, isLoggedIn, getUserId}}>
+        <AuthContext.Provider 
+            value={{
+                authObj: authState.authObj, 
+                registerObj: authState.registerObj,
+                userObj: authState.userObj, 
+                login, 
+                logout, 
+                refreshToken, 
+                fail, 
+                register, 
+                isLoggedIn, 
+                getUserId,
+                getUserInfo
+        }}>
             {contextHolder}
             {children}
         </AuthContext.Provider>

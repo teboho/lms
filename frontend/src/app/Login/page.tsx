@@ -5,7 +5,7 @@ import { Layout, Flex, Form, Input, Button, Row, Col, Tag, Typography, message }
 import { Header, Content, Footer } from "antd/lib/layout/layout";
 import Sider from "antd/lib/layout/Sider";
 import moduleStyles from "./register.module.css";
-import { AUTH_REQUEST_TYPE, AuthContext } from "@/providers/AuthProvider/context";
+import AuthContext, { AUTH_REQUEST_TYPE } from "@/providers/AuthProvider/context";
 import { useRouter } from "next/navigation";
 import { stat } from "fs";
 
@@ -62,7 +62,7 @@ interface FormInputDataType {
 
 export default function Login(): React.ReactNode {
     const [form] = Form.useForm<FormInputDataType>();
-    const { login, state } = useContext(AuthContext);
+    const { login } = useContext(AuthContext);
     const { styles, cx, theme } = useMainStyles();
     const  { push } = useRouter();
 

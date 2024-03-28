@@ -20,22 +20,24 @@ const Book: React.FC<BookProps> = ({ book }) => {
     return (
         <Card
             hoverable
-            style={{ width: 500, height: 500, overflow: 'auto' }}
+            style={{ width: 500, height: 850, }}
             cover={<Image alt={book.name} src={book.imageURL} style={{height: 250}}/>}
         >
             <Card.Meta
                 title={<Title level={4}>{book.name}</Title>}
                 description={
                     <>
-                        <Paragraph  style={{ maxHeight: '200px', overflowY: 'scroll' }}>{book.description}</Paragraph>
-                        <Paragraph>Type: {book.type}</Paragraph>
-                        <Paragraph>Year: {book.year}</Paragraph>
+                        <Paragraph  style={{ height: '200px', maxHeight: '200px', overflowY: 'scroll' }}>{book.description}</Paragraph>
+                        <Paragraph>Type: {book.type}, Year: {book.year}</Paragraph>
                         <Paragraph>ISBN: {book.isbn}</Paragraph>
                         <Paragraph>Category ID: {book.categoryId}</Paragraph>
                         <Paragraph>Author ID: {book.authorId}</Paragraph>
                         <Paragraph>ID: {book.id}</Paragraph>
                         <Link href={`/Read?bookId=${book.id}`}>
                             <Button>Read</Button>
+                        </Link>
+                        <Link href={`/Loan?bookId=${book.id}`}>
+                            <Button>Loan</Button>
                         </Link>
                     </>
                 }
