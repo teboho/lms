@@ -11,6 +11,7 @@ import AuthProvider from "@/providers/AuthProvider";
 import SessionProvider from "@/providers/SessionProvider";
 import BookProvider from "@/providers/BookProvider";
 import CategoryProvider from "@/providers/CategoryProvider";
+import UserProvider from "@/providers/UserProvider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -28,22 +29,24 @@ export default function RootLayout({
     <body>
       <AuthProvider>
         <SessionProvider>
-          <CategoryProvider>
-            <BookProvider>
-            <Layout>
-              <Header style={{background: "white"}}>
-                <NavBar />
-              </Header>
+          <UserProvider>
+            <CategoryProvider>
+              <BookProvider>
               <Layout>
-                <Flex>
-                  <Sider width={"100%"} style={{background: "white"}}>
-                    <Content>{children}</Content>
-                  </Sider>
-                </Flex>
+                <Header style={{background: "white"}}>
+                  <NavBar />
+                </Header>
+                <Layout>
+                  <Flex>
+                    <Sider width={"100%"} style={{background: "white"}}>
+                      <Content>{children}</Content>
+                    </Sider>
+                  </Flex>
+                </Layout>
               </Layout>
-            </Layout>
-          </BookProvider>
-          </CategoryProvider>
+            </BookProvider>
+            </CategoryProvider>
+          </UserProvider>
         </SessionProvider>
       </AuthProvider>
     </body>

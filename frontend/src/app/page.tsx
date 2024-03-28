@@ -10,6 +10,10 @@ import { useContext } from "react";
 import { AuthContext } from "@/providers/AuthProvider/context";
 import { redirect } from "next/navigation";
 
+/**
+ * 
+ * Different users will see different things here
+ */
 export default function Welcome() {
   // check if the user is logged in and redirect to home if so
   const {isLoggedIn} = useContext(AuthContext);

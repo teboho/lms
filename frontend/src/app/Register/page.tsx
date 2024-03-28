@@ -81,7 +81,10 @@ export default function Register(): React.ReactNode {
             emailAddress: formstuff.email.email,
             password: formstuff.password.password,
             userName: formstuff.email.email,
-            isActive: true
+            isActive: true,
+            roleNames: [
+                "PATRON"
+            ],
         }
         console.log(user);
         register(user);

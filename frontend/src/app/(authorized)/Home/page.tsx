@@ -11,12 +11,13 @@ import Image from "next/image";
 import {useStyles} from "./styles";
 import Preferences from "@/components/Preferences";
 import History from "@/components/History";
+import { UserContext } from "@/providers/UserProvider/context";
 
 const Home = ({ searchParams } : { searchParams: { query?: string; page?: string;} }): React.FC | React.ReactNode => {
     const { getInfo, sessionState } = useContext(SessionContext);
+    const { getUserProfile, userState } = useContext(UserContext);
     const { bookState, search } = useContext(BookContext);
     const { styles, cx } = useStyles();
-
 
     useEffect(() => {
         getInfo();
@@ -25,12 +26,21 @@ const Home = ({ searchParams } : { searchParams: { query?: string; page?: string
     const user = useMemo(() => {
         return sessionState.user;
     }, [sessionState]);
+
+    useEffect(() => {
+        getUserProfile(user?.id);
+    }, [sessionState]);
+
+    const fulluser = useMemo(() => {
+        console.log(userState.user);
+        return userState.user;
+    }, [userState]);
     
     // use memo to get the values from the state
-    useEffect(() => {
-        console.log(bookState.results)
-        // return results;
-    }, [bookState]);
+    // useEffect(() => {
+    //     console.log(bookState.results)
+    //     // return results;
+    // }, [bookState]);
 
     return (
         <>   
@@ -47,6 +57,8 @@ const Home = ({ searchParams } : { searchParams: { query?: string; page?: string
                             <p>surname: {user?.surname}</p>
                             <p>user id: {user?.id}</p>
                             <p>email: {user?.emailAddress}</p>
+                            <p>fullname: {fulluser?.fullName}</p>
+                            <p>rolenames: {JSON.stringify(fulluser?.roleNames)}</p>
                         </div>
                         <List
                             className={cx(styles.list)}

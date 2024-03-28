@@ -101,7 +101,7 @@ export default function Login(): React.ReactNode {
                         <Row>           
                             <Col span={24}>
                             <MyFormItemGroup prefix={["email"]}>
-                                <MyFormItem name="email" label="Email">
+                                <MyFormItem name="email" label="Email/Username">
                                     <Input />
                                 </MyFormItem>
                             </MyFormItemGroup>

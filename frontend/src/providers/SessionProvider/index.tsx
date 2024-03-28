@@ -42,8 +42,31 @@ export default function SessionProvider({ children }: { children: React.ReactNod
                     const res = data.result.user;
                     dispatch(postSessionSuccessAction(res));
                     console.log("GetCurrentLoginInformations success");
+                    // getUserInformations()
                 } else {
                     console.log("GetCurrentLoginInformations unsuccessful");
+                }
+            })
+            .catch(error => {
+                console.log(error);
+                dispatch(postSessionErrorAction());
+            });
+    }
+
+    function getUserInformations(id: number): void {
+        // conduct the fetch and dispatch based on the response
+        const endpoint = `/api/services/app/User/Get?Id=${id}`;
+
+        instance.get(endpoint)
+            .then(response => {
+                const data = response.data;
+                console.log("data", data);
+                if (data.success) {
+                    const res = data.result.user;
+                    dispatch(postSessionSuccessAction(res));
+                    console.log("getUserInformations success");
+                } else {
+                    console.log("getUserInformations unsuccessful");
                 }
             })
             .catch(error => {

@@ -2,7 +2,7 @@
 import { get } from "https";
 import { createContext } from "react";
 
-export interface SessionUser {
+export interface User {
     "id": number,
     "name": string,
     "surname": string,
@@ -12,13 +12,13 @@ export interface SessionUser {
     fullName?: string
 }
 
-export const SESSION_INITIAL_STATE = {
+export const USER_INITIAL_STATE = {
     "id": 0,
     "name": "",
     "surname": "",
     "userName": "",
     "emailAddress": "",
-    roleNames: [""],
+    roleNames: Array<string>(),
     fullName: ""
 }
 
@@ -27,4 +27,4 @@ type getInfoType = () => void;
 /**
  * Default value that the provider will pass is an empty object
  */
-export const SessionContext = createContext<{}>({});
+export const UserContext = createContext<{}>({});
