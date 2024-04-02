@@ -1,6 +1,6 @@
 "use client";
 import { createAction } from "redux-actions";
-import { BookType } from "./context";
+import { BookDataType } from "./context";
 
 export const BookActionEnums = {
     GetBooksRequest: "GET_BOOKS_REQUEST",
@@ -28,7 +28,7 @@ export const getBooksRequestAction = createAction(
  */
 export const getBooksSuccessAction = createAction(
     BookActionEnums.GetBooksSuccess,
-    (books: BookType[]): any => ({ isSuccess: true, isPending: false, isError: false, books, book: undefined})
+    (books: BookDataType[]): any => ({ isSuccess: true, isPending: false, isError: false, books, book: undefined})
 );
 
 /**
@@ -53,7 +53,7 @@ export const getBookRequestAction = createAction(
  */
 export const getBookSuccessAction = createAction(
     BookActionEnums.GetBookSuccess,
-    (book: BookType):any => ({ isSuccess: true, isPending: false, isError: false, book, books: [] as BookType[] })
+    (book: BookDataType):any => ({ isSuccess: true, isPending: false, isError: false, book, books: [] as BookDataType[] })
 );
 
 
@@ -63,7 +63,7 @@ export const getBookSuccessAction = createAction(
  */
 export const getBookErrorAction = createAction(
     BookActionEnums.GetBookSuccess,
-    () => ({ isSuccess: false, isPending: false, isError: true, book: undefined, books: undefined })
+    () => ({ isSuccess: false, isPending: false, isError: true, book: undefined, books: undefined, searchTerm: "" })
 );
 
 /**

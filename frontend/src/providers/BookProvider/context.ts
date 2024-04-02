@@ -1,11 +1,17 @@
 "use client";
-import { Preferences } from "@/app/(authorized)/Survey/page";
+import { Preferences } from "@/app/(authorized)/Patron/Survey/page";
 import { createContext } from "react";
 
-export interface BookType {
+export enum BookType {
+    "Physical",
+    "Digital",
+    "Both",
+}
+
+export interface BookDataType {
     "name": string,
     "description": string,
-    "type": number,
+    "type": BookType,
     "year": number,
     "imageURL": string,
     "isbn": string,
@@ -14,7 +20,7 @@ export interface BookType {
     "id": number
 }
 
-export const BOOK_INIT: BookType = {
+export const BOOK_INIT: BookDataType = {
     "name": "",
     "description": "",
     "type": 0,
@@ -30,8 +36,8 @@ export interface BOOK_STATE_TYPE {
     isPending: boolean;
     isSuccess: boolean;
     isError: boolean;
-    books: BookType[] | undefined;
-    book: BookType | undefined;
+    books: BookDataType[] | undefined;
+    book: BookDataType | undefined;
     searchTerm: string;
 }
 
@@ -45,8 +51,8 @@ export const BOOK_CONTEXT_INITIAL_STATE: BOOK_STATE_TYPE = {
 }
 
 export interface BookContextType {
-    book: BookType;
-    books: BookType[];
+    book: BookDataType;
+    books: BookDataType[];
     search: (term: string) => void;
     savePreferences: (prefs: Preferences) => void;
     getBook: (bookId: string) => void;

@@ -3,7 +3,7 @@ import { useEffect, useReducer } from "react";
 import AuthContext, { AUTH_INITIAL_STATE, AUTH_REQUEST_TYPE, AUTH_RESPONSE_TYPE, REGISTER_REQUEST_TYPE } from "./context";
 import { authReducer } from "./reducer";
 import { clearAuthAction, getUserErrorAction, getUserRequestAction, getUserSuccessAction, postAuthErrorAction, postAuthRequestAction, postAuthSuccessAction } from "./actions";
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import { message } from "antd";
 import axios from "axios";
 
@@ -29,14 +29,26 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     const [authState, dispatch] = useReducer(authReducer, AUTH_INITIAL_STATE);
     const { push } = useRouter();
     const [messageApi, contextHolder] = message.useMessage();
+    
+    const accessToken = localStorage.getItem("accessToken");
+
+    const instance = makeAxiosInstance(accessToken);
 
     useEffect(() => {
-        const accessToken = localStorage.getItem("accessToken");
         // check if the user is logged in
         if (accessToken) {
+            dispatch(postAuthSuccessAction({
+                accessToken: accessToken,
+                encryptedAccessToken: localStorage.getItem("encryptedAccessToken"),
+                expireInSeconds: parseInt(localStorage.getItem("expireInSeconds")),
+                userId: parseInt(localStorage.getItem("userId"))
+            }));
+
             // if the user is logged in, then we should get the user info
             const userId = parseInt(localStorage.getItem("userId"));
             getUserInfo(userId);
+            
+            console.log("Auth has landed...");
         }
     }, []);
 
@@ -98,7 +110,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
             mode: "cors"
         }).then(res => res.json())
         .then(data => {
-            console.log("data", data);
+            console.log("Auth login data", data);
             if (data.success) {
                 const res: AUTH_RESPONSE_TYPE = data.result;
                 dispatch(postAuthSuccessAction(res));
@@ -111,8 +123,8 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
                 localStorage.setItem("userId", res.userId.toString());
 
                 getUserInfo(res.userId);
-
-                push("/Home");
+                    
+                push("/");
             } else {
                 console.log("Login is unsuccessful");
                 fail();
@@ -158,9 +170,9 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     }
 
     function logout(): void {
-        localStorage.clear();
         push("/Login");
         
+        localStorage.clear();
         messageApi.open({
             type: "success",
             content: "Logout Successful"

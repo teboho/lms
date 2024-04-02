@@ -1,10 +1,10 @@
 'use client';
-import React, { useContext, useReducer, useState } from "react";
+import React, { useContext, useMemo, useReducer, useState } from "react";
 import { Flex, Layout, Input, Button } from "antd";
 import { DatabaseOutlined } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import Menu from "antd/lib/menu/menu";
-import styles from './NavBar.module.css';
+import style from './NavBar.module.css';
 import  { useStyles } from './styles';
 import { SearchProps } from "antd/es/input";
 import Link from "next/link";
@@ -12,8 +12,6 @@ import Image from "next/image";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import AuthContext from "@/providers/AuthProvider/context";
 import BookContext from "@/providers/BookProvider/context";
-import { setSearchTermAction } from "@/providers/BookProvider/actions";
-import { bookReducer } from "@/providers/BookProvider/reducer";
 
 const outItems: MenuProps['items'] = [
     {
@@ -35,14 +33,20 @@ const { Search } = Input;
 
 const NavBar: React.FC = () => {
     const { replace } = useRouter();
-    const { logout } = useContext(AuthContext);
+    const { logout, userObj } = useContext(AuthContext);
     const { styles, cx } = useStyles();
     const [searchTerm, setSearchTerm] = useState("");
     
     const { search } = useContext(BookContext);
 
+    const user = useMemo(() => userObj, [userObj]);
+
     function handleSearch(term:string) {
         setSearchTerm(prev => term);
+    }
+
+    function isPatron() {
+        return user?.roleNames?.includes("PATRON");
     }
 
     const accessToken = localStorage.getItem("accessToken");
@@ -53,7 +57,6 @@ const NavBar: React.FC = () => {
     }
 
     if (accessToken) {
-
         const inItems: MenuProps['items'] = [
             {
                 label: <Link href={"/"}>Home</Link>, 
@@ -72,22 +75,32 @@ const NavBar: React.FC = () => {
             }
         ];
 
+        const inAdminItems: MenuProps['items'] = [
+            {
+                label: <Link href={"/"}>Home</Link>, 
+                key: 'home',
+                icon: <Image src="/assets/images/LMS-logo1-transparent.png" width={30} height={30} alt="logo"/>
+            },
+        ];
+
         return (
-            <Flex className={cx(styles.flex)} justify="center" align="center">
-                {/* <Link href={"/"}><Image src="/assets/images/LMS-logo1-transparent.png" width={30} height={30} alt="logo"/></Link> */}
+            <Flex className={cx(styles.flex, styles.sticky)} justify="space-between" align="center">
                 <Menu 
                     mode="horizontal"
-                    items={inItems}
+                    items={isPatron() ? inItems : inAdminItems}
                 />
-                <Search className={cx(styles.search)} 
-                    placeholder="search for book" onChange={e => handleSearch(e.target.value)} 
-                    onSearch={onSearch} />
-                <Button onClick={() => { logout(); }}>Logout</Button>
+                <Search 
+                    className={cx(styles.search)} 
+                    placeholder="search for book" 
+                    onChange={e => handleSearch(e.target.value)} 
+                    onSearch={onSearch} 
+                />
+                <Button onClick={logout}>Logout</Button>
             </Flex>
         );
     }
 
-    return <Menu mode="horizontal" items={outItems} />;
+    return <Menu mode="horizontal" items={outItems} className={cx(styles.sticky)} />;
 }
 
 export default NavBar;

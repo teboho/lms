@@ -62,9 +62,16 @@ interface FormInputDataType {
 
 export default function Login(): React.ReactNode {
     const [form] = Form.useForm<FormInputDataType>();
-    const { login } = useContext(AuthContext);
+    const { login, authObj } = useContext(AuthContext);
     const { styles, cx, theme } = useMainStyles();
     const  { push } = useRouter();
+
+    useEffect(() => {
+        if (authObj?.accessToken) {
+            push("/");
+        }
+    }
+    , []);
 
     const onFinish = (value: object): void => {
         console.log("Hello World");

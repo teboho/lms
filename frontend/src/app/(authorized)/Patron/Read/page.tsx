@@ -4,12 +4,12 @@ import { useSearchParams } from "next/navigation";
 
 import withAuth from "@/hocs/withAuth";
 import { Card, Typography, Image, Button , List, message, Steps, theme } from 'antd';
-import BookContext, { BookType } from "@/providers/BookProvider/context";
+import BookContext, { BookDataType } from "@/providers/BookProvider/context";
 
 import Link from "next/link";
 
 interface BookProps {
-    book: BookType;
+    book: BookDataType;
 }
 
 const { Title, Paragraph } = Typography;

@@ -1,11 +1,6 @@
 "use client";
 import { createAction } from "redux-actions";
-import { LOAN_CONTEXT_STATE_TYPE, LOAN_OBJ_TYPE } from "./context";
-
-// experiment
-// export enum LoanActionEnums {
-//     SetToken = "SET_TOKEN",
-// }
+import { LOAN_OBJ_TYPE } from "./context";
 
 export const LoanActionEnums = {
     PostLoanRequest: "POST_LOAN_REQUEST",
@@ -19,7 +14,7 @@ export const LoanActionEnums = {
  */
 export const postLoanRequestAction = createAction(
     LoanActionEnums.PostLoanRequest,
-    (): LOAN_CONTEXT_STATE_TYPE => ({ isSuccess: false, isInProgress: true, isError: false, loanObj: undefined})
+    () => ({ isSuccess: false, isInProgress: true, isError: false, loanObj: undefined})
 )
 
 /**

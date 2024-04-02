@@ -1,3 +1,4 @@
+
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 // import "./globals.css";
@@ -10,6 +11,8 @@ import MyFooter from "@/components/MyFooter";
 import AuthProvider from "@/providers/AuthProvider";
 import BookProvider from "@/providers/BookProvider";
 import CategoryProvider from "@/providers/CategoryProvider";
+import InventoryProvider from "@/providers/InventoryProvider";
+import LoanProvider from "@/providers/LoanProvider";
 
 export const metadata: Metadata = {
   title: "savvyshelf",
@@ -20,27 +23,33 @@ export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
+}>) { 
   return (
     <html lang="en">
     <body>
       <AuthProvider>
-            <CategoryProvider>
-              <BookProvider>
+        <CategoryProvider>
+          <BookProvider>
+            <Layout>
+              <Header style={{background: "white"}}>
+                <NavBar />
+              </Header>
               <Layout>
-                <Header style={{background: "white"}}>
-                  <NavBar />
-                </Header>
-                <Layout>
-                  <Flex>
-                    <Sider width={"100%"} style={{background: "white"}}>
-                      <Content>{children}</Content>
-                    </Sider>
-                  </Flex>
-                </Layout>
+                <Flex>
+                    <InventoryProvider>
+                      <LoanProvider>
+                          <Sider width={"100%"} style={{background: "white"}}>
+                            <Content>
+                              {children}
+                            </Content>
+                          </Sider>                     
+                      </LoanProvider>
+                    </InventoryProvider>
+                </Flex>
               </Layout>
-            </BookProvider>
-            </CategoryProvider>
+            </Layout>
+          </BookProvider>
+        </CategoryProvider>
       </AuthProvider>
     </body>
     </html>

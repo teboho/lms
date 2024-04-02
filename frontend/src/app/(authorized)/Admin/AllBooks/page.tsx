@@ -17,8 +17,13 @@ const AllBooks = (): React.FC | React.ReactNode => {
     const { books, getAll } = useContext(BookContext);
     const { styles, cx } = useStyles();
 
+    const accessToken = localStorage.getItem("accessToken");
+
     useEffect(() => {
-        getAll();
+        console.log("AllBooks useEffect");
+        if (accessToken) { 
+            getAll();
+        }
     }, []);
 
     return (

@@ -1,11 +1,12 @@
 'use client';
-import React, { useContext, useState } from "react";
-import type { BOOK } from "@/providers/BookProvider/context";
-import { Card, Typography, Image, Button } from "antd";
+import React, { use, useContext, useEffect, useMemo } from "react";
+import { BookType, type BookDataType } from "@/providers/BookProvider/context";
+import { Card, Typography, Image, Button, Row } from "antd";
 import Link from "next/link";
+import AuthorsContext, { AuthorDataType } from "@/providers/AuthorsProvider/context";
 
 interface BookProps {
-    book: BOOK;
+    book: BookDataType;
 }
 
 const { Title, Paragraph } = Typography;
@@ -16,32 +17,40 @@ const { Title, Paragraph } = Typography;
  * @returns The book component
  */
 const Book: React.FC<BookProps> = ({ book }) => {
-   
+    const { getAuthor, authorsState } = useContext(AuthorsContext);
+
+    useEffect(() => {
+        if (book.authorId)
+        {
+            getAuthor(book.authorId);
+        }
+        console.log("Book useEffect", authorsState);
+    }, [authorsState]);
+
+    const author: AuthorDataType = useMemo(() => authorsState.author, [authorsState]);
+
+    // Small card for each book
     return (
         <Card
             hoverable
-            style={{ width: 500, height: 850, }}
-            cover={<Image alt={book.name} src={book.imageURL} style={{height: 250}}/>}
+            style={{ width: 240 }}
+            title={book.name}
         >
-            <Card.Meta
-                title={<Title level={4}>{book.name}</Title>}
-                description={
-                    <>
-                        <Paragraph  style={{ height: '200px', maxHeight: '200px', overflowY: 'scroll' }}>{book.description}</Paragraph>
-                        <Paragraph>Type: {book.type}, Year: {book.year}</Paragraph>
-                        <Paragraph>ISBN: {book.isbn}</Paragraph>
-                        <Paragraph>Category ID: {book.categoryId}</Paragraph>
-                        <Paragraph>Author ID: {book.authorId}</Paragraph>
-                        <Paragraph>ID: {book.id}</Paragraph>
-                        <Link href={`/Read?bookId=${book.id}`}>
-                            <Button>Read</Button>
-                        </Link>
-                        <Link href={`/Loan?bookId=${book.id}`}>
-                            <Button>Loan</Button>
-                        </Link>
-                    </>
-                }
-            />
+            <Image alt={book.name} src={book.imageURL} style={{height: 150}}/>
+            <Paragraph>Type: {BookType[book.type]}, Year: {book.year}</Paragraph>
+            <Paragraph>ISBN: {book.isbn}</Paragraph>
+            <Paragraph>Category ID: {book.categoryId}</Paragraph>
+            <Paragraph>Author ID: {`${author.firstName} ${author.lastName}`} </Paragraph>
+            <Paragraph>ID: {book.id}</Paragraph>
+            {book.type > 0 && <Link href={`/Read?bookId=${book.id}`}>
+                <Button color="green">Read</Button>
+            </Link>}
+            {book.type !== 1 && <Link href={`/Loan?bookId=${book.id}`}>
+                <Button>Loan</Button>
+            </Link>}
+            <Link href={`/Patron/Book/${book.id}`}>
+                <Button type="primary">View</Button>
+            </Link>
         </Card>
     );    
 }

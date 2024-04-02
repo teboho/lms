@@ -1,5 +1,5 @@
 "use client"
-import { useReducer } from "react";
+import { use, useContext, useEffect, useReducer } from "react";
 import { bookReducer } from "./reducer";
 import BookContext, { BOOK_CONTEXT_INITIAL_STATE } from "./context";
 import axios from "axios";
@@ -9,12 +9,22 @@ import { getBooksErrorAction, getBooksRequestAction, getBooksSuccessAction,
     setSearchTermAction
 } from "./actions";
 import { Preferences } from "@/app/(authorized)/Survey/page";
+import AuthContext from "../AuthProvider/context";
 
 export default function BookProvider({ children }: { children: React.ReactNode }) {
     // we will make the state with the reducers
     const [bookState, dispatch] = useReducer(bookReducer, BOOK_CONTEXT_INITIAL_STATE);
+    const { authObj } = useContext(AuthContext);
 
     const accessToken = localStorage.getItem("accessToken");
+
+    useEffect(() => {
+        // check the AuthProvider for the accesToken
+        if (accessToken) {
+            getAll();
+        }
+    }, []);
+
     // Axios instance
     const instance = axios.create({
         baseURL: baseURL,
@@ -58,7 +68,7 @@ export default function BookProvider({ children }: { children: React.ReactNode }
      */
     function getAll(): void {
         // conduct the fetch and dispatch based on the response
-        const endpoint = "api/services/app/Book/GetAll";
+        const endpoint = "api/services/app/Book/GetAll?maxResultCount=10000";
         console.log(endpoint);
         // console.log(term);
         
