@@ -14,7 +14,7 @@ namespace Boxfusion.LMS_Backend.Services.Dtos
     [AutoMap(typeof(Inventory))]
     public class InventoryDto : EntityDto<Guid>
     {
-        public long BookId { get; set; }
+        public Guid BookId { get; set; }
         public int Count { get; set; }
     }
 }

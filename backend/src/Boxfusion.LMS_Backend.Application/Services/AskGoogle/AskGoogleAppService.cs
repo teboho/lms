@@ -123,6 +123,11 @@ namespace Boxfusion.LMS_Backend.Services.AskGoogle
             return await response.Content.ReadAsStringAsync();
         }
 
+        /// <summary>
+        /// adding a newbook will require checking google apis
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
         public async Task<List<Tuple<Book, Category, Author>>> PoulateVolumes(string query)
         {
             var startIndex = _random.Next(0, 1000); // Adjust based on the number of available books
@@ -130,7 +135,6 @@ namespace Boxfusion.LMS_Backend.Services.AskGoogle
                 $"volumes?q={query}&startIndex={startIndex}&maxResults=30");
             var volumes = await response.Content.ReadFromJsonAsync<Result>();
             var books = new List<Tuple<Book, Category, Author>> ();
-
 
             if (volumes.Items != null)
             {

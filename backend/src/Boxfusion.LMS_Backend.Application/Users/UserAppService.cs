@@ -56,7 +56,7 @@ namespace Boxfusion.LMS_Backend.Users
         [AbpAllowAnonymous]
         public override async Task<UserDto> CreateAsync(CreateUserDto input)
         {
-            CheckCreatePermission();
+            //CheckCreatePermission();
 
             var user = ObjectMapper.Map<User>(input);
 

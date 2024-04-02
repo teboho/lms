@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Abp.Authorization;
 using Abp.Configuration;
 using Abp.Zero.Configuration;
 using Boxfusion.LMS_Backend.Authorization.Accounts.Dto;
@@ -35,6 +36,7 @@ namespace Boxfusion.LMS_Backend.Authorization.Accounts
             return new IsTenantAvailableOutput(TenantAvailabilityState.Available, tenant.Id);
         }
 
+        [AbpAllowAnonymous]
         public async Task<RegisterOutput> Register(RegisterInput input)
         {
             var user = await _userRegistrationManager.RegisterAsync(

@@ -14,7 +14,7 @@ namespace Boxfusion.LMS_Backend.EntityFrameworkCore
         public DbSet<Book> Books { get; set; }
         public DbSet<Loan> Loans { get; set; }
         public DbSet<Payment> Payments { get; set; }
-        public DbSet<History> Histories { get; set; }
+        public DbSet<History> HistoryData { get; set; }
         public DbSet<Preference> Preferences { get; set; }
         public DbSet<Author> Authors { get; set; }
         public DbSet<Inventory> InventoryData { get; set; }

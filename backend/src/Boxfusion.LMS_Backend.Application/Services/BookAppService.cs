@@ -15,10 +15,12 @@ namespace Boxfusion.LMS_Backend.Services
     [AbpAuthorize]
     public class BookAppService : AsyncCrudAppService<Book, BookDto, Guid>, IBookAppService
     {
-        IRepository<Book, Guid> _bookRepository;
-        public BookAppService(IRepository<Book, Guid> repository) : base(repository)
+        private readonly IRepository<Book, Guid> _bookRepository;
+        private readonly IRepository<Inventory, Guid> _inventoryRepository;
+        public BookAppService(IRepository<Book, Guid> repository, IRepository<Inventory, Guid> inventoryRepository) : base(repository)
         {
             _bookRepository = repository;
+            _inventoryRepository = inventoryRepository;
         }
 
         public List<Book> SearchForBook(string term)
@@ -29,6 +31,49 @@ namespace Boxfusion.LMS_Backend.Services
         public async Task<List<Book>> GetSearchBooks(string name)
         {
             return SearchForBook(name);
+        }
+
+        /// <summary>
+        /// Get all books but for each just the id and the type
+        /// </summary>
+        public List<BookDto> GetBooksIdAndType()
+        {
+            var books = _bookRepository.GetAllList();
+            var booksDto = ObjectMapper.Map<List<BookDto>>(books);
+            return booksDto;
+        }
+
+        /// <summary>
+        /// Get Printed books or those that are printed and digital
+        /// </summary>
+        public List<ShortBookDto> GetPrinted()
+        {
+            var books = _bookRepository.GetAllList();
+            var booksDto = ObjectMapper.Map<List<Book>>(books);
+
+            var printedBooks = booksDto.Where(a => a.Type != 1)
+                .Select(b => new ShortBookDto{ Id = b.Id, Type = b.Type })
+                .ToList();
+            return printedBooks;
+        }
+
+        /// <summary>
+        /// Fill in the inventory table with the books, size 50 each
+        /// </summary>
+        public async Task GetFillInventory()
+        {
+            var books = GetPrinted();
+            foreach (var book in books)
+            {
+                var inventory = new Inventory
+                {
+                    BookId = book.Id,
+                    Count = 50
+                };
+                _inventoryRepository.Insert(inventory);
+            }
+
+            await CurrentUnitOfWork.SaveChangesAsync();
         }
     }
 }

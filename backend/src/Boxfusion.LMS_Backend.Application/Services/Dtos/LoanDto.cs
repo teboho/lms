@@ -13,8 +13,12 @@ namespace Boxfusion.LMS_Backend.Services.Dtos
     [AutoMap(typeof(Loan))]
     public class LoanDto : EntityDto<Guid>
     {
-        public Guid PatronId { get; set; }
-        public long BookId { get; set; }
+        public long PatronId { get; set; }
+        public Guid BookId { get; set; }
         public DateTime DateCreated { get; set; }
+        public DateTime? DateDue { get; set; }
+        public DateTime? DateReturned { get; set; }
+        public bool IsReturned { get; set; }
+        public bool IsOverdue { get; set; }
     }
 }

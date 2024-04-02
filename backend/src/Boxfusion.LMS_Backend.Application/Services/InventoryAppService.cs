@@ -27,5 +27,28 @@ namespace Boxfusion.LMS_Backend.Services
         public InventoryAppService(IRepository<Inventory, Guid> repository) : base(repository)
         {
         }
+
+        /// <summary>
+        /// Searching by bookId guid
+        /// </summary>
+        public InventoryDto GetByBookId(Guid bookId)
+        {
+            var inventory = Repository.FirstOrDefault(x => x.BookId == bookId);
+            return MapToEntityDto(inventory);
+        }
+
+        /// <summary>
+        /// Updating inventory by bookId
+        /// </summary>
+        public InventoryDto UpdateByBookId(Guid bookId, int quantity)
+        {
+            var inventory = Repository.FirstOrDefault(x => x.BookId == bookId);
+            inventory.Count = quantity;
+
+            Repository.Update(inventory);
+            CurrentUnitOfWork.SaveChanges();
+
+            return MapToEntityDto(inventory);
+        }
     }
 }
