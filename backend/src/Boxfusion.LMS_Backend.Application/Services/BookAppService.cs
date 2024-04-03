@@ -32,6 +32,10 @@ namespace Boxfusion.LMS_Backend.Services
         {
             return SearchForBook(name);
         }
+        public async Task<List<Book>> GetSearchGoogleBooks(string name)
+        {
+            return SearchForBook(name);
+        }
 
         /// <summary>
         /// Get all books but for each just the id and the type

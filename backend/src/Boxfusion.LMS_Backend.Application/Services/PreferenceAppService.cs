@@ -15,7 +15,10 @@ namespace Boxfusion.LMS_Backend.Services
     [AbpAuthorize]
     public class PreferenceAppService : AsyncCrudAppService<Preference, PreferenceDto, Guid>
     {
+        private IRepository<Preference, Guid> _repository;
         public PreferenceAppService(IRepository<Preference, Guid> repository) : base(repository)
-        { }
+        { 
+            _repository = repository;
+        }
     }
 }

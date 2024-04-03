@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace Boxfusion.LMS_Backend.Services
 {
 
-    [AbpAuthorize]
+    [AbpAuthorize] // should use Pages.Loan permission
     public class LoanAppService : AsyncCrudAppService<Loan, LoanDto, Guid>, ILoanAppService
     {
         public LoanAppService(IRepository<Loan, Guid> repository) : base(repository)

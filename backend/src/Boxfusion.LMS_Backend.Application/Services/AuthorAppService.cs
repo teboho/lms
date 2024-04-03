@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services;
+using Abp.Authorization;
 using Abp.Domain.Repositories;
 using Abp.EntityFrameworkCore.Repositories;
 using Boxfusion.LMS_Backend.Domain;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace Boxfusion.LMS_Backend.Services
 {
+    [AbpAuthorize]
     public class AuthorAppService : AsyncCrudAppService<Author, AuthorDto, Guid>, IAuthorAppService
     {
         public IRepository<Author, Guid> _repository;
