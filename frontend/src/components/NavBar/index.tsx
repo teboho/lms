@@ -37,7 +37,7 @@ const NavBar: React.FC = () => {
     const { styles, cx } = useStyles();
     const [searchTerm, setSearchTerm] = useState("");
     
-    const { search } = useContext(BookContext);
+    const { searchDB } = useContext(BookContext);
 
     const user = useMemo(() => userObj, [userObj]);
 
@@ -53,7 +53,7 @@ const NavBar: React.FC = () => {
     const onSearch: SearchProps["onSearch"] = (value, _e, info) => {
         console.log(searchTerm);
 
-        search(searchTerm);
+        searchDB(searchTerm);
     }
 
     if (accessToken) {
