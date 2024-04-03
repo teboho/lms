@@ -289,7 +289,7 @@ namespace Boxfusion.LMS_Backend.Services.AskGoogle
 
                             Random random = new Random();
                             // random between 0 , 1 or 2
-                            byte b = (byte)(random.Next(0, 3));
+                            byte b = 0; //(byte)(random.Next(0, 3));
                             string strYear = v.VolumeInfo.PublishedDate == null ? "0000" : (v.VolumeInfo.PublishedDate.Split("-")[0]);
                             int intYear = int.Parse(strYear);
                             Book book = SearchForBook(v.VolumeInfo.Title);
