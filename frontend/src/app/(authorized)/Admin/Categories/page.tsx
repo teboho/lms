@@ -4,19 +4,17 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
 import withAuth from "@/hocs/withAuth";
-import { Card, Typography, Image, Button , List, message, Steps, theme, Select, Space } from 'antd';
-import BookContext, { BookDataType, BookType } from "@/providers/BookProvider/context";
+import { Typography, Image, Button , List, message, Steps, theme, Select, Space } from 'antd';
+import { BookDataType, BookType } from "@/providers/BookProvider/context";
 
 import InventoryContext from "@/providers/InventoryProvider/context";
 import CategoryContext from "@/providers/CategoryProvider/context";
 
 const { Title, Paragraph } = Typography;
 
-const Inventory = (): React.FC | React.ReactNode => {
+const Categories = (): React.FC | React.ReactNode => {
     const { token } = theme.useToken();
     const searchParams = useSearchParams();
-    const params = new URLSearchParams(searchParams);
-    const { books } = useContext(BookContext);
     const { inventoryItems } = useContext(InventoryContext);
     const { categoryState } = useContext(CategoryContext);
     const [currentBooks, setCurrentBooks] = useState([]);
@@ -133,11 +131,11 @@ const Inventory = (): React.FC | React.ReactNode => {
                         <Paragraph>
                             ID: {book.id}
                         </Paragraph>
-                        {/* {book.type > 0 && <Link href={`/Read?bookId=${book.id}`}>
+                        {book.type > 0 && <Link href={`/Read?bookId=${book.id}`}>
                             <Button>Read</Button>
-                        </Link>} */}
-                        {book.type !== 1 && <Link href={`Admin/Loans?bookId=${book.id}`}>
-                            <Button>View Loans</Button>
+                        </Link>}
+                        {book.type !== 1 && <Link href={`/Loan?bookId=${book.id}`}>
+                            <Button>Loan</Button>
                         </Link>}
                         {
                             book.type !== 1 && filterInventoryItems(book.id) && (
@@ -154,4 +152,4 @@ const Inventory = (): React.FC | React.ReactNode => {
     );
 }
 
-export default withAuth(Inventory);
+export default withAuth(Categories);

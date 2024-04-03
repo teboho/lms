@@ -1,14 +1,15 @@
 "use client";
 import { createContext } from "react";
 import { categoryReducer } from "./reducer";
+import { Guid } from "js-guid";
 
 export interface CategoryType {
-    "id": number,
+    "id": string,
     "name": string
 }
 
 export const CATEGORY_INIT: CategoryType = {
-    "id": 0,
+    "id": "",
     "name": ""
 }
 

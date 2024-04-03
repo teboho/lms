@@ -3,7 +3,7 @@ import { useEffect, useReducer } from "react";
 import AuthContext, { AUTH_INITIAL_STATE, AUTH_REQUEST_TYPE, AUTH_RESPONSE_TYPE, REGISTER_REQUEST_TYPE } from "./context";
 import { authReducer } from "./reducer";
 import { clearAuthAction, getUserErrorAction, getUserRequestAction, getUserSuccessAction, postAuthErrorAction, postAuthRequestAction, postAuthSuccessAction } from "./actions";
-import { redirect, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { message } from "antd";
 import axios from "axios";
 
@@ -15,6 +15,7 @@ export const baseURL = process.env.NEXT_PUBLIC_API_URL;
  * @returns an axios instance
  */
 export function makeAxiosInstance(accessToken:string) {
+
     return axios.create({
         baseURL: baseURL,
         headers: {

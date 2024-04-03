@@ -18,7 +18,7 @@ function getItem(
     key: React.Key,
     icon?: React.ReactNode,
     children?: MenuItem[],
-    type?: 'group',
+    type?: 'group'
   ): MenuItem {
     return {
       key,
@@ -29,11 +29,32 @@ function getItem(
     } as MenuItem;
 }
 
+const inventoryMenu: MenuItem[] = [
+    getItem(<Link href={"/Admin/Inventory/"}>Inventory</Link>, 1, undefined, undefined, undefined),
+    getItem(<Link href={"/Admin/AddBook/"}>Add New Book</Link>, 1, undefined, undefined, undefined),
+];
+
+const categoryMenu: MenuItem[] = [
+    getItem(<Link href={"/Admin/Categories/"}>Categories</Link>, 1, undefined, undefined, undefined),
+    getItem(<Link href={"/Admin/AddCategory/"}>Add New Category</Link>, 1, undefined, undefined, undefined),
+];
+
+const loanMenu: MenuItem[] = [
+    getItem(<Link href={"/Admin/Loans/"}>Loans</Link>, 1, undefined, undefined, undefined),
+    getItem(<Link href={"/Admin/FinishedLoans/"}>Finished Loans</Link>, 1, undefined, undefined, undefined),
+];
+
+const paymentsMenu: MenuItem[] = [
+    getItem(<Link href={"/Admin/Payments/"}>Payments</Link>, 1, undefined, undefined, undefined),
+]
+
 const adminMenu: MenuItem[] = [
-    getItem("Admin", 1, undefined, undefined, 'group'),
-    getItem("Categories", 4, undefined, undefined, 'group'),
-    getItem(<Link href={"/Admin/Inventory/"}>Inventory</Link>, 5, undefined, undefined, undefined),
-    getItem("Loans", 6, undefined, undefined, 'group'),
+    getItem(<Link href="/Admin">Admin</Link>, 1, undefined, undefined, 'group'),
+    getItem("Categories", 4, undefined, categoryMenu, 'group'),
+    getItem("Inventory", 5, undefined, inventoryMenu, 'group'),
+    getItem("Payments", 6, undefined, paymentsMenu, 'group'),
+    getItem("Loans", 6, undefined, loanMenu, 'group')
+    ,
 ];
 
 const AdminLayout = ({ children }: { children: React.ReactNode }): React.ReactNode => {
@@ -45,6 +66,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }): React.ReactNo
                 <Menu
                     items={adminMenu}
                     className={cx(styles.sticky)}
+                    mode="inline"
                 />
             </Sider>
             <Sider style={{background: "white"}} className={cx(styles.right)} width={"75%"}>

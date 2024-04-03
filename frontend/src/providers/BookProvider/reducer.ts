@@ -35,6 +35,18 @@ export const bookReducer = handleActions(
         [BookActionEnums.SetSearchTerm]: (state, action) => ({
             ...state,
             ...action.payload
+        }),
+        [BookActionEnums.GetSearchBooksRequest]: (state, action) => ({
+            ...state,
+            ...action.payload
+        }),
+        [BookActionEnums.GetSearchBooksSuccess]: (state, action) => ({
+            ...state,
+            ...action.payload
+        }),
+        [BookActionEnums.GetSearchBooksError]: (state, action) => ({
+            ...state,
+            ...action.payload
         })
     },
     BOOK_CONTEXT_INITIAL_STATE

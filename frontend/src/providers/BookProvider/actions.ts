@@ -1,6 +1,6 @@
 "use client";
 import { createAction } from "redux-actions";
-import { BookDataType } from "./context";
+import { BookDataType, SearchBookType } from "./context";
 
 export const BookActionEnums = {
     GetBooksRequest: "GET_BOOKS_REQUEST",
@@ -10,6 +10,10 @@ export const BookActionEnums = {
     GetBookRequest: "GET_BOOK_REQUEST",
     GetBookSuccess: "GET_BOOK_SUCCESS",
     GetBookError: "GET_BOOK_ERROR",
+
+    GetSearchBooksRequest: "GET_SEARCH_BOOKS_REQUEST",
+    GetSearchBooksSuccess: "GET_SEARCH_BOOKS_SUCCESS",
+    GetSearchBooksError: "GET_SEARCH_BOOKS_ERROR",
 
     SetSearchTerm: "SET_SEARCH_TERM"
 }
@@ -72,4 +76,29 @@ export const getBookErrorAction = createAction(
 export const setSearchTermAction = createAction(
     BookActionEnums.SetSearchTerm,
     (searchTerm: string): any => ({ searchTerm })
+);
+
+/**
+ * Sets the isPending to true
+ * The results array is not there yet
+ */
+export const getSearchBooksRequestAction = createAction(
+    BookActionEnums.GetSearchBooksRequest,
+    (): any => ({ isSuccess: false, isPending: true, isError: false, books: undefined, searchTerm: "", searchBooks: undefined })
+)
+
+/**
+ * Sets the isSuccess to true but then all else to false
+ */
+export const getSearchBooksSuccessAction = createAction(
+    BookActionEnums.GetSearchBooksSuccess,
+    (searchBooks: SearchBookType): any => ({ isSuccess: true, isPending: false, isError: false, books: undefined, searchBooks })
+);
+
+/**
+ * Sets the isError to true but then all else to false
+ */
+export const getSearchBooksErrorAction = createAction(
+    BookActionEnums.GetSearchBooksSuccess,
+    (): any => ({ isSuccess: false, isPending: false, isError: true, books: undefined, searchTerm: "", searchBooks: undefined })
 );

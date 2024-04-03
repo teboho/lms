@@ -1,6 +1,8 @@
 "use client";
 import { Preferences } from "@/app/(authorized)/Patron/Survey/page";
 import { createContext } from "react";
+import { CATEGORY_INIT, CategoryType } from "../CategoryProvider/context";
+import { AuthorDataType, AuthorInitialData } from "../AuthorsProvider/context";
 
 export enum BookType {
     "Physical",
@@ -17,8 +19,9 @@ export interface BookDataType {
     "isbn": string,
     "categoryId": number,
     "authorId": string,
-    "id": number
+    "id": string
 }
+
 
 export const BOOK_INIT: BookDataType = {
     "name": "",
@@ -29,7 +32,7 @@ export const BOOK_INIT: BookDataType = {
     "isbn": "",
     "categoryId": 0,
     "authorId": "",
-    "id": 0
+    "id": ""
 }
 
 export interface BOOK_STATE_TYPE {
@@ -37,8 +40,9 @@ export interface BOOK_STATE_TYPE {
     isSuccess: boolean;
     isError: boolean;
     books: BookDataType[] | undefined;
-    book: BookDataType | undefined;
+    book?: BookDataType;
     searchTerm: string;
+    searchBooks?: SearchBookType;
 }
 
 export const BOOK_CONTEXT_INITIAL_STATE: BOOK_STATE_TYPE = {
@@ -47,17 +51,40 @@ export const BOOK_CONTEXT_INITIAL_STATE: BOOK_STATE_TYPE = {
     isSuccess: false,
     books: undefined,
     book: BOOK_INIT,
-    searchTerm: ""
+    searchTerm: "",
+    searchBooks: undefined
 }
 
 export interface BookContextType {
     book: BookDataType;
     books: BookDataType[];
+    searchBooks?: SearchBookType;
     search: (term: string) => void;
     savePreferences: (prefs: Preferences) => void;
     getBook: (bookId: string) => void;
     getAll: () => void;
     searchTerm: string;
+}
+
+
+export interface SearchBookDataType {
+    item1?: BookDataType;
+    item2?: CategoryType;
+    item3?: AuthorDataType;
+}
+
+export const SearchBookInit = {
+    item1: BOOK_INIT,
+    item2: CATEGORY_INIT,
+    item3: AuthorInitialData
+}
+
+export interface SearchBookType {
+    result?: SearchBookDataType[];
+}
+
+export const SearchBookInitState: SearchBookType = {
+    result: [SearchBookInit]
 }
 
 /**
@@ -66,6 +93,7 @@ export interface BookContextType {
 const BookContext = createContext<BookContextType>({ 
     book: BOOK_INIT,
     books: [],
+    searchBooks: SearchBookInitState,
     search: function (term: string) {}, 
     savePreferences: (prefs: Preferences) => {}, 
     getBook: (bookId: string) => {}, 

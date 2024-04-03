@@ -6,10 +6,13 @@ import axios from "axios";
 import { baseURL } from "../AuthProvider";
 import { getBooksErrorAction, getBooksRequestAction, getBooksSuccessAction,
     getBookErrorAction, getBookRequestAction, getBookSuccessAction, 
-    setSearchTermAction
+    setSearchTermAction,
+    getSearchBooksRequestAction,
+    getSearchBooksSuccessAction,
+    getSearchBooksErrorAction
 } from "./actions";
-import { Preferences } from "@/app/(authorized)/Survey/page";
 import AuthContext from "../AuthProvider/context";
+import { Preferences } from "@/app/(authorized)/Patron/Survey/page";
 
 export default function BookProvider({ children }: { children: React.ReactNode }) {
     // we will make the state with the reducers
@@ -39,30 +42,59 @@ export default function BookProvider({ children }: { children: React.ReactNode }
      * @param term search term
      */
     function search(term: string): void {
-        const endpoint = "api/services/app/Book/GetSearchBooks";
+        const endpoint = "/api/services/app/AskGoogle/SearchVolumes";
         console.log(endpoint);
         console.log(term);
-
-        dispatch(setSearchTermAction(term));
         
         // before we make the http request, we set pending to true via dispatch
-        dispatch(getBooksRequestAction());
+        dispatch(getSearchBooksRequestAction());
+        dispatch(setSearchTermAction(term));
         // the we make the call
-        instance.get(`${endpoint}?name=${term}`)
+        instance.get(`${endpoint}?query=${term}`)
             .then(res => {
-                console.log("results", res.data)
+                console.log("query results", res.data.result)
                 if (res.data.success) {
                     // disptach for success
                     if (res.data.result !== null)
                     {
-                        dispatch(getBooksSuccessAction(res.data.result))
+                        dispatch(getSearchBooksSuccessAction({
+                            result: res.data.result
+                        }))
                     }
                 } else {
                     // dispatch for erroe
-                    dispatch(getBooksErrorAction());
+                    dispatch(getSearchBooksErrorAction());
                 }
             })
     }
+
+
+   function searchGoogle(term: string): void {
+       const endpoint = "/api/services/app/AskGoogle/SearchVolumes";
+       console.log(endpoint);
+       console.log(term);
+
+       dispatch(setSearchTermAction(term));
+       
+       // before we make the http request, we set pending to true via dispatch
+       dispatch(getSearchBooksRequestAction());
+       // the we make the call
+       instance.get(`${endpoint}?query=${term}`)
+           .then(res => {
+               console.log("results", res.data)
+               if (res.data.success) {
+                   // disptach for success
+                   if (res.data.result !== null)
+                   {
+                       dispatch(getSearchBooksSuccessAction(res.data.result.result))
+                   }
+               } else {
+                   // dispatch for erroe
+                   dispatch(getSearchBooksErrorAction());
+               }
+           })
+   }
+
     /**
      * get all books (we need to do by category)
      */
@@ -145,7 +177,13 @@ export default function BookProvider({ children }: { children: React.ReactNode }
     }
 
     return (
-        <BookContext.Provider value={{books: bookState.books, book: bookState.book, searchTerm: bookState.searchTerm, search, savePreferences, getBook, getAll}}>
+        <BookContext.Provider value={{
+            books: bookState.books,
+            book: bookState.book, 
+            searchTerm: bookState.searchTerm, 
+            search, savePreferences, getBook, getAll, 
+            searchBooks: bookState.searchBooks
+        }}>
             {children}
         </BookContext.Provider>
     );
