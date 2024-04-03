@@ -26,7 +26,7 @@ const Home = (): React.FC | React.ReactNode => {
                 <p>email: {user?.emailAddress}</p>
             </div>
             {/* Inventory */}
-            <h1>Inventory</h1>
+            <h1>Admin Home</h1>
         </Content>
     );
 }

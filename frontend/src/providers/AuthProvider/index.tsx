@@ -6,6 +6,7 @@ import { clearAuthAction, getUserErrorAction, getUserRequestAction, getUserSucce
 import { useRouter } from 'next/navigation';
 import { message } from "antd";
 import axios from "axios";
+import Utils from "@/utils";
 
 export const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -31,7 +32,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     const { push } = useRouter();
     const [messageApi, contextHolder] = message.useMessage();
     
-    const accessToken = localStorage.getItem("accessToken");
+    const accessToken = Utils.getAccessToken();// localStorage.getItem("accessToken");
 
     const instance = makeAxiosInstance(accessToken);
 
@@ -57,7 +58,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         // conduct the fetch and dispatch based on the response
         const endpoint = `/api/services/app/User/Get?Id=${id}`;
 
-        const accessToken = localStorage.getItem("accessToken");
+        const accessToken = Utils.getAccessToken(); // localStorage.getItem("accessToken");
         const instance = makeAxiosInstance(accessToken);
 
         dispatch(getUserRequestAction());

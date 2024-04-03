@@ -1,5 +1,5 @@
 "use client";
-import { ReactNode, useState, useEffect, useMemo, useContext } from "react";
+import { ReactNode, useState, useEffect, useMemo, useContext, use } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
@@ -8,7 +8,8 @@ import { Card, Typography, Image, Button , List, message, Steps, theme, Select, 
 import BookContext, { BookDataType, BookType } from "@/providers/BookProvider/context";
 
 import InventoryContext from "@/providers/InventoryProvider/context";
-import CategoryContext from "@/providers/CategoryProvider/context";
+import CategoryContext, { CategoryType } from "@/providers/CategoryProvider/context";
+import AuthorsContext from "@/providers/AuthorsProvider/context";
 
 const { Title, Paragraph } = Typography;
 
@@ -17,25 +18,32 @@ const Inventory = (): React.FC | React.ReactNode => {
     const searchParams = useSearchParams();
     const params = new URLSearchParams(searchParams);
     const { books } = useContext(BookContext);
-    const { inventoryItems } = useContext(InventoryContext);
-    const { categoryState } = useContext(CategoryContext);
+    const { inventoryItems, getAll, getInventory } = useContext(InventoryContext);
+    const { categories, category, getAllCategories, getCategory } = useContext(CategoryContext);
+    const { getAuthorById } = useContext(AuthorsContext);
     const [currentBooks, setCurrentBooks] = useState([]);
+
+    useEffect(() => {
+        if (inventoryItems?.length === 0 || !inventoryItems) {
+            getAll();
+        }
+    }, []);
 
     const memoInventoryItems = useMemo(() => {
         return inventoryItems;
     }, [inventoryItems]);
 
     let memoBooks = useMemo(() => {
-        setCurrentBooks(prev => books?.sort((a, b) => a.categoryId - b.categoryId));
-        return books?.sort((a, b) => a.categoryId - b.categoryId);
+        setCurrentBooks(prev => books?.sort((a: BookDataType, b: BookDataType) => a.categoryId.charCodeAt(0) - b.categoryId.charCodeAt(0)));
+        return books?.sort((a: BookDataType, b: BookDataType) => a.categoryId.charCodeAt(0) - b.categoryId.charCodeAt(0));
     }, [books]);
 
     const memoCategories = useMemo(() => {
-        return categoryState.categories;
-    }, [categoryState]);
+        return categories;
+    }, [categories]);
 
     // filter the inventory items by book id
-    function filterInventoryItems(bookId: number) {
+    function filterInventoryItems(bookId: string) {
         return memoInventoryItems?.filter((item) => item.bookId === bookId)[0];
     }
 
@@ -70,7 +78,7 @@ const Inventory = (): React.FC | React.ReactNode => {
                     setCurrentBooks(filteredBooks);
                 }}
                 >
-                {memoCategories?.map((category) => (
+                {memoCategories?.map((category: CategoryType) => (
                     <Option key={category.id} value={category.id}>{category.name}</Option>
                 ))}
             </Select>
@@ -125,18 +133,18 @@ const Inventory = (): React.FC | React.ReactNode => {
                             ISBN: {book.isbn}
                         </Paragraph>
                         <Paragraph>
-                            Category ID: {book.categoryId}
+                            Category: {getCategory(book.categoryId).name}
                         </Paragraph>
                         <Paragraph>
-                            Author ID: {book.authorId}
+                            Author: {`${getAuthorById(book.authorId).firstName} ${getAuthorById(book.authorId).lastName}`}
                         </Paragraph>
-                        <Paragraph>
+                        {/* <Paragraph>
                             ID: {book.id}
-                        </Paragraph>
+                        </Paragraph> */}
                         {/* {book.type > 0 && <Link href={`/Read?bookId=${book.id}`}>
                             <Button>Read</Button>
                         </Link>} */}
-                        {book.type !== 1 && <Link href={`Admin/Loans?bookId=${book.id}`}>
+                        {book.type !== 1 && <Link href={`Loans?bookId=${book.id}`}>
                             <Button>View Loans</Button>
                         </Link>}
                         {

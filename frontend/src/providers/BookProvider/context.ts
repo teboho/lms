@@ -3,6 +3,7 @@ import { Preferences } from "@/app/(authorized)/Patron/Survey/page";
 import { createContext } from "react";
 import { CATEGORY_INIT, CategoryType } from "../CategoryProvider/context";
 import { AuthorDataType, AuthorInitialData } from "../AuthorsProvider/context";
+import { CreateBookType } from "./types";
 
 export enum BookType {
     "Physical",
@@ -11,15 +12,15 @@ export enum BookType {
 }
 
 export interface BookDataType {
-    "name": string,
-    "description": string,
-    "type": BookType,
-    "year": number,
-    "imageURL": string,
-    "isbn": string,
-    "categoryId": number,
-    "authorId": string,
-    "id": string
+    name: string,
+    description: string,
+    type: BookType,
+    year: number,
+    imageURL: string,
+    isbn: string,
+    categoryId: string,
+    authorId: string,
+    id: string
 }
 
 
@@ -30,7 +31,7 @@ export const BOOK_INIT: BookDataType = {
     "year": 0,
     "imageURL": "",
     "isbn": "",
-    "categoryId": 0,
+    "categoryId": "",
     "authorId": "",
     "id": ""
 }
@@ -64,6 +65,13 @@ export interface BookContextType {
     getBook: (bookId: string) => void;
     getAll: () => void;
     searchTerm: string;
+    searchDB: (term: string) => void;
+    /**
+     * adding new book to the db
+     * @param book new book dto
+     * @returns void
+     */
+    sendBook: (book: CreateBookType) => void;
 }
 
 
@@ -98,7 +106,9 @@ const BookContext = createContext<BookContextType>({
     savePreferences: (prefs: Preferences) => {}, 
     getBook: (bookId: string) => {}, 
     getAll: () => {},
-    searchTerm: ""
+    searchTerm: "",
+    searchDB: (term: string) => {},
+    sendBook: (book: CreateBookType) => {}
 });
 
 export default BookContext;

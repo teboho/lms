@@ -1,26 +1,24 @@
 "use client";
 import { createAction } from "redux-actions";
+import { CategoryType } from "./context";
 
 export const CategoryActionEnums = {
-    GetCategoryRequest: "POST_CATEGORY_REQUEST",
-    GetCategorySuccess: "POST_CATEGORY_SUCCESS",
-    GetCategoryError: "POST_CATEGORY_ERROR"
-}
+    GetCategoryRequest: "GET_CATEGORY_REQUEST",
+    GetCategorySuccess: "GET_CATEGORY_SUCCESS",
+    GetCategoryError: "GET_CATEGORY_ERROR",
 
-export type Category = {
-    name: string;
-    description: string;
-    location: string;
-    id: string;
+    GetCategoriesRequest: "GET_CATEGORIES_REQUEST",
+    GetCategoriesSuccess: "GET_CATEGORIES_SUCCESS",
+    GetCategoriesError: "GET_CATEGORIES_ERROR"
 }
 
 /**
- * Sets the isInProgress to true
+ * Sets the isPending to true
  * The results array is not there yet
  */
 export const getCategoryRequestAction = createAction(
     CategoryActionEnums.GetCategoryRequest,
-    ():any => ({ isSuccess: false, isInProgress: true, isError: false, categories: []})
+    ():any => ({ isSuccess: false, isPending: true, isError: false, categories: undefined, category: undefined })
 )
 
 /**
@@ -28,7 +26,7 @@ export const getCategoryRequestAction = createAction(
  */
 export const getCategorySuccessAction = createAction(
     CategoryActionEnums.GetCategorySuccess,
-    (categories: Category[]): any => ({ isSuccess: true, isInProgress: false, isError: false, categories})
+    (category: CategoryType): any => ({ isSuccess: true, isPending: false, isError: false, categories: undefined, category })
 );
 
 /**
@@ -36,5 +34,30 @@ export const getCategorySuccessAction = createAction(
  */
 export const getCategoryErrorAction = createAction(
     CategoryActionEnums.GetCategorySuccess,
-    () => ({ isSuccess: false, isInProgress: false, isError: true, categories: []})
+    () => ({ isSuccess: false, isPending: false, isError: true, categories: undefined, category: undefined})
+);
+
+/**
+ * Sets the isPending to true
+ * The results array is not there yet
+ */
+export const getCategoriesRequestAction = createAction(
+    CategoryActionEnums.GetCategoriesRequest,
+    () => ({ isSuccess: false, isPending: true, isError: false, categories: undefined, category: undefined })
+);
+
+/**
+ * Sets the isSuccess to true but then all else to false
+ */
+export const getCategoriesSuccessAction = createAction(
+    CategoryActionEnums.GetCategoriesSuccess,
+    (categories: CategoryType[]) => ({ isSuccess: true, isPending: false, isError: false, category: undefined, categories })
+);
+
+/**
+ * Sets the isError to true but then all else to false
+ */
+export const getCategoriesErrorAction = createAction(
+    CategoryActionEnums.GetCategoriesSuccess,
+    () => ({ isSuccess: false, isPending: false, isError: true, categories: undefined, category: undefined})
 );

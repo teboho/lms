@@ -10,6 +10,7 @@ import { getInventorysErrorAction, getInventorysRequestAction, getInventorysSucc
 } from "./actions";
 import AuthContext from "../AuthProvider/context";
 import { useRouter } from "next/navigation";
+import Utils from "@/utils";
 
 export default function InventoryProvider({ children }: { children: React.ReactNode }) {
     // we will make the state with the reducers
@@ -17,7 +18,7 @@ export default function InventoryProvider({ children }: { children: React.ReactN
     const { authObj } = useContext(AuthContext);
     const { push } = useRouter();
 
-    const accessToken = authObj?.accessToken; // localStorage.getItem("accessToken");
+    const accessToken = Utils.getAccessToken(); //authObj?.accessToken; // localStorage.getItem("accessToken");
     // Axios instance
     const instance = axios.create({
         baseURL: baseURL,

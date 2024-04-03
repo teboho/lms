@@ -16,7 +16,7 @@ const { Title, Paragraph } = Typography;
 import { type Dayjs } from "dayjs";
 import Utils from "@/utils";
 
-const MyLoans = (): React.ReactNode => {
+const Loans = (): React.ReactNode => {
     const { token } = theme.useToken();
     const { loan, getLoans, loans, getLoan } = useContext(LoanContext);
     const { books } = useContext(BookContext);
@@ -114,4 +114,4 @@ const MyLoans = (): React.ReactNode => {
     );
 }
 
-export default withAuth(MyLoans);
+export default withAuth(Loans);

@@ -12,12 +12,13 @@ import Preferences from "@/components/Preferences";
 import History from "@/components/History";
 import Book from "@/components/Book";
 import SearchResults from "@/components/SearchResults";
+import Utils from "@/utils";
 
 const AllBooks = (): React.FC | React.ReactNode => {
     const { books, getAll } = useContext(BookContext);
     const { styles, cx } = useStyles();
 
-    const accessToken = localStorage.getItem("accessToken");
+    const accessToken = Utils.getAccessToken(); // localStorage.getItem("accessToken");
 
     useEffect(() => {
         console.log("AllBooks useEffect");

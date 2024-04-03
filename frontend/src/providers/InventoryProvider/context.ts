@@ -1,16 +1,15 @@
 "use client";
-import { Preferences } from "@/app/(authorized)/Survey/page";
 import { createContext } from "react";
 
 export interface InventoryType {
-    "id": number,
-    "bookId": number,
+    "id": string,
+    "bookId": string,
     "count" : number,
 }
 
 export const INVENTORY_INIT: InventoryType = {
-    "id": 0,
-    "bookId": 0,
+    "id": "",
+    "bookId": "",
     "count" : 0,
 }
 

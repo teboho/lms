@@ -1,33 +1,33 @@
 "use client"
 import { Provider, useContext, useEffect, useReducer } from "react";
 import { categoryReducer } from "./reducer";
-import { getCategoryErrorAction, getCategoryRequestAction, getCategorySuccessAction } from "./actions";
+import { getCategoriesErrorAction, getCategoriesRequestAction, getCategoriesSuccessAction, getCategoryErrorAction, getCategoryRequestAction, getCategorySuccessAction } from "./actions";
 import { baseURL, makeAxiosInstance } from "../AuthProvider";
 import axios, { Axios, AxiosInstance } from "axios";
 import AuthContext from "../AuthProvider/context";
-import CategoryContext from "./context";
+import CategoryContext, { CATEGORY_CONTEXT_INITIAL_STATE, CategoryType } from "./context";
+import Utils from "@/utils";
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function CategoryProvider({ children }: { children: React.ReactNode }) {
     // we will make the state with the reduce3rs
-    const [categoryState, dispatch] = useReducer(categoryReducer, {});
-    const { authObj } = useContext(AuthContext);
+    const [categoryState, dispatch] = useReducer(categoryReducer, CATEGORY_CONTEXT_INITIAL_STATE);
+
+    const accessToken = Utils.getAccessToken(); // localStorage.getItem("accessToken");
+    const instance = makeAxiosInstance(accessToken);
 
     useEffect(() => {
-        const accessToken = localStorage.getItem("accessToken");
-        const instance = makeAxiosInstance(accessToken);
-
         // get the categories
         if (accessToken) {
-            getCategories(instance);
+            getAllCategories();
         }
     }, []);
 
     // get the categories
-    function getCategories(instance: AxiosInstance) {
+    function getAllCategories() {
         // before we make the http request, we set pending to true via dispatch
-        dispatch(getCategoryRequestAction());
+        dispatch(getCategoriesRequestAction());
         // the we make the call
         instance.get(`/api/services/app/Category/GetAll?skipCount=0&maxResultCount=1000`)
             .then(res => {
@@ -36,17 +36,26 @@ export default function CategoryProvider({ children }: { children: React.ReactNo
                     // disptach for success
                     if (res.data.result !== null)
                     {
-                        dispatch(getCategorySuccessAction(res.data.result.items))
+                        dispatch(getCategoriesSuccessAction(res.data.result.items))
                     }
                 } else {
                     // dispatch for erroe
-                    dispatch(getCategoryErrorAction());
+                    dispatch(getCategoriesErrorAction());
                 }
             });
     }
 
+    // get the category by id
+    function getCategory(id: string): CategoryType | undefined {
+        const category = categoryState.categories?.filter((category: CategoryType) => category.id === id)[0];
+
+        // dispatch(getCategorySuccessAction(category));
+
+        return category;
+    }
+
     return (
-        <CategoryContext.Provider value={{getCategories, categoryState}}>
+        <CategoryContext.Provider value={{categories: categoryState.categories, category: categoryState.category, getAllCategories: getAllCategories, getCategory}}>
             {children}
         </CategoryContext.Provider>
     );

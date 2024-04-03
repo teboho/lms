@@ -1,14 +1,15 @@
 "use client";
 import { ReactNode, useContext, useEffect, useMemo, useState } from "react";
-import withAuth from "@/hocs/withAuth";
-import { Flex, Layout, Input, List, Typography, Select } from "antd";
+import { Flex, Layout, Input, List, Typography, Select, message } from "antd";
 import type { SearchProps } from "antd/es/input";
-import BookContext from "@/providers/BookProvider/context";
 const { Content, Sider } = Layout;
 const { Search } = Input;
 import {useStyles} from "./styles";
+import withAuth from "@/hocs/withAuth";
+import BookContext from "@/providers/BookProvider/context";
 import SearchResults from "@/components/SearchResults";
 import GoogleSearchResults from "@/components/GoogleSearchResults";
+import Utils from "@/utils";
 
 const { Option } = Select;
 
@@ -17,7 +18,7 @@ const AddBook = (): React.FC | React.ReactNode => {
     const [currentBooks, setCurrentBooks] = useState([]);
     const { styles, cx } = useStyles();
 
-    const accessToken = localStorage.getItem("accessToken");
+    const accessToken = Utils.getAccessToken(); // localStorage.getItem("accessToken");
 
     useEffect(() => {
         console.log("AllBooks useEffect");
@@ -36,11 +37,11 @@ const AddBook = (): React.FC | React.ReactNode => {
         // setCurrentBooks(filteredBooks);
     }
 
-
     return (
         <>   
             <Layout>
                 <Sider style={{background: "white"}} className={cx(styles.right)} width={"100%"}>
+                    
                     <Content className={cx(styles.content)}>
                         <Typography.Title level={3}>Add A New Book</Typography.Title>
                         <Typography.Paragraph>

@@ -47,4 +47,4 @@ const MyLoans = (): React.FC | React.ReactNode => {
     );
 }
 
-export default withAuth(AllBooks);
+export default withAuth(MyLoans);

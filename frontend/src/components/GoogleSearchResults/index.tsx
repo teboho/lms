@@ -29,7 +29,12 @@ const GoogleSearchResults: React.FC = () => {
     )), [searchBooks]);
 
     if (!searchBooks || !searchBooks.result || searchBooks.result.length === 0) {
-        return <Title level={3}>No search results, try again</Title>;
+        return (<>
+            <Title level={3}>No search results, try again</Title>
+            {/* todo: loading icon */}
+            {/* ... */}
+
+        </>);
     }
 
     return (

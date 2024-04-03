@@ -1,5 +1,5 @@
 "use client"
-import { use, useContext, useEffect, useReducer } from "react";
+import { useContext, useEffect, useReducer } from "react";
 import { bookReducer } from "./reducer";
 import BookContext, { BOOK_CONTEXT_INITIAL_STATE } from "./context";
 import axios from "axios";
@@ -9,15 +9,21 @@ import { getBooksErrorAction, getBooksRequestAction, getBooksSuccessAction,
     setSearchTermAction,
     getSearchBooksRequestAction,
     getSearchBooksSuccessAction,
-    getSearchBooksErrorAction
+    getSearchBooksErrorAction,
+    postBookRequestAction,
+    postBookSuccessAction,
+    postBookErrorAction
 } from "./actions";
 import AuthContext from "../AuthProvider/context";
 import { Preferences } from "@/app/(authorized)/Patron/Survey/page";
+import { CreateBookType } from "./types";
+import { message } from "antd";
 
 export default function BookProvider({ children }: { children: React.ReactNode }) {
     // we will make the state with the reducers
     const [bookState, dispatch] = useReducer(bookReducer, BOOK_CONTEXT_INITIAL_STATE);
     const { authObj } = useContext(AuthContext);
+    const [messageApi, contextHolder] = message.useMessage();
 
     const accessToken = localStorage.getItem("accessToken");
 
@@ -69,30 +75,29 @@ export default function BookProvider({ children }: { children: React.ReactNode }
     }
 
 
-   function searchGoogle(term: string): void {
-       const endpoint = "/api/services/app/AskGoogle/SearchVolumes";
-       console.log(endpoint);
-       console.log(term);
+   function searchDB(term: string): void {
+        // conduct the fetch and dispatch based on the response
+        const endpoint = "api/services/app/Book/GetSearchBooks";
+        console.log(endpoint);
+        console.log(term);
 
-       dispatch(setSearchTermAction(term));
-       
-       // before we make the http request, we set pending to true via dispatch
-       dispatch(getSearchBooksRequestAction());
-       // the we make the call
-       instance.get(`${endpoint}?query=${term}`)
-           .then(res => {
-               console.log("results", res.data)
-               if (res.data.success) {
-                   // disptach for success
-                   if (res.data.result !== null)
-                   {
-                       dispatch(getSearchBooksSuccessAction(res.data.result.result))
-                   }
-               } else {
-                   // dispatch for erroe
-                   dispatch(getSearchBooksErrorAction());
-               }
-           })
+        // before we make the http request, we set pending to true via dispatch
+        dispatch(getBooksRequestAction());
+        // the we make the call
+        instance.get(`${endpoint}?name=${term}`)
+            .then(res => {
+                console.log("results", res.data)
+                if (res.data.success) {
+                    // disptach for success
+                    if (res.data.result !== null)
+                    {
+                        dispatch(getBooksSuccessAction(res.data.result))
+                    }
+                } else {
+                    // dispatch for erroe
+                    dispatch(getBooksErrorAction());
+                }
+            });
    }
 
     /**
@@ -176,14 +181,55 @@ export default function BookProvider({ children }: { children: React.ReactNode }
         //     }).catch(err =>  dispatch(getBooksErrorAction()));
     }
 
+    /**
+     * send book to the backend
+     *
+     */
+    function sendBook(book: CreateBookType): void {
+        // conduct the fetch and dispatch based on the response
+        const endpoint = "/api/services/app/Book/PostCreateBook";
+        console.log(endpoint);
+        console.log(book);
+        
+        // before we make the http request, we set pending to true via dispatch
+        dispatch(postBookRequestAction());
+        // the we make the call
+        instance.post(`${endpoint}`, book)
+            .then(res => {
+                console.log("results", res.data)
+                if (res.data.success) {
+                    // disptach for success
+                    if (res.data.result !== null)
+                    {
+                        dispatch(postBookSuccessAction(res.data.result));
+                        success();
+                    }
+                } else {
+                    // dispatch for error
+                    dispatch(postBookErrorAction());
+                }
+            })
+    }
+
+    
+
+    const success = () => {
+        messageApi.success('Book added successfully!');
+    }
+
+    const error = () => {
+        messageApi.error('An error occurred. Please try again.');
+    }
+
     return (
         <BookContext.Provider value={{
             books: bookState.books,
             book: bookState.book, 
             searchTerm: bookState.searchTerm, 
-            search, savePreferences, getBook, getAll, 
+            search, savePreferences, getBook, getAll, searchDB, sendBook,
             searchBooks: bookState.searchBooks
         }}>
+            {contextHolder}
             {children}
         </BookContext.Provider>
     );

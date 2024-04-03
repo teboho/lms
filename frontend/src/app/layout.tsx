@@ -13,6 +13,7 @@ import BookProvider from "@/providers/BookProvider";
 import CategoryProvider from "@/providers/CategoryProvider";
 import InventoryProvider from "@/providers/InventoryProvider";
 import LoanProvider from "@/providers/LoanProvider";
+import AuthorsProvider from "@/providers/AuthorsProvider";
 
 export const metadata: Metadata = {
   title: "savvyshelf",
@@ -30,6 +31,7 @@ export default function RootLayout({
       <AuthProvider>
         <CategoryProvider>
           <BookProvider>
+          <AuthorsProvider>
             <Layout>
               <Header style={{background: "white"}}>
                 <NavBar />
@@ -48,6 +50,7 @@ export default function RootLayout({
                 </Flex>
               </Layout>
             </Layout>
+          </AuthorsProvider>
           </BookProvider>
         </CategoryProvider>
       </AuthProvider>

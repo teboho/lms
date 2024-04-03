@@ -18,11 +18,12 @@ const { Title, Paragraph } = Typography;
  */
 const Book: React.FC<BookProps> = ({ book }) => {
     const { getAuthor, authorsState } = useContext(AuthorsContext);
+    const [myAuthor, setMyAuthor] = React.useState<AuthorDataType | null>(null);
 
     useEffect(() => {
-        if (book.authorId)
+        if (book?.authorId)
         {
-            getAuthor(book.authorId);
+            getAuthor(book?.authorId);
         }
         console.log("Book useEffect", authorsState);
     }, [authorsState]);
@@ -34,21 +35,21 @@ const Book: React.FC<BookProps> = ({ book }) => {
         <Card
             hoverable
             style={{ width: 240 }}
-            title={book.name}
+            title={book?.name}
         >
-            <Image alt={book.name} src={book.imageURL} style={{height: 150}}/>
-            <Paragraph>Type: {BookType[book.type]}, Year: {book.year}</Paragraph>
-            <Paragraph>ISBN: {book.isbn}</Paragraph>
-            <Paragraph>Category ID: {book.categoryId}</Paragraph>
-            <Paragraph>Author ID: {`${author.firstName} ${author.lastName}`} </Paragraph>
-            <Paragraph>ID: {book.id}</Paragraph>
-            {book.type > 0 && <Link href={`/Read?bookId=${book.id}`}>
+            <Image alt={book?.name} src={book?.imageURL} style={{height: 150}}/>
+            <Paragraph>Type: {BookType[book?.type]}, Year: {book?.year}</Paragraph>
+            <Paragraph>ISBN: {book?.isbn}</Paragraph>
+            <Paragraph>Category ID: {book?.categoryId}</Paragraph>
+            <Paragraph>Author ID: {`${author?.firstName} ${author?.lastName}`} </Paragraph>
+            <Paragraph>ID: {book?.id}</Paragraph>
+            {book?.type > 0 && <Link href={`/Read?bookId=${book?.id}`}>
                 <Button color="green">Read</Button>
             </Link>}
-            {book.type !== 1 && <Link href={`/Loan?bookId=${book.id}`}>
+            {book?.type !== 1 && <Link href={`/Loan?bookId=${book?.id}`}>
                 <Button>Loan</Button>
             </Link>}
-            <Link href={`/Patron/Book/${book.id}`}>
+            <Link href={`/Patron/Book/${book?.id}`}>
                 <Button type="primary">View</Button>
             </Link>
         </Card>
