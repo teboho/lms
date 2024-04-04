@@ -2,10 +2,7 @@
 
 import { Layout, Menu, MenuProps } from "antd";
 import React, { useContext, useEffect, useMemo } from "react";
-import { useRouter } from "next/navigation";
 import { useStyles } from "./styles";
-import AuthContext from "@/providers/AuthProvider/context";
-import BookContext from "@/providers/BookProvider/context";
 import Link from "next/link";
 import withAuth from "@/hocs/withAuth";
 
@@ -30,11 +27,12 @@ function getItem(
 }
 
 const patronMenu: MenuItem[] = [
-    getItem(<Link href={"/Patron/"}>Patron</Link>, 1, undefined, undefined, 'group'),
-    getItem(<Link href={"/Patron/Categories/"}>Categories</Link>, 4, undefined, undefined, undefined),
-    getItem(<Link href={"/Patron/Inventory/"}>Inventory</Link>, 5, undefined, undefined, undefined),
-    getItem(<Link href={"/Patron/MyLoans/"}>MyLoans</Link>, 6, undefined, undefined, undefined),
-    getItem(<Link href={"/Patron/Payments/"}>Payments</Link>, 6, undefined, undefined, undefined),
+    getItem(<Link href={"/patron/"}>Patron</Link>, "patron", undefined, undefined, 'group'),
+    getItem(<Link href={"/patron/categories/"}>Categories</Link>, "patron-categories", undefined, undefined, undefined),
+    getItem(<Link href={"/patron/loans/"}>My Loans</Link>, "patron-myloans", undefined, undefined, undefined),
+    getItem(<Link href={"/patron/payments/"}>Payments</Link>, "patron-payments", undefined, undefined, undefined),
+    getItem("Preferences", "patron-preferences", undefined, undefined, undefined),
+    getItem("History", "patron-history", undefined, undefined, undefined),
 ];
 
 const PatronLayout = ({ children }: { children: React.ReactNode }): React.ReactNode => {
@@ -42,13 +40,13 @@ const PatronLayout = ({ children }: { children: React.ReactNode }): React.ReactN
 
     return (
         <Layout>
-            <Sider style={{background: "white"}} className={cx(styles.right)} width={"25%"}>
+            <Sider theme="light" className={cx(styles.right)} width={"25%"}>
                 <Menu
                     items={patronMenu}
                     className={cx(styles.sticky)}
                 />
             </Sider>
-            <Sider style={{background: "white"}} className={cx(styles.right)} width={"75%"}>
+            <Sider theme="light" className={cx(styles.right)} width={"75%"}>
                 {children}
             </Sider>
         </Layout>

@@ -1,6 +1,6 @@
 'use client';
 import React, { use, useContext, useEffect, useMemo, useState } from "react";
-import BookContext, { BookType, SearchBookDataType, type BookDataType } from "@/providers/BookProvider/context";
+import BookContext, { BookType, SearchBookDataType, type BookDataType } from "@/providers/bookProvider/context";
 import { Card, Typography, Image, Button, Popconfirm, InputNumber, message } from "antd";
 
 import { Guid } from "js-guid";
@@ -41,7 +41,7 @@ const SearchBook: React.FC<BookProps> = ({ bookStuff }) => {
      * 
      * @param e 
      */
-    const addBook = (e) => {
+    const addbook = (e) => {
         // to check if the category id is not guid initial value in which case we first need to add the category
         // if ()
         // then also check if the author id is not guid initial value in which case we first need to add the author
@@ -90,18 +90,13 @@ const SearchBook: React.FC<BookProps> = ({ bookStuff }) => {
             <Paragraph>ISBN: {book.isbn}</Paragraph>
             <Paragraph>Category: {category.name}</Paragraph>
             <Paragraph>Author: {`${author.firstName} ${author.lastName}`} </Paragraph>
-            {/* <Paragraph>ID: {book.id}</Paragraph> */}
-            {/* {book.type !== 1 && <Link href={`/Loan?bookId=${book.id}`}>
-                <Button>Loan</Button>
-            </Link>} */}
-            {/* Form input for the count */}
             <label htmlFor="bookCount">Count</label>
             <InputNumber id="bookCount" name="bookCount" min={1} max={50} defaultValue={count} onChange={onNumberChange} />
             <br />
             <Popconfirm
                 title="Are you sure you want to add this book?"
                 description="This will add the book to the library, but you need to provide the count of books available."
-                onConfirm={addBook}
+                onConfirm={addbook}
                 onCancel={cancel}
                 okText="Add book"
                 cancelText="Cancel"

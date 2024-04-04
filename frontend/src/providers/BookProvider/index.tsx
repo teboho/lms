@@ -1,9 +1,9 @@
 "use client"
-import { useContext, useEffect, useReducer } from "react";
+import { useContext, useEffect, useReducer, useState } from "react";
 import { bookReducer } from "./reducer";
 import BookContext, { BOOK_CONTEXT_INITIAL_STATE } from "./context";
 import axios from "axios";
-import { baseURL } from "../AuthProvider";
+import { baseURL } from "../authProvider";
 import { getBooksErrorAction, getBooksRequestAction, getBooksSuccessAction,
     getBookErrorAction, getBookRequestAction, getBookSuccessAction, 
     setSearchTermAction,
@@ -14,8 +14,8 @@ import { getBooksErrorAction, getBooksRequestAction, getBooksSuccessAction,
     postBookSuccessAction,
     postBookErrorAction
 } from "./actions";
-import AuthContext from "../AuthProvider/context";
-import { Preferences } from "@/app/(authorized)/Patron/Survey/page";
+import AuthContext from "../authProvider/context";
+import { Preferences } from "@/app/(authorized)/patron/survey/page";
 import { CreateBookType } from "./types";
 import { message } from "antd";
 
@@ -24,6 +24,7 @@ export default function BookProvider({ children }: { children: React.ReactNode }
     const [bookState, dispatch] = useReducer(bookReducer, BOOK_CONTEXT_INITIAL_STATE);
     const { authObj } = useContext(AuthContext);
     const [messageApi, contextHolder] = message.useMessage();
+    const [loading, setLoading] = useState(false);
 
     const accessToken = localStorage.getItem("accessToken");
 
@@ -44,7 +45,7 @@ export default function BookProvider({ children }: { children: React.ReactNode }
     });
 
     /**
-     * 
+     * Searching the Google API
      * @param term search term
      */
     function search(term: string): void {
@@ -55,9 +56,11 @@ export default function BookProvider({ children }: { children: React.ReactNode }
         // before we make the http request, we set pending to true via dispatch
         dispatch(getSearchBooksRequestAction());
         dispatch(setSearchTermAction(term));
+        setLoading(true);
         // the we make the call
         instance.get(`${endpoint}?query=${term}`)
             .then(res => {
+                setLoading(false);
                 console.log("query results", res.data.result)
                 if (res.data.success) {
                     // disptach for success
@@ -68,12 +71,12 @@ export default function BookProvider({ children }: { children: React.ReactNode }
                         }))
                     }
                 } else {
+                    setLoading(false);
                     // dispatch for erroe
                     dispatch(getSearchBooksErrorAction());
                 }
             })
     }
-
 
    function searchDB(term: string): void {
         // conduct the fetch and dispatch based on the response
@@ -114,7 +117,7 @@ export default function BookProvider({ children }: { children: React.ReactNode }
         // the we make the call
         instance.get(`${endpoint}`)
             .then(res => {
-                console.log("results", res.data)
+                // console.log("all books", res.data)
                 if (res.data.success) {
                     // disptach for success
                     if (res.data.result !== null)
@@ -141,7 +144,7 @@ export default function BookProvider({ children }: { children: React.ReactNode }
         // the we make the call
         instance.get(`${endpoint}`)
             .then(res => {
-                console.log("book result", res.data.result)
+                // console.log("book result", res.data.result)
                 if (res.data.success) {
                     // disptach for success
                     if (res.data.result !== null)
@@ -227,7 +230,8 @@ export default function BookProvider({ children }: { children: React.ReactNode }
             book: bookState.book, 
             searchTerm: bookState.searchTerm, 
             search, savePreferences, getBook, getAll, searchDB, sendBook,
-            searchBooks: bookState.searchBooks
+            searchBooks: bookState.searchBooks,
+            loading: loading
         }}>
             {contextHolder}
             {children}

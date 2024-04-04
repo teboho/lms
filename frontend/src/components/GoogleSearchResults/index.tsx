@@ -1,21 +1,15 @@
 'use client';
 import React, { use, useContext, useEffect, useMemo, useState } from "react";
-import type { BookDataType, SearchBookType } from "@/providers/BookProvider/context";
-import { Typography, Flex } from "antd";
+import type { BookDataType, SearchBookType } from "@/providers/bookProvider/context";
+import { Typography, Flex, Spin } from "antd";
 import Book from "../Book";
-import BookContext from "@/providers/BookProvider/context";
-import SearchBook from "../SearchBook";
+import BookContext from "@/providers/bookProvider/context";
+import SearchBook from "../searchBook";
 
 const { Title, Paragraph } = Typography;
 
-/**
- * Needs to take in a books array
- * @param props json book object
- * @param searchTerm the search term
- * @returns The book `component
- */
 const GoogleSearchResults: React.FC = () => {
-    const { searchBooks, searchTerm } = useContext(BookContext);
+    const { searchBooks, searchTerm, loading } = useContext(BookContext);
 
     useEffect(() => {
         console.log("GoogleSearchResults useEffect");
@@ -30,10 +24,12 @@ const GoogleSearchResults: React.FC = () => {
 
     if (!searchBooks || !searchBooks.result || searchBooks.result.length === 0) {
         return (<>
-            <Title level={3}>No search results, try again</Title>
-            {/* todo: loading icon */}
-            {/* ... */}
-
+            <Title level={3}>No search results, try searching again</Title>
+        </>);
+    } else if (loading) {
+        return (<>
+            <br />
+            <Spin />
         </>);
     }
 

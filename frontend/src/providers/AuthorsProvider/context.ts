@@ -36,6 +36,7 @@ export const AuthorsContextDefaultValue = {
     getAuthor: (authorsId: string) => {},
     authorsState: AuthorsContextInit,
     getAuthorById: (id: string) => AuthorInitialData,
+    _getAuthor: (id: string) => AuthorInitialData,
 };
 
 export interface AuthorsContextValueType {
@@ -44,6 +45,7 @@ export interface AuthorsContextValueType {
     getAuthor: (authorsId: string) => void;
     authorsState: AuthorsContextType;
     getAuthorById: (id: string) => AuthorDataType | undefined;
+    _getAuthor: (id: string) => AuthorDataType;
 }
 
 /**

@@ -3,115 +3,118 @@ import { ReactNode, useState, useEffect, useMemo, useContext } from "react";
 import { useSearchParams } from "next/navigation";
 
 import withAuth from "@/hocs/withAuth";
-import { Button, Calendar, Card, theme, Typography, } from 'antd';
-import BookContext, { BookDataType } from "@/providers/BookProvider/context";
+import { Button, Card, message, Steps, theme, DatePicker, Row, Col, Space, Typography, Form, Result } from 'antd';
+import BookContext from "@/providers/bookProvider/context";
 import moment from "moment";
 import Image from "next/image";
-import InventoryContext from "@/providers/InventoryProvider/context";
-import AuthContext from "@/providers/AuthProvider/context";
-import { LoanContext } from "@/providers/LoanProvider/context";
-import { useStyles } from "./styles";
+import InventoryContext from "@/providers/inventoryProvider/context";
+import AuthContext from "@/providers/authProvider/context";
+import { LoanContext } from "@/providers/loanProvider/context";
+
 const { Title, Paragraph } = Typography;
 
-import { type Dayjs } from "dayjs";
-import Utils from "@/utils";
-
-const MyLoans = (): React.ReactNode => {
+const Loan = (): React.ReactNode => {
     const { token } = theme.useToken();
-    const { loan, getLoans, loans, getLoan } = useContext(LoanContext);
-    const { books } = useContext(BookContext);
-    const [patron, setPatron] = useState(null);
-
-    const { styles, cx } = useStyles();
-
+    const searchParams = useSearchParams();
+    const params = new URLSearchParams(searchParams);
+    const [dueDate, setDueDate] = useState<Date | null>(null);
+    const [] = useState(null);  
+    const { books, getBook, book } = useContext(BookContext);
+    const { inventoryItems } = useContext(InventoryContext);
+    const { authObj } = useContext(AuthContext);
+    const { loans, loan, makeLoan, updateLoan } = useContext(LoanContext);
+        
     useEffect(() => {
-        console.log("Loan useEffect", loans);
-        if (loans?.length === 0 || !loans) {
-            getLoans();
+        console.log("Loan useEffect");
+
+        const bookId = params.get("bookId");
+
+        if (bookId) {
+            getBook(bookId);
         }
-    }, [loans]);
+    }
+    , []);
 
-    const memoLoans = useMemo(() => loans, [loans]);
+    const memoBook = useMemo(() => {
+        console.log("memoBook", book);
+        return book;
+    }
+    , [book]);
 
-    const getBookById = (bookId: string) => {
-        return books?.find((book) => book.id === bookId);
+    const memoInventory = useMemo(() => {
+        return inventoryItems?.find((item) => item.bookId === memoBook?.id);
+    },  [inventoryItems, memoBook]);
+
+    const onChange = (e: any) => {
+        const date = e.toDate();
     }
 
-    function getDateTuple(date: string) {
-        const dateObj = new Date(date);
-        return [dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate()];
-    }
-
-    const dateCellRender = (value: Dayjs) => {
-        const data = { type: 'error', content: 'This is error event 4.' };
-
-        // search for the loan that matches the date
-        const loan = memoLoans?.find((loan) => {
-            const dueDate = getDateTuple(loan.dateDue);
-            return value.year() === dueDate[0] && value.month() === dueDate[1] && value.date() === dueDate[2];
-        });
-
-        const book = loan ? getBookById(loan?.bookId) : null;
-
-        // let user;
-        // if (book !== null && book) {
-        //     Utils.getPatronUserInfo(loan?.patronId)
-        //         .then((res) => {
-        //             console.log("patron", res.data.result);
-        //             setPatron(res);
-        //         })
-        //         .catch((err) => console.error(err))
-        // }
-   
-
-        return (
-            loan && 
-            <ul className="events">
-                <li key={`loan_for_${loan?.bookId}`}>
-                    <div className="events-content">
-                        <p>{book?.name}, {loan.dateCreated}</p>
-                    </div>
-                </li>
-            </ul>
-        );
-    }
-
-    const cellRender = (current, info) => {
-        // console.log("cellRender", current, info);
-        if (!current || !info) {
-            return (
-                <div>
-                    <p>Cell Render</p>
-                </div>
-            );
-        } else {
-            return dateCellRender(current);
+    const onCheckout = () => {
+        let userId = authObj?.userId;
+        if (!userId) {
+            userId = parseInt(localStorage.getItem("userId"));
         }
+        const _loan = {
+            patronId: userId,
+            bookId: memoBook?.id,
+            dateDue: dueDate
+        };
+        console.log(_loan);
+        // post the loan
+        makeLoan(_loan);
     }
 
     return (
         <>
-            <div>
-                <Title level={3}>Loans</Title>
-                <Paragraph>
-                    This is the loans page {loans?.length}
-                </Paragraph>
-                {/* <div>
-                    {memoLoans?.map((loan) => {
-                        const book = getBookById(loan?.bookId);
-                        return (
-                            <Card key={loan.id} title={book?.name} extra={<a href={""}>More</a>} style={{ width: 300 }}>
-                                <p>{loan.dateDue}</p>
-                                <p>{loan.dateReturned}</p>
-                            </Card>
-                        );
-                    })}
-                </div> */}
-                {/* Antd calendar viewer */}
-                <Calendar className={cx(styles.padding)} cellRender={cellRender} />
-            </div>
+            <h1>Loan book checkout {params.get("bookId")}</h1>
+    
+            <Row gutter={16}>
+                <Col span={8}>
+                    <Image alt={memoBook?.name} src={memoBook?.imageURL} width={272} height={450}/>
+                </Col>
+                <Col span={8}>
+                    <Row>{memoInventory && `${memoInventory.count} available`}</Row>
+                    <Row>
+                        <Card
+                            hoverable
+                        >
+                            <Card.Meta title={memoBook?.name} description={memoBook?.description} />
+                        </Card>
+                    </Row>
+                    <Space />
+                    <Button type="primary" onClick={onCheckout}>Checkout</Button>
+                    <Space />
+                    
+                    {/* {loanState.isSuccess  && 
+                    (
+                        <Result
+                            status="success"
+                            title="Loan successful"
+                            subTitle="The book has been successfully loaned out."
+                        />
+                    )} */}
+                </Col>
+    
+                <Col span={8}>
+                    <Form>
+                        <Form.Item 
+                            label="Due Date"
+                            name={"dueDate"}
+                        >
+                            <DatePicker 
+                            title="Select a date to return the book"    
+                                open={true}
+                                disabledDate={(current) => 
+                                    current && (current < moment().endOf('day') || current > moment().add(5, 'days').endOf('day'))
+                                }
+                                onChange={(date) => setDueDate(date.toDate())}
+                            />
+                        </Form.Item>
+                    </Form>
+                </Col>
+            </Row>
         </>
     );
 }
 
-export default withAuth(MyLoans);
+export default withAuth(Loan);

@@ -1,26 +1,19 @@
 "use client";
-import { ReactNode, useState, useEffect, useMemo, useContext } from "react";
-import { useSearchParams } from "next/navigation";
-
+import { useEffect, useMemo, useContext } from "react";
 import withAuth from "@/hocs/withAuth";
-import { Button, Calendar, Card, theme, Typography, } from 'antd';
-import BookContext, { BookDataType } from "@/providers/BookProvider/context";
-import moment from "moment";
-import Image from "next/image";
-import InventoryContext from "@/providers/InventoryProvider/context";
-import AuthContext from "@/providers/AuthProvider/context";
-import { LoanContext } from "@/providers/LoanProvider/context";
+import { Calendar, Table, theme, Typography, } from 'antd';
+import BookContext from "@/providers/bookProvider/context";
+import { LoanContext } from "@/providers/loanProvider/context";
 import { useStyles } from "./styles";
 const { Title, Paragraph } = Typography;
 
 import { type Dayjs } from "dayjs";
 import Utils from "@/utils";
 
-const Loans = (): React.ReactNode => {
+const Page = (): React.ReactNode => {
     const { token } = theme.useToken();
-    const { loan, getLoans, loans, getLoan } = useContext(LoanContext);
+    const { getLoans, loans, getLoan } = useContext(LoanContext);
     const { books } = useContext(BookContext);
-    const [patron, setPatron] = useState(null);
 
     const { styles, cx } = useStyles();
 
@@ -51,18 +44,7 @@ const Loans = (): React.ReactNode => {
             return value.year() === dueDate[0] && value.month() === dueDate[1] && value.date() === dueDate[2];
         });
 
-        const book = loan ? getBookById(loan?.bookId) : null;
-
-        // let user;
-        // if (book !== null && book) {
-        //     Utils.getPatronUserInfo(loan?.patronId)
-        //         .then((res) => {
-        //             console.log("patron", res.data.result);
-        //             setPatron(res);
-        //         })
-        //         .catch((err) => console.error(err))
-        // }
-   
+        const book = loan ? getBookById(loan?.bookId) : null;   
 
         return (
             loan && 
@@ -89,6 +71,60 @@ const Loans = (): React.ReactNode => {
         }
     }
 
+    const columns = [
+        {
+            title: 'Book',
+            dataIndex: 'book',
+            key: 'book',
+            render: (text, record) => {
+                return (
+                    <a onClick={() => getLoan(record.id)}>{text}</a>
+                );
+            }
+        },
+        {
+            title: 'Patron',
+            dataIndex: 'patron',
+            key: 'patron',
+        },
+        {
+            title: 'Date Created',
+            dataIndex: 'dateCreated',
+            key: 'dateCreated',
+        },
+        {
+            title: 'Date Due',
+            dataIndex: 'dateDue',
+            key: 'dateDue',
+        },
+        {
+            title: 'Date Returned',
+            dataIndex: 'dateReturned',
+            key: 'dateReturned',
+        },
+        {
+            title: 'Status',
+            dataIndex: 'status',
+            key: 'status',
+        }
+    ];
+
+    const data = memoLoans?.map((loan) => {
+        const book = getBookById(loan?.bookId);
+        // const patron = Utils.getPatronUserInfo(loan?.patronId);
+        return {
+            key: loan.id,
+            id: loan.id,
+            book: book?.name,
+            patron: loan.patronId,
+            dateCreated: loan.dateCreated,
+            dateDue: loan.dateDue,
+            dateReturned: loan.dateReturned,
+            status: loan?.isReturned ? "Returned" : "Not Returned",
+            isOverdue: loan?.isOverdue ? "Overdue" : "Not Overdue"
+        }
+    });
+
     return (
         <>
             <div>
@@ -96,22 +132,13 @@ const Loans = (): React.ReactNode => {
                 <Paragraph>
                     This is the loans page {loans?.length}
                 </Paragraph>
-                {/* <div>
-                    {memoLoans?.map((loan) => {
-                        const book = getBookById(loan?.bookId);
-                        return (
-                            <Card key={loan.id} title={book?.name} extra={<a href={""}>More</a>} style={{ width: 300 }}>
-                                <p>{loan.dateDue}</p>
-                                <p>{loan.dateReturned}</p>
-                            </Card>
-                        );
-                    })}
-                </div> */}
-                {/* Antd calendar viewer */}
+                
+                <Table columns={columns} dataSource={data} />
+                <Typography.Title level={3}>Calendar</Typography.Title>
                 <Calendar className={cx(styles.padding)} cellRender={cellRender} />
             </div>
         </>
     );
 }
 
-export default withAuth(Loans);
+export default withAuth(Page);

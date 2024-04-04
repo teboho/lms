@@ -1,14 +1,14 @@
 "use client"
 import { Provider, useReducer } from "react";
-import { History_CONTEXT_INITIAL_STATE, History_REQUEST_TYPE, HistoryContext, History_OBJ_TYPE } from "./context";
+import { HISTORY_CONTEXT_INITIAL_STATE, History_REQUEST_TYPE, HistoryContext, History_Type } from "./context";
 import { historyReducer } from "./reducer";
-import { postHistoryErrorAction, postHistoryRequestAction, postHistorySuccessAction } from "./actions";
+import { getHistoryRequestAction, getHistoryErrorAction, getHistorySuccessAction } from "./actions";
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function HistoryProvider({ children }: { children: React.ReactNode }) {
     // we will make the state with the reducers
-    const [HistoryState, dispatch] = useReducer(HistoryReducer, History_CONTEXT_INITIAL_STATE);
+    const [HistoryState, dispatch] = useReducer(historyReducer, HISTORY_CONTEXT_INITIAL_STATE);
 
     /**
      * 
@@ -31,14 +31,14 @@ export default function HistoryProvider({ children }: { children: React.ReactNod
         .then(data => {
             console.log(data.result);
             if (data.result.success) {
-                const res: History_OBJ_TYPE = data.result;
-                dispatch(postHistorySuccessAction(res));
+                const res: History_Type = data.result;
+                dispatch(getHistorySuccessAction(res));
                 
             }
         })
         .catch(err => {
             console.log(err);
-            dispatch(postHistoryErrorAction());
+            dispatch(getHistoryErrorAction());
         })
     }
     function logout(): void {

@@ -159,7 +159,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
                 console.log("Register success");
 
                 success();
-                setTimeout(() => push("/Login"), 300);
+                setTimeout(() => push("/login"), 300);
             } else {
                 console.log("Register is unsuccc");
                 fail();
@@ -172,7 +172,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     }
 
     function logout(): void {
-        push("/Login");
+        push("/login");
         
         localStorage.clear();
         messageApi.open({

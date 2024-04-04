@@ -2,9 +2,8 @@
 import { Provider, useContext, useEffect, useReducer } from "react";
 import { categoryReducer } from "./reducer";
 import { getCategoriesErrorAction, getCategoriesRequestAction, getCategoriesSuccessAction, getCategoryErrorAction, getCategoryRequestAction, getCategorySuccessAction } from "./actions";
-import { baseURL, makeAxiosInstance } from "../AuthProvider";
+import { baseURL, makeAxiosInstance } from "../authProvider";
 import axios, { Axios, AxiosInstance } from "axios";
-import AuthContext from "../AuthProvider/context";
 import CategoryContext, { CATEGORY_CONTEXT_INITIAL_STATE, CategoryType } from "./context";
 import Utils from "@/utils";
 
@@ -48,9 +47,6 @@ export default function CategoryProvider({ children }: { children: React.ReactNo
     // get the category by id
     function getCategory(id: string): CategoryType | undefined {
         const category = categoryState.categories?.filter((category: CategoryType) => category.id === id)[0];
-
-        // dispatch(getCategorySuccessAction(category));
-
         return category;
     }
 

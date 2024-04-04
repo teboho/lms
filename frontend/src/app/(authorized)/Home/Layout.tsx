@@ -1,12 +1,12 @@
-import { Layout, Menu } from "antd";
+"use client";
+import { Layout as AntdLayout, Menu } from "antd";
 import React from "react";
 import { useRouter } from "next/navigation";
 import { useStyles } from "./styles";
 
-const { Content, Sider } = Layout;
+const { Content, Sider } = AntdLayout;
 
-
-const HomeLayout = ({ children }: {
+const Layout = ({ children }: {
     children: React.ReactNode
 }) => {
     const { styles, cx } = useStyles();
@@ -14,13 +14,13 @@ const HomeLayout = ({ children }: {
 
     const adminMenu = () => [
         <Menu.Item key="1" onClick={() => push("/")}>Admin</Menu.Item>,
-        <Menu.Item key="4" onClick={() => push("/Categories")}>Categories</Menu.Item>,
-        <Menu.Item key="5" onClick={() => push("/Inventory")}>Inventory</Menu.Item>,
-        <Menu.Item key="6" onClick={() => push("/Loans")}>Loans</Menu.Item>,
+        <Menu.Item key="4" onClick={() => push("/categories")}>Categories</Menu.Item>,
+        <Menu.Item key="5" onClick={() => push("/inventory")}>Inventory</Menu.Item>,
+        <Menu.Item key="6" onClick={() => push("/loans")}>Loans</Menu.Item>,
     ];
 
     return (        
-        <Layout>
+        <AntdLayout>
             <Sider width={"25%"} className={cx(styles.border, styles.bgwhite)}>
                 {/* vertical ant ANtd menu with options ...*/}
                 <Menu 
@@ -32,6 +32,8 @@ const HomeLayout = ({ children }: {
                     {children}  
                 </Content>
             </Sider>
-        </Layout>
+        </AntdLayout>
     );
 }
+
+export default Layout;

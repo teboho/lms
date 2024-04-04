@@ -4,7 +4,7 @@ import { useSearchParams } from "next/navigation";
 
 import withAuth from "@/hocs/withAuth";
 import { Card, Typography, Image, Button , List, message, Steps, theme } from 'antd';
-import BookContext, { BookDataType } from "@/providers/BookProvider/context";
+import BookContext, { BookDataType } from "@/providers/bookProvider/context";
 
 import Link from "next/link";
 

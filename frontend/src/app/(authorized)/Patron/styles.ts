@@ -11,7 +11,12 @@ export const useStyles = createStyles(({css, cx}) => ({
     right: css`
         width: 100%;
         border: 1px solid red;
-        background: white;
+        background: #00A0AD;
+    `,
+    left: css`
+        width: 100%;
+        border: 1px solid red;
+        background: #00A0AD;
     `,
     border: css`
         border: 1px solid blue;

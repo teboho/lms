@@ -1,11 +1,11 @@
 "use client"
 import React, { useContext, useEffect, useReducer } from "react";
-import { authorsReducer } from "./reducer";
 import AuthorsContext, { AuthorDataType, AuthorsContextInit, } from "./context";
-import { baseURL, makeAxiosInstance } from "../AuthProvider";
-import AuthContext from "../AuthProvider/context";
+import { makeAxiosInstance } from "../authProvider";
 import { getAuthorErrorAction, getAuthorRequestAction, getAuthorsErrorAction, getAuthorsRequestAction, getAuthorsSuccessAction, getAuthorSuccessAction } from "./actions";
 import Utils from "@/utils";
+import { authorsReducer } from "./reducer";
+import AuthContext from "../authProvider/context";
 
 export default function AuthorsProvider({ children }: { children: React.ReactNode }) {
     // we will make the state with the reducers
@@ -32,6 +32,10 @@ export default function AuthorsProvider({ children }: { children: React.ReactNod
                 dispatch(getAuthorErrorAction());
                 console.error(error);
             });
+    }
+
+    const _getAuthor = (id: string) => {
+        return authorsState.authors?.filter((author: AuthorDataType) => author.id === id)[0];
     }
 
     const getAuthors = (): void => {
@@ -62,7 +66,8 @@ export default function AuthorsProvider({ children }: { children: React.ReactNod
             getAuthor,
             getAuthors,
             setAuthors,
-            getAuthorById
+            getAuthorById,
+            _getAuthor
         }}>
             {children}
         </AuthorsContext.Provider>

@@ -1,6 +1,6 @@
 'use client';
 import React, { useContext, useState } from "react";
-import type { BookDataType } from "@/providers/BookProvider/context";
+import type { BookDataType } from "@/providers/bookProvider/context";
 import { Typography, Flex } from "antd";
 import Book from "../Book";
 
@@ -21,7 +21,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ books, searchTerm }) => {
    
     return (
         <>
-            {searchTerm ? <Title level={3}>Search Results for {searchTerm}</Title> : <Title level={3}>All Books currently in the system</Title>}
+            {searchTerm && searchTerm.length > 0 ? <Title level={3}>Search Results for {searchTerm}</Title> : <Title level={3}>Explore our library...</Title>}
             <Flex  gap={20} justify="center" align="center" wrap="wrap">
                 {books?.map((book, index) => (
                     <div key={`search_col_${index}`}>

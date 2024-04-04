@@ -5,20 +5,20 @@ import Link from "next/link";
 
 import withAuth from "@/hocs/withAuth";
 import { Card, Typography, Image, Button , List, message, Steps, theme, Select, Space } from 'antd';
-import BookContext, { BookDataType, BookType } from "@/providers/BookProvider/context";
+import BookContext, { BookDataType, BookType } from "@/providers/bookProvider/context";
 
-import InventoryContext from "@/providers/InventoryProvider/context";
-import CategoryContext from "@/providers/CategoryProvider/context";
+import InventoryContext from "@/providers/inventoryProvider/context";
+import CategoryContext from "@/providers/categoryProvider/context";
 
 const { Title, Paragraph } = Typography;
 
-const Inventory = (): React.FC | React.ReactNode => {
+const Page = (): React.ReactNode => {
     const { token } = theme.useToken();
     const searchParams = useSearchParams();
     const params = new URLSearchParams(searchParams);
     const { books } = useContext(BookContext);
     const { inventoryItems } = useContext(InventoryContext);
-    const { categoryState } = useContext(CategoryContext);
+    const { categories } = useContext(CategoryContext);
     const [currentBooks, setCurrentBooks] = useState([]);
 
     const memoInventoryItems = useMemo(() => {
@@ -31,8 +31,8 @@ const Inventory = (): React.FC | React.ReactNode => {
     }, [books]);
 
     const memoCategories = useMemo(() => {
-        return categoryState.categories;
-    }, [categoryState]);
+        return categories;
+    }, [categories]);
 
     // filter the inventory items by book id
     function filterInventoryItems(bookId: number) {
@@ -58,7 +58,7 @@ const Inventory = (): React.FC | React.ReactNode => {
                 optionFilterProp="children"
                 filterOption={(input, option) =>
                         `${option.children}`.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                    }
+                }
                 onSelect={(value) => {
                     console.log(value);
                     // document.getElementById("inventory-list")?.scrollIntoView();
@@ -133,10 +133,10 @@ const Inventory = (): React.FC | React.ReactNode => {
                         <Paragraph>
                             ID: {book.id}
                         </Paragraph>
-                        {book.type > 0 && <Link href={`/Read?bookId=${book.id}`}>
+                        {book.type > 0 && <Link href={`patron/books?bookId=${book.id}`}>
                             <Button>Read</Button>
                         </Link>}
-                        {book.type !== 1 && <Link href={`/Loan?bookId=${book.id}`}>
+                        {book.type !== 1 && <Link href={`patron/loans?bookId=${book.id}`}>
                             <Button>Loan</Button>
                         </Link>}
                         {
@@ -154,4 +154,4 @@ const Inventory = (): React.FC | React.ReactNode => {
     );
 }
 
-export default withAuth(Inventory);
+export default withAuth(Page);

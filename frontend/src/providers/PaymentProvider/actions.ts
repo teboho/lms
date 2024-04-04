@@ -1,10 +1,6 @@
 "use client";
 import { createAction } from "redux-actions";
-
-// experiment
-// export enum PaymentActionEnums {
-//     SetToken = "SET_TOKEN",
-// }
+import { PAYMENT_CONTEXT_STATE_TYPE, PAYMENT_TYPE } from "./context";
 
 export const PaymentActionEnums = {
     PostPaymentRequest: "POST_Payment_REQUEST",
@@ -18,7 +14,7 @@ export const PaymentActionEnums = {
  */
 export const postPaymentRequestAction = createAction(
     PaymentActionEnums.PostPaymentRequest,
-    (): Payment_CONTEXT_STATE_TYPE => ({ isSuccess: false, isInProgress: true, isError: false, PaymentObj: undefined})
+    (): PAYMENT_CONTEXT_STATE_TYPE => ({ isSuccess: false, isInProgress: true, isError: false, payment: undefined, payments: undefined })
 )
 
 /**
@@ -26,7 +22,7 @@ export const postPaymentRequestAction = createAction(
  */
 export const postPaymentSuccessAction = createAction(
     PaymentActionEnums.PostPaymentSuccess,
-    (PaymentObj): any => ({ isSuccess: true, isInProgress: false, isError: false, PaymentObj})
+    (payment: PAYMENT_TYPE): any => ({ isSuccess: true, isInProgress: false, isError: false, payment, payments: undefined })
 );
 
 /**
@@ -34,5 +30,5 @@ export const postPaymentSuccessAction = createAction(
  */
 export const postPaymentErrorAction = createAction(
     PaymentActionEnums.PostPaymentSuccess,
-    () => ({ isSuccess: false, isInProgress: false, isError: true, PaymentObj: {}})
+    () => ({ isSuccess: false, isInProgress: false, isError: true, payment: undefined, payments: undefined })
 );

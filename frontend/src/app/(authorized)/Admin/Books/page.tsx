@@ -1,19 +1,17 @@
 "use client";
-import { ReactNode, useState, useEffect, useMemo, useContext, use } from "react";
+import { ReactNode, useMemo, useContext, } from "react";
 import { useSearchParams } from "next/navigation";
-import Link from "next/link";
 
 import withAuth from "@/hocs/withAuth";
-import { Card, Typography, Image, Button , List, message, Steps, theme, Select, Space, Row, Col } from 'antd';
-import BookContext, { BookDataType, BookType } from "@/providers/BookProvider/context";
-
-import InventoryContext from "@/providers/InventoryProvider/context";
-import CategoryContext, { CategoryType } from "@/providers/CategoryProvider/context";
-import AuthorsContext from "@/providers/AuthorsProvider/context";
+import { Typography, Image, List, theme, Row, Col, Button } from 'antd';
+import BookContext, { BookDataType } from "@/providers/bookProvider/context";
+import CategoryContext from "@/providers/categoryProvider/context";
+import AuthorsContext from "@/providers/authorsProvider/context";
+import Link from "next/link";
 
 const { Title, Paragraph } = Typography;
 
-const Inventory = (): React.FC | React.ReactNode => {
+const Page = (): React.ReactNode => {
     const { token } = theme.useToken();
     const searchParams = useSearchParams();
     const params = new URLSearchParams(searchParams);
@@ -44,9 +42,9 @@ const Inventory = (): React.FC | React.ReactNode => {
                                 <List.Item.Meta
                                     title={book.name}
                                 />
-                                {/* <Link href={`/Admin/Books/${book.id}`}>
-                                    <Button type="primary">View Book</Button>
-                                </Link> */}
+                                <Link href={`/admin/loans?bookId=${book.id}`}>
+                                    <Button type="primary">View Related Loans</Button>
+                                </Link>
                             </Col>
                             
                             <Col span={8}>
@@ -67,4 +65,4 @@ const Inventory = (): React.FC | React.ReactNode => {
     );
 }
 
-export default withAuth(Inventory);
+export default withAuth(Page);

@@ -3,12 +3,12 @@ import { useContext, useEffect, useReducer } from "react";
 import { inventoryReducer } from "./reducer";
 import InventoryContext, { INVENTORY_CONTEXT_INITIAL_STATE } from "./context";
 import axios from "axios";
-import { baseURL } from "../AuthProvider";
+import { baseURL } from "../authProvider";
 import { getInventorysErrorAction, getInventorysRequestAction, getInventorysSuccessAction,
     getInventoryErrorAction, getInventoryRequestAction, getInventorySuccessAction, 
     setSearchTermAction
 } from "./actions";
-import AuthContext from "../AuthProvider/context";
+import AuthContext from "../authProvider/context";
 import { useRouter } from "next/navigation";
 import Utils from "@/utils";
 
@@ -40,7 +40,7 @@ export default function InventoryProvider({ children }: { children: React.ReactN
      * @param term search term
      */
     function search(term: string): void {
-        const endpoint = "api/services/app/Inventory/GetSearchInventorys";
+        const endpoint = "api/services/app/inventory/GetSearchInventorys";
         console.log(endpoint);
         console.log(term);
 
@@ -69,7 +69,7 @@ export default function InventoryProvider({ children }: { children: React.ReactN
      */
     function getAll(): void {
         // conduct the fetch and dispatch based on the response
-        const endpoint = "api/services/app/Inventory/GetAll?maxResultCount=10000";
+        const endpoint = "api/services/app/inventory/GetAll?maxResultCount=10000";
         console.log(endpoint);
         // console.log(term);
         
@@ -98,7 +98,7 @@ export default function InventoryProvider({ children }: { children: React.ReactN
      */
     function getInventory(inventoryId: string): void {
         // conduct the fetch and dispatch based on the response
-        const endpoint = "api/services/app/Inventory/Get?Id=" + inventoryId;
+        const endpoint = "api/services/app/inventory/Get?Id=" + inventoryId;
         
         // before we make the http request, we set pending to true via dispatch
         dispatch(getInventoryRequestAction());

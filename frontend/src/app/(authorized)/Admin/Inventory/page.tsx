@@ -5,28 +5,27 @@ import Link from "next/link";
 
 import withAuth from "@/hocs/withAuth";
 import { Card, Typography, Image, Button , List, message, Steps, theme, Select, Space } from 'antd';
-import BookContext, { BookDataType, BookType } from "@/providers/BookProvider/context";
+import BookContext, { BookDataType, BookType } from "@/providers/bookProvider/context";
 
-import InventoryContext from "@/providers/InventoryProvider/context";
-import CategoryContext, { CategoryType } from "@/providers/CategoryProvider/context";
-import AuthorsContext from "@/providers/AuthorsProvider/context";
+import InventoryContext from "@/providers/inventoryProvider/context";
+import CategoryContext, { CategoryType } from "@/providers/categoryProvider/context";
+import AuthorsContext from "@/providers/authorsProvider/context";
 
 const { Title, Paragraph } = Typography;
 
-const Inventory = (): React.FC | React.ReactNode => {
+const Inventory = (): React.ReactNode => {
     const { token } = theme.useToken();
     const searchParams = useSearchParams();
-    const params = new URLSearchParams(searchParams);
     const { books } = useContext(BookContext);
     const { inventoryItems, getAll, getInventory } = useContext(InventoryContext);
-    const { categories, category, getAllCategories, getCategory } = useContext(CategoryContext);
+    const { categories, getCategory } = useContext(CategoryContext);
     const { getAuthorById } = useContext(AuthorsContext);
     const [currentBooks, setCurrentBooks] = useState([]);
 
     useEffect(() => {
-        if (inventoryItems?.length === 0 || !inventoryItems) {
+        // if (inventoryItems?.length === 0 || !inventoryItems) {
             getAll();
-        }
+        // }
     }, []);
 
     const memoInventoryItems = useMemo(() => {
@@ -133,18 +132,12 @@ const Inventory = (): React.FC | React.ReactNode => {
                             ISBN: {book.isbn}
                         </Paragraph>
                         <Paragraph>
-                            Category: {getCategory(book.categoryId).name}
+                            Category: {getCategory(book?.categoryId)?.name}
                         </Paragraph>
                         <Paragraph>
-                            Author: {`${getAuthorById(book.authorId).firstName} ${getAuthorById(book.authorId).lastName}`}
+                            Author: {`${getAuthorById(book?.authorId).firstName} ${getAuthorById(book?.authorId).lastName}`}
                         </Paragraph>
-                        {/* <Paragraph>
-                            ID: {book.id}
-                        </Paragraph> */}
-                        {/* {book.type > 0 && <Link href={`/Read?bookId=${book.id}`}>
-                            <Button>Read</Button>
-                        </Link>} */}
-                        {book.type !== 1 && <Link href={`Loans?bookId=${book.id}`}>
+                        {book.type !== 1 && <Link href={`loans?bookId=${book.id}`}>
                             <Button>View Loans</Button>
                         </Link>}
                         {

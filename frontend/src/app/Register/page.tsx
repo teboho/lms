@@ -5,7 +5,7 @@ import { Layout, Flex, Form, Input, Button, Row, Col, Tag, Typography } from "an
 import { Header, Content, Footer } from "antd/lib/layout/layout";
 import Sider from "antd/lib/layout/Sider";
 import moduleStyles from "./register.module.css";
-import AuthContext from "@/providers/AuthProvider/context";
+import AuthContext from "@/providers/authProvider/context";
 import { redirect } from "next/navigation";
 // Can contain an array of strings or array of numbers
 const MyFormItemContext = React.createContext<(string | number)[]>([]);

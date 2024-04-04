@@ -5,15 +5,13 @@ import { Inter } from "next/font/google";
 // import styles from './page.module.css';
 import { Layout, Flex } from "antd";
 import { Header, Content, Footer } from "antd/lib/layout/layout";
-import Sider from "antd/lib/layout/Sider";
-import NavBar from "@/components/NavBar";
-import MyFooter from "@/components/MyFooter";
-import AuthProvider from "@/providers/AuthProvider";
-import BookProvider from "@/providers/BookProvider";
-import CategoryProvider from "@/providers/CategoryProvider";
-import InventoryProvider from "@/providers/InventoryProvider";
-import LoanProvider from "@/providers/LoanProvider";
-import AuthorsProvider from "@/providers/AuthorsProvider";
+import AuthProvider from "@/providers/authProvider";
+import CategoryProvider from "@/providers/categoryProvider";
+import BookProvider from "@/providers/bookProvider";
+import AuthorsProvider from "@/providers/authorsProvider";
+import NavBar from "@/components/navBar";
+import InventoryProvider from "@/providers/inventoryProvider";
+import LoanProvider from "@/providers/loanProvider";
 
 export const metadata: Metadata = {
   title: "savvyshelf",
@@ -40,11 +38,9 @@ export default function RootLayout({
                 <Flex>
                     <InventoryProvider>
                       <LoanProvider>
-                          <Sider width={"100%"} style={{background: "white"}}>
                             <Content>
                               {children}
-                            </Content>
-                          </Sider>                     
+                            </Content>                  
                       </LoanProvider>
                     </InventoryProvider>
                 </Flex>

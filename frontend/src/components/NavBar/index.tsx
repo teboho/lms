@@ -1,17 +1,16 @@
 'use client';
 import React, { useContext, useMemo, useReducer, useState } from "react";
-import { Flex, Layout, Input, Button } from "antd";
+import { Flex, Input, Button, Drawer } from "antd";
 import { DatabaseOutlined } from "@ant-design/icons";
-import type { MenuProps } from "antd";
+import type { DrawerProps, MenuProps, RadioChangeEvent } from "antd";
 import Menu from "antd/lib/menu/menu";
-import style from './NavBar.module.css';
-import  { useStyles } from './styles';
+import  { useStyles } from "./styles";
 import { SearchProps } from "antd/es/input";
 import Link from "next/link";
 import Image from "next/image";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
-import AuthContext from "@/providers/AuthProvider/context";
-import BookContext from "@/providers/BookProvider/context";
+import AuthContext from "@/providers/authProvider/context";
+import BookContext from "@/providers/bookProvider/context";
 
 const outItems: MenuProps['items'] = [
     {
@@ -20,11 +19,11 @@ const outItems: MenuProps['items'] = [
         icon: <Image src="/assets/images/LMS-logo1-transparent.png" width={30} height={30} alt="logo"/>
     },
     {
-        label: <Link href={"/Login"}>Login</Link>,
+        label: <Link href={"/login"}>Login</Link>,
         key: 'login'
     },
     {
-        label: <Link href={"/Register"}>Register</Link>,
+        label: <Link href={"/register"}>Register</Link>,
         key: 'register'
     }
 ];
@@ -32,15 +31,23 @@ const outItems: MenuProps['items'] = [
 const { Search } = Input;
 
 const NavBar: React.FC = () => {
-    const { replace } = useRouter();
     const { logout, userObj } = useContext(AuthContext);
     const { styles, cx } = useStyles();
     const [searchTerm, setSearchTerm] = useState("");
     
+    const user = useMemo(() => userObj, [userObj]);
     const { searchDB } = useContext(BookContext);
 
-    const user = useMemo(() => userObj, [userObj]);
-
+    const [open, setOpen] = useState(false);
+  
+    const showDrawer = () => {
+      setOpen(true);
+    };
+  
+    const onClose = () => {
+      setOpen(false);
+    };
+  
     function handleSearch(term:string) {
         setSearchTerm(prev => term);
     }
@@ -62,32 +69,14 @@ const NavBar: React.FC = () => {
                 label: <Link href={"/"}>Home</Link>, 
                 key: 'home',
                 icon: <Image src="/assets/images/LMS-logo1-transparent.png" width={30} height={30} alt="logo"/>
-            },
-            {
-                label: <Link href={"/Survey"}>Survey</Link>, 
-                key: 'survey',
-                icon: <DatabaseOutlined />
-            },
-            {
-                label: <Link href={"/AllBooks"}>View All Books</Link>, 
-                key: 'allbooks',
-                icon: <DatabaseOutlined />
             }
-        ];
-
-        const inAdminItems: MenuProps['items'] = [
-            {
-                label: <Link href={"/"}>Home</Link>, 
-                key: 'home',
-                icon: <Image src="/assets/images/LMS-logo1-transparent.png" width={30} height={30} alt="logo"/>
-            },
         ];
 
         return (
             <Flex className={cx(styles.flex, styles.sticky)} justify="space-between" align="center">
                 <Menu 
                     mode="horizontal"
-                    items={isPatron() ? inItems : inAdminItems}
+                    items={inItems}
                 />
                 <Search 
                     className={cx(styles.search)} 
@@ -95,7 +84,24 @@ const NavBar: React.FC = () => {
                     onChange={e => handleSearch(e.target.value)} 
                     onSearch={onSearch} 
                 />
-                <Button onClick={logout}>Logout</Button>
+                <span>
+                    <Button style={{borderRadius: "50%"}} onClick={showDrawer}>Profile</Button>
+                    <Drawer
+                        title="Profile information"
+                        placement={"right" as DrawerProps["placement"]}
+                        closable={false}
+                        onClose={onClose}
+                        open={open}
+                        key={"right"}
+                    >
+                        {/* Show user information */}
+                        <p>{user?.fullName}</p>
+                        <p>{user?.emailAddress}</p>
+                        <p>{JSON.stringify(user?.roleNames)}</p>
+                        <hr />
+                        <Button onClick={logout}>Logout</Button>
+                    </Drawer>
+                </span>
             </Flex>
         );
     }

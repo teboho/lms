@@ -8,12 +8,14 @@ import { Typography, Image, Button , List, message, Steps, theme, Select, Space 
 import { BookDataType, BookType } from "@/providers/bookProvider/context";
 
 import CategoryContext from "@/providers/categoryProvider/context";
+import { useStyles } from "./styles";
 
 const { Title, Paragraph } = Typography;
 
 const Categories = (): React.FC | React.ReactNode => {
     const { token } = theme.useToken();
     const { categories, category, getAllCategories, getCategory } = useContext(CategoryContext);
+    const { styles, cx } = useStyles();
 
     useEffect(() => {
         if (categories?.length === 0 || !categories) {
@@ -21,8 +23,6 @@ const Categories = (): React.FC | React.ReactNode => {
         }
     }, []);
             
-
-
     return (
         <>
             <div>
@@ -36,15 +36,17 @@ const Categories = (): React.FC | React.ReactNode => {
                     dataSource={categories}
                     renderItem={
                         (category: BookType) => (
-                            <List.Item>
+                            <List.Item
+                                className={cx(styles.hoverable)}
+                            >
                                 <List.Item.Meta
                                     title={category?.name}
                                     description={category?.description}
                                 />
                                 {/* Button that view books of this category */}
-                                <Link href={`/admin/books?categoryId=${category?.id}`}>
+                                {/* <Link href={`/patron/books?categoryId=${category?.id}`}>
                                     <Button type="primary">View Books</Button>
-                                </Link>
+                                </Link> */}
                             </List.Item>
                         )
                     }

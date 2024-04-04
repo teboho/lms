@@ -1,18 +1,17 @@
 "use client";
-import { ReactNode, use, useContext, useEffect, useMemo } from "react";
+import { useContext, useEffect, useMemo } from "react";
 import withAuth from "@/hocs/withAuth";
-import { Layout, Input, List, Typography, Menu } from "antd";
-import BookContext from "@/providers/BookProvider/context";
+import { Layout, Menu } from "antd";
+import BookContext from "@/providers/bookProvider/context";
 const { Content, Sider } = Layout;
-import Image from "next/image";
 import {useStyles} from "./styles";
-import AuthContext from "@/providers/AuthProvider/context";
-import Preferences from "@/components/Preferences";
-import History from "@/components/History";
-import SearchResults from "@/components/SearchResults";
+import AuthContext from "@/providers/authProvider/context";
+import Preferences from "@/components/preferences";
+import History from "@/components/history";
+import SearchResults from "@/components/searchResults";
 import { useRouter } from "next/navigation";
 
-const Home = (): React.FC | React.ReactNode => {
+const Page = (): React.ReactNode => {
     const { userObj } = useContext(AuthContext);
     const { books } = useContext(BookContext);
     const { styles, cx } = useStyles();
@@ -28,9 +27,9 @@ const Home = (): React.FC | React.ReactNode => {
     // if user is admin, show admin page
     useEffect(() => {
         if (user?.roleNames?.includes("ADMIN") || user?.roleNames?.includes("ASSISTANT") || user?.roleNames?.includes("Admin") || user?.roleNames?.includes("Assistant")) {
-            push("/Admin");
+            push("/admin");
         } else {
-            push("/Patron");
+            push("/patron");
         }
     }, [user]);
 
@@ -45,9 +44,9 @@ const Home = (): React.FC | React.ReactNode => {
                             <Menu.Item key="1" onClick={() => push("/")}>Admin</Menu.Item>
                             {/* <Menu.Item key="2" onClick={() => redirect("/admin/users")}>Users</Menu.Item> */}
                             {/* <Menu.Item key="3" onClick={() => redirect("/admin/books")}>Books</Menu.Item> */}
-                            <Menu.Item key="4" onClick={() => push("/Categories")}>Categories</Menu.Item>
-                            <Menu.Item key="5" onClick={() => push("/Inventory")}>Inventory</Menu.Item>
-                            <Menu.Item key="6" onClick={() => push("/Loans")}>Loans</Menu.Item>
+                            <Menu.Item key="4" onClick={() => push("/categories")}>Categories</Menu.Item>
+                            <Menu.Item key="5" onClick={() => push("/inventory")}>Inventory</Menu.Item>
+                            <Menu.Item key="6" onClick={() => push("/loans")}>Loans</Menu.Item>
                         </Menu>
                     </Sider>
                     <Sider style={{background: "white"}} className={cx(styles.right)} width={"75%"}>
@@ -93,4 +92,4 @@ const Home = (): React.FC | React.ReactNode => {
     );
 }
 
-export default withAuth(Home);
+export default withAuth(Page);

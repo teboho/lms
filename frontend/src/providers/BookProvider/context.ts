@@ -1,8 +1,8 @@
 "use client";
-import { Preferences } from "@/app/(authorized)/Patron/Survey/page";
+import { Preferences } from "@/app/(authorized)/patron/survey/page";
 import { createContext } from "react";
-import { CATEGORY_INIT, CategoryType } from "../CategoryProvider/context";
-import { AuthorDataType, AuthorInitialData } from "../AuthorsProvider/context";
+import { CATEGORY_INIT, CategoryType } from "../categoryProvider/context";
+import { AuthorDataType, AuthorInitialData } from "../authorsProvider/context";
 import { CreateBookType } from "./types";
 
 export enum BookType {
@@ -60,6 +60,10 @@ export interface BookContextType {
     book: BookDataType;
     books: BookDataType[];
     searchBooks?: SearchBookType;
+    /**
+     * Searching the Google API
+     * @param term search term
+     */
     search: (term: string) => void;
     savePreferences: (prefs: Preferences) => void;
     getBook: (bookId: string) => void;
@@ -72,6 +76,7 @@ export interface BookContextType {
      * @returns void
      */
     sendBook: (book: CreateBookType) => void;
+    loading: boolean;
 }
 
 
@@ -108,7 +113,8 @@ const BookContext = createContext<BookContextType>({
     getAll: () => {},
     searchTerm: "",
     searchDB: (term: string) => {},
-    sendBook: (book: CreateBookType) => {}
+    sendBook: (book: CreateBookType) => {},
+    loading: false
 });
 
 export default BookContext;

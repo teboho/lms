@@ -3,15 +3,11 @@ import { ReactNode, useContext, useEffect, useMemo } from "react";
 import withAuth from "@/hocs/withAuth";
 import { Flex, Layout, Input, List, Typography } from "antd";
 import type { SearchProps } from "antd/es/input";
-import BookContext from "@/providers/BookProvider/context";
+import BookContext from "@/providers/bookProvider/context";
 const { Content, Sider } = Layout;
-const { Search } = Input;
-import Image from "next/image";
 import {useStyles} from "./styles";
-import Preferences from "@/components/Preferences";
-import History from "@/components/History";
 import Book from "@/components/Book";
-import SearchResults from "@/components/SearchResults";
+import SearchResults from "@/components/searchResults";
 import Utils from "@/utils";
 
 const AllBooks = (): React.FC | React.ReactNode => {

@@ -3,7 +3,7 @@ import { useEffect, useReducer } from "react";
 import { LoanContext, LoanType, LOAN_CONTEXT_INITIAL_STATE } from "./context";
 import { getLoanErrorAction, getLoanRequestAction, getLoansErrorAction, getLoansRequestAction, getLoansSuccessAction, getLoanSuccessAction, postLoanErrorAction, postLoanRequestAction, postLoanSuccessAction } from "./actions";
 import { loanReducer } from "./reducer";
-import { makeAxiosInstance } from "../AuthProvider";
+import { makeAxiosInstance } from "../authProvider";
 import Utils from "@/utils";
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
@@ -27,7 +27,7 @@ export default function LoanProvider({ children }: { children: React.ReactNode }
         dispatch(postLoanRequestAction());
         instance.post(`${apiURL}/${endpoint}`, loanObj)
             .then(res => {
-                console.log("results", res.data);
+                console.log("loan create", res.data);
                 if (res.data.success) {
                     dispatch(postLoanSuccessAction(res.data.result));
                 } else {
@@ -91,8 +91,66 @@ export default function LoanProvider({ children }: { children: React.ReactNode }
             });
     }
 
+    // get loans by patron
+    const getLoansByPatron = (id: number): LoanType[] => {
+        // const endpoint = `api/services/app/Loan/GetByPatron?patronId=${id}`;
+        // dispatch(getLoansRequestAction());
+        // instance.get(`${endpoint}`)
+        //     .then(res => {
+        //         console.log("results of getting loans by patron", res.data.result);
+        //         if (res.data.success) {
+        //             dispatch(getLoansSuccessAction(res.data.result.items));
+        //         } else {
+        //             dispatch(getLoansErrorAction());
+        //         }
+        //     })
+        //     .catch(() => {
+        //         dispatch(getLoansErrorAction());
+        //     });
+        return state.loans?.filter(loan => loan.patronId === id);
+    }
+    
+    const  getLoansByBook = (id: string): LoanType[] => {
+        // const endpoint = `api/services/app/Loan/GetByBook?bookId=${id}`;
+        // dispatch(getLoansRequestAction());
+        // instance.get(`${endpoint}`)
+        //     .then(res => {
+        //         console.log("results of getting loans by book", res.data);
+        //         if (res.data.success) {
+        //             dispatch(getLoansSuccessAction(res.data.result.items));
+        //         } else {
+        //             dispatch(getLoansErrorAction());
+        //         }
+        //     })
+        //     .catch(() => {
+        //         dispatch(getLoansErrorAction());
+        //     });
+        return state.loans?.filter(loan => loan.bookId === parseInt(id));
+    }
+    
+    const getReturnedLoans = (): void => {
+        const endpoint = `api/services/app/Loan/GetReturned`;
+        dispatch(getLoansRequestAction());
+        instance.get(`${endpoint}`)
+            .then(res => {
+                console.log("results of getting returned loans", res.data);
+                if (res.data.success) {
+                    dispatch(getLoansSuccessAction(res.data.result.items));
+                } else {
+                    dispatch(getLoansErrorAction());
+                }
+            })
+            .catch(() => {
+                dispatch(getLoansErrorAction());
+            });
+    }
+
     return (
-        <LoanContext.Provider value={{ loan: state.loan, loans: state.loans, makeLoan, updateLoan, getLoan, getLoans }}>
+        <LoanContext.Provider value={{ 
+            loan: state.loan, 
+            loans: state.loans, 
+            makeLoan, updateLoan, getLoan, getLoans, getLoansByBook, getLoansByPatron, getReturnedLoans 
+        }}>
             {children}
         </LoanContext.Provider>
     );

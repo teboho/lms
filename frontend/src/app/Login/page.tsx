@@ -5,7 +5,7 @@ import { Layout, Flex, Form, Input, Button, Row, Col, Tag, Typography, message }
 import { Header, Content, Footer } from "antd/lib/layout/layout";
 import Sider from "antd/lib/layout/Sider";
 import moduleStyles from "./register.module.css";
-import AuthContext, { AUTH_REQUEST_TYPE } from "@/providers/AuthProvider/context";
+import AuthContext, { AUTH_REQUEST_TYPE } from "@/providers/authProvider/context";
 import { useRouter } from "next/navigation";
 import { stat } from "fs";
 

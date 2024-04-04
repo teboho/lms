@@ -6,21 +6,17 @@ export const useStyles = createStyles(({css, cx}) => ({
     `,
     content: css`
         width: 100%;
-        /* border: 1px solid red; */
+        border: 1px solid red;
     `,
     right: css`
         width: 100%;
         border: 1px solid red;
         background: white;
     `,
-    border: css`
-        border: 1px solid blue;
-    `,
-    bgwhite: css`
-        background: white;
-    `,
-    sticky: css`
-        position: sticky;
-        top: 0;
+    hoverable: css`
+        &:hover {
+            background-color: #f0f0f0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
     `,
 }));

@@ -31,6 +31,9 @@ export interface LoanContextType {
     updateLoan: (loan: LoanType) => void;
     getLoans: () => void;
     getLoan: (loanId: string) => void;
+    getLoansByPatron: (id: number) => LoanType[];
+    getLoansByBook: (id: string) => LoanType[];
+    getReturnedLoans: () => void;
 }
 
 export const LoanContextDefault = {
@@ -39,7 +42,10 @@ export const LoanContextDefault = {
     makeLoan: () => {},
     updateLoan: () => {},
     getLoans: () => {},
-    getLoan: () => {}
+    getLoan: () => {},
+    getLoansByPatron: (id: number) => [] as LoanType[],
+    getLoansByBook: (id: string) => [] as LoanType[],
+    getReturnedLoans: () => {}
 }
 
 export const LOAN_CONTEXT_INITIAL_STATE = {
@@ -68,7 +74,10 @@ export const LoanValueDefault:LoanContextType  = {
     makeLoan: () => {},
     updateLoan: () => {},
     getLoans: () => {},
-    getLoan: (loanId) => {}
+    getLoan: (loanId) => {},
+    getLoansByPatron: (id) => [] as LoanType[],
+    getLoansByBook: (id) => [] as LoanType[],
+    getReturnedLoans: () => {},
 }
 
 /**

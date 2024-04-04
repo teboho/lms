@@ -1,6 +1,7 @@
 // Usage: import Utils from 'utils';
-
-import { makeAxiosInstance } from "@/providers/AuthProvider";
+'use client';
+import { makeAxiosInstance } from "@/providers/authProvider";
+import { use } from "react";
 
 export default class Utils {
     static getAccessToken() {
@@ -14,5 +15,8 @@ export default class Utils {
         const instance = makeAxiosInstance(Utils.getAccessToken());
         
         return instance.get(`/api/services/app/User/Get?Id=${id}`);
+    }
+    static getPatronId() {
+        return parseInt(localStorage.getItem("userId"));
     }
 }

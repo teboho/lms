@@ -1,11 +1,8 @@
 'use client';
 import React, { use, useContext, useEffect, useMemo } from "react";
-import BookContext, { BookType, type BookDataType } from "@/providers/BookProvider/context";
+import BookContext, { BookType, type BookDataType } from "@/providers/bookProvider/context";
 import { Card, Typography, Image, Button, Row, List } from "antd";
 import Link from "next/link";
-import AuthorsContext, { AuthorDataType } from "@/providers/AuthorsProvider/context";
-import CategoryContext from "@/providers/CategoryProvider/context";
-import InventoryContext from "@/providers/InventoryProvider/context";
 
 interface BookProps {
     book: BookDataType;
@@ -27,7 +24,7 @@ const BooksViewer: React.FC<BookProps> = ({ book }) => {
             cover={<Image alt="example" src={book.imageURL} />}
         >
             <Card.Meta title={book.name} description={book.description} />
-            <Link href={`/Admin/Books/${book.id}`}>
+            <Link href={`/admin/Books/${book.id}`}>
                 <Button type="primary">View</Button>
             </Link>
         </Card>        

@@ -1,6 +1,6 @@
 "use client"
 import { Provider, useReducer } from "react";
-import PaymentContext, { PAYMENT_CONTEXT_INITIAL_STATE, PAYMENT_REQUEST_TYPE, PAYMENT_OBJ_TYPE } from "./context";
+import PaymentContext, { PAYMENT_CONTEXT_INITIAL_STATE, PAYMENT_REQUEST_TYPE, PAYMENT_TYPE } from "./context";
 import { paymentReducer } from "./reducer";
 import { postPaymentSuccessAction, PaymentActionEnums, postPaymentErrorAction, postPaymentRequestAction } from "./actions";
 
@@ -10,46 +10,10 @@ export default function PaymentProvider({ children }: { children: React.ReactNod
     // we will make the state with the reducers
     const [paymentState, dispatch] = useReducer(paymentReducer, PAYMENT_CONTEXT_INITIAL_STATE);
 
-    /**
-     * 
-     * @param loginObj login object
-     */
-    function login(loginObj: PAYMENT_REQUEST_TYPE): void {
-        // conduct the fetch and dispatch based on the response
-        const endpoint = apiURL + "api/TokenPayment/Paymententicate";
-        console.log(endpoint);
-        console.log(loginObj);
-        
-        fetch(endpoint, {
-            headers: {
-                "Content-Type": "application/json",
-            },
-            method: "POST",
-            body: JSON.stringify(loginObj),
-            mode: "cors"
-        }).then(res => res.json())
-        .then(data => {
-            console.log(data.result);
-            if (data.result.success) {
-                const res: PAYMENT_OBJ_TYPE = data.result;
-                dispatch(postPaymentSuccessAction(res));
-                
-            }
-        })
-        .catch(err => {
-            console.log(err);
-            dispatch(postPaymentErrorAction());
-        })
-    }
-    function logout(): void {
-
-    }
-    function refreshToken() {
-
-    }
+   
 
     return (
-        <PaymentContext.Provider value={{paymentObj: paymentState.paymentObj, login, logout, refreshToken}}>
+        <PaymentContext.Provider value={{}}>
             {children}
         </PaymentContext.Provider>
     );

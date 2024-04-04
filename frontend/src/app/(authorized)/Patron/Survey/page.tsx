@@ -2,10 +2,9 @@
 import { ReactNode, useState, useEffect, useMemo, useContext } from "react";
 import withAuth from "@/hocs/withAuth";
 import { Button, List, message, Steps, theme } from 'antd';
-import { redirect } from "next/navigation";
-import AuthContext from "@/providers/AuthProvider/context";
-import BookContext from "@/providers/BookProvider/context";
-import CategoryContext from "@/providers/CategoryProvider/context";
+import AuthContext from "@/providers/authProvider/context";
+import BookContext from "@/providers/bookProvider/context";
+import CategoryContext from "@/providers/categoryProvider/context";
 
 export type Preferences = {
     primaryCategoryId: number;
@@ -24,7 +23,7 @@ for (var i = 0; i < 10; i++) {
     )
 }
 
-const Survey = (): React.FC | React.ReactNode => {
+const Survey = (): React.ReactNode => {
     const { token } = theme.useToken();
     const [current, setCurrent] = useState(0);
     const [chosen, setChosen] = useState([]);  
@@ -110,7 +109,7 @@ const Survey = (): React.FC | React.ReactNode => {
         },
     ];
     const items = steps.map((item) => ({ key: item.title, title: item.title }));
-    const options = categoryContextValue?.categoryState?.categories?.map((item, index) => (
+    const options = categoryContextValue?.categories?.map((item, index) => (
         <Button key={`choice_${item.id}`} type="primary" 
             onClick={() => {
                 savePref(index, item)

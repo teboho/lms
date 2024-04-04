@@ -7,7 +7,7 @@ import { Header, Content,  } from "antd/lib/layout/layout";
 import NavBar from "@/components/NavBar";
 import Link from "next/link";
 import { useContext } from "react";
-import AuthContext from "@/providers/AuthProvider/context";
+import AuthContext from "@/providers/authProvider/context";
 import { redirect } from "next/navigation";
 
 /**
@@ -20,7 +20,7 @@ export default function Welcome() {
 
   if (isLoggedIn()) {
     // Load session
-    redirect("/Home");
+    redirect("/home");
   }
   
   return (
@@ -34,10 +34,10 @@ export default function Welcome() {
                 </div>
                 <Flex gap={50}>
                   <div>
-                    <Link href={"/Login"}><Button>Login</Button></Link>
+                    <Link href={"/login"}><Button>Login</Button></Link>
                   </div>
                   <div>
-                    <Link href={"/Register"}><Button>Register</Button></Link>
+                    <Link href={"/register"}><Button>Register</Button></Link>
                   </div>
                 </Flex>
               </Flex>
