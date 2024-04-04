@@ -13,9 +13,9 @@ namespace Boxfusion.LMS_Backend.Services.Dtos
     [AutoMap(typeof(Preference))]
     public class PreferenceDto : EntityDto<Guid>
     {
-        public Guid PatronId { get; set; }
-        public long PrimaryCategoryId { get; set; }
-        public long SecondaryCategoryId { get; set; }
-        public long TertiaryCategoryId { get; set; }
+        public long PatronId { get; set; }
+        public Guid PrimaryCategoryId { get; set; }
+        public Guid SecondaryCategoryId { get; set; }
+        public Guid TertiaryCategoryId { get; set; }
     }
 }

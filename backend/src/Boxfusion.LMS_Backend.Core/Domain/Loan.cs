@@ -25,7 +25,7 @@ namespace Boxfusion.LMS_Backend.Domain
 
         public Loan()
         {
-            DateCreated = DateTime.Now;
+            //DateCreated = DateTime.Now;
         }
     }
 }
