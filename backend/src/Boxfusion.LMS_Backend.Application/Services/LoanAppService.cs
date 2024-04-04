@@ -13,10 +13,31 @@ using System.Threading.Tasks;
 namespace Boxfusion.LMS_Backend.Services
 {
 
-    [AbpAuthorize] // should use Pages.Loan permission
+    [AbpAuthorize] // should use Pages.Loan permission for example...
     public class LoanAppService : AsyncCrudAppService<Loan, LoanDto, Guid>, ILoanAppService
     {
+        private readonly IRepository<Loan, Guid> _repository;
         public LoanAppService(IRepository<Loan, Guid> repository) : base(repository)
-        { }
+        {
+            _repository = repository;
+        }
+
+        public async Task<List<LoanDto>> GetByBook(Guid bookId)
+        {
+            var loans = await _repository.GetAllListAsync(x => x.BookId == bookId);
+            return ObjectMapper.Map<List<LoanDto>>(loans);
+        }
+
+        public async Task<List<LoanDto>> GetByPatron(long patronId)
+        {
+            var loans = await _repository.GetAllListAsync(x => x.PatronId == patronId);
+            return ObjectMapper.Map<List<LoanDto>>(loans);
+        }
+
+        public async Task<List<LoanDto>> GetReturned()
+        {
+            var loans = await _repository.GetAllListAsync(x => x.IsReturned == true);
+            return ObjectMapper.Map<List<LoanDto>>(loans);
+        }
     }
 }

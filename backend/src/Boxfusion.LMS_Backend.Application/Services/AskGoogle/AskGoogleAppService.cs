@@ -274,6 +274,8 @@ namespace Boxfusion.LMS_Backend.Services.AskGoogle
                             }
                             string catName = v.VolumeInfo.Categories == null ? "Category" : (v.VolumeInfo.Categories[0] != null ? v.VolumeInfo.Categories[0] : "Category");
                             Category category = SearchForCategory(catName);
+                            Random random = new Random();
+                            
                             if (category == null)
                             {
                                 category = new Category
@@ -287,7 +289,7 @@ namespace Boxfusion.LMS_Backend.Services.AskGoogle
                                 // CurrentUnitOfWork.SaveChanges();
                             }
 
-                            Random random = new Random();
+                            random = new Random();
                             // random between 0 , 1 or 2
                             byte b = 0; //(byte)(random.Next(0, 3));
                             string strYear = v.VolumeInfo.PublishedDate == null ? "0000" : (v.VolumeInfo.PublishedDate.Split("-")[0]);
