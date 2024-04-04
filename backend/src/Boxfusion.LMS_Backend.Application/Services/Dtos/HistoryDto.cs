@@ -16,6 +16,6 @@ namespace Boxfusion.LMS_Backend.Services.Dtos
     {
         public long PatronId { get; set; }
         public DateTime DateRead { get; set; }
-        public long BookId { get; set; }
+        public Guid BookId { get; set; }
     }
 }
