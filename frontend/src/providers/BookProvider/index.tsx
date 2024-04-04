@@ -15,7 +15,7 @@ import { getBooksErrorAction, getBooksRequestAction, getBooksSuccessAction,
     postBookErrorAction
 } from "./actions";
 import AuthContext from "../authProvider/context";
-import { Preferences } from "@/app/(authorized)/patron/survey/page";
+import { Preferences } from "@/app/(authorized)/patron/preferences-survey/page";
 import { CreateBookType } from "./types";
 import { message } from "antd";
 
@@ -224,12 +224,17 @@ export default function BookProvider({ children }: { children: React.ReactNode }
         messageApi.error('An error occurred. Please try again.');
     }
 
+    function getLocalBook(bookId: string) {
+        const book = bookState.books?.find(b => b.id === bookId);
+        return book;
+    }
+
     return (
         <BookContext.Provider value={{
             books: bookState.books,
             book: bookState.book, 
             searchTerm: bookState.searchTerm, 
-            search, savePreferences, getBook, getAll, searchDB, sendBook,
+            search, savePreferences, getBook, getAll, searchDB, sendBook, getLocalBook,
             searchBooks: bookState.searchBooks,
             loading: loading
         }}>

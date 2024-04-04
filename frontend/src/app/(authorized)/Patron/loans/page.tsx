@@ -22,18 +22,9 @@ const Page = (): React.ReactNode => {
     }, [providerLoans]);
 
     return (
-        <>   
+        <div className={cx(styles.padding)}>   
             <h1>My Loans</h1>
             <List
-                grid={{
-                    gutter: 16,
-                    xs: 1,
-                    sm: 2,
-                    md: 3,
-                    lg: 4,
-                    xl: 5,
-                    xxl: 6,
-                }}
                 dataSource={loans}
                 renderItem={(item) => (
                     <List.Item>
@@ -41,7 +32,7 @@ const Page = (): React.ReactNode => {
                     </List.Item>
                 )}
             />
-        </>
+        </div>
     );
 }
 

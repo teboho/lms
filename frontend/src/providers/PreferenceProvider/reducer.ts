@@ -1,25 +1,46 @@
 import { handleActions } from "redux-actions";
-import { AuthActionEnums } from "./actions";
-import { AUTH_CONTEXT_INITIAL_STATE } from "./context";
+import { PreferenceActionEnums } from "./actions";
+import { PREFERENCE_CONTEXT_INITIAL_STATE } from "./context";
 
-/**
- * A reducer t
- */
-export const authReducer = handleActions(
+export const preferenceReducer = handleActions(
     {
         // this handler will change the value of the isPending in the state
-        [AuthActionEnums.PostAuthRequest]: (state, action) => ({
+        [PreferenceActionEnums.GetPreferenceRequest]: (state, action) => ({
             ...state,
             ...action.payload
         }),  // this handler will change the value of the isSuccess in the state
-        [AuthActionEnums.PostAuthSuccess]: (state, action) => ({
+        [PreferenceActionEnums.GetPreferenceSuccess]: (state, action) => ({
             ...state,
             ...action.payload
         }), // this handler will change the value of the isError in the state
-        [AuthActionEnums.PostAuthError]: (state, action) => ({
+        [PreferenceActionEnums.GetPreferenceError]: (state, action) => ({
             ...state,
             ...action.payload
-        })
+        }),
+        [PreferenceActionEnums.GetPreferenceDataRequest]: (state, action) => ({
+            ...state,
+            ...action.payload
+        }),
+        [PreferenceActionEnums.GetPreferenceDataSuccess]: (state, action) => ({
+            ...state,
+            ...action.payload
+        }),
+        [PreferenceActionEnums.GetPreferenceDataError]: (state, action) => ({
+            ...state,
+            ...action.payload
+        }),
+        [PreferenceActionEnums.PostPreferenceRequest]: (state, action) => ({
+            ...state,
+            ...action.payload
+        }),
+        [PreferenceActionEnums.PostPreferenceSuccess]: (state, action) => ({
+            ...state,
+            ...action.payload
+        }),
+        [PreferenceActionEnums.PostPreferenceError]: (state, action) => ({
+            ...state,
+            ...action.payload
+        }),
     },
-    AUTH_CONTEXT_INITIAL_STATE
+    PREFERENCE_CONTEXT_INITIAL_STATE
 )

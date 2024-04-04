@@ -1,12 +1,12 @@
 'use client';
 
-import { Layout, Menu, MenuProps } from "antd";
+import { Layout as AntdLayout, Menu, MenuProps } from "antd";
 import React, { useContext, useEffect, useMemo } from "react";
 import { useStyles } from "./styles";
 import Link from "next/link";
 import withAuth from "@/hocs/withAuth";
 
-const { Content, Sider } = Layout;
+const { Content, Sider } = AntdLayout;
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -26,20 +26,25 @@ function getItem(
     } as MenuItem;
 }
 
+const preferencesMenu: MenuItem[] = [
+    getItem(<Link href={"/patron/preferences/"}>View Preferences</Link>, "patron-modify-preferences", undefined, undefined, undefined),
+    getItem(<Link href={"/patron/preferences-survey/"}>Modify Preferences</Link>, "patron-preferences-survey", undefined, undefined, undefined)
+];
+
 const patronMenu: MenuItem[] = [
     getItem(<Link href={"/patron/"}>Patron</Link>, "patron", undefined, undefined, 'group'),
     getItem(<Link href={"/patron/categories/"}>Categories</Link>, "patron-categories", undefined, undefined, undefined),
     getItem(<Link href={"/patron/loans/"}>My Loans</Link>, "patron-myloans", undefined, undefined, undefined),
     getItem(<Link href={"/patron/payments/"}>Payments</Link>, "patron-payments", undefined, undefined, undefined),
-    getItem("Preferences", "patron-preferences", undefined, undefined, undefined),
-    getItem("History", "patron-history", undefined, undefined, undefined),
+    getItem("Preferences", "patron-preferences", undefined, preferencesMenu, "group"),
+    getItem(<Link href="/patron/history">History</Link>, "patron-history", undefined, undefined, undefined),
 ];
 
-const PatronLayout = ({ children }: { children: React.ReactNode }): React.ReactNode => {
+const Layout = ({ children }: { children: React.ReactNode }): React.ReactNode => {
     const { styles, cx } = useStyles();
 
     return (
-        <Layout>
+        <AntdLayout>
             <Sider theme="light" className={cx(styles.right)} width={"25%"}>
                 <Menu
                     items={patronMenu}
@@ -49,9 +54,8 @@ const PatronLayout = ({ children }: { children: React.ReactNode }): React.ReactN
             <Sider theme="light" className={cx(styles.right)} width={"75%"}>
                 {children}
             </Sider>
-        </Layout>
+        </AntdLayout>
     );
-    
 }
 
-export default withAuth(PatronLayout);
+export default withAuth(Layout);

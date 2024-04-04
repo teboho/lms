@@ -12,5 +12,8 @@ export const useStyles = createStyles(({css, cx}) => ({
         width: 100%;
         border: 1px solid red;
         background: white;
-    `
+    `,
+    padding: css`
+        padding: 10px;
+    `,
 }));

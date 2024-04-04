@@ -19,4 +19,7 @@ export const useStyles = createStyles(({css, cx}) => ({
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
         }
     `,
+    padding: css`  
+        padding: 10px;
+    `,
 }));

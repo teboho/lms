@@ -10,8 +10,7 @@ import Image from "next/image";
 import InventoryContext from "@/providers/inventoryProvider/context";
 import AuthContext from "@/providers/authProvider/context";
 import { LoanContext } from "@/providers/loanProvider/context";
-
-const { Title, Paragraph } = Typography;
+import { useStyles } from "./styles"; 
 
 const Loan = (): React.ReactNode => {
     const { token } = theme.useToken();
@@ -19,11 +18,12 @@ const Loan = (): React.ReactNode => {
     const params = new URLSearchParams(searchParams);
     const [dueDate, setDueDate] = useState<Date | null>(null);
     const [] = useState(null);  
-    const { books, getBook, book } = useContext(BookContext);
+    const { getBook, book } = useContext(BookContext);
     const { inventoryItems } = useContext(InventoryContext);
     const { authObj } = useContext(AuthContext);
-    const { loans, loan, makeLoan, updateLoan } = useContext(LoanContext);
-        
+    const { makeLoan, updateLoan } = useContext(LoanContext);
+    const { cx, styles } = useStyles();
+
     useEffect(() => {
         console.log("Loan useEffect");
 
@@ -32,14 +32,12 @@ const Loan = (): React.ReactNode => {
         if (bookId) {
             getBook(bookId);
         }
-    }
-    , []);
+    }, []);
 
     const memoBook = useMemo(() => {
         console.log("memoBook", book);
         return book;
-    }
-    , [book]);
+    }, [book]);
 
     const memoInventory = useMemo(() => {
         return inventoryItems?.find((item) => item.bookId === memoBook?.id);
@@ -57,15 +55,16 @@ const Loan = (): React.ReactNode => {
         const _loan = {
             patronId: userId,
             bookId: memoBook?.id,
-            dateDue: dueDate
+            dateDue: dueDate,
+            dateCreated: new Date(),
         };
+        // _loan.dateDue.setHours(_loan.dateDue.getHours() + 2); // Add 2 hours to the due date not working
         console.log(_loan);
-        // post the loan
         makeLoan(_loan);
     }
 
     return (
-        <>
+        <div className={cx(styles.padding)}>
             <h1>Loan book checkout {params.get("bookId")}</h1>
     
             <Row gutter={16}>
@@ -113,7 +112,7 @@ const Loan = (): React.ReactNode => {
                     </Form>
                 </Col>
             </Row>
-        </>
+        </div>
     );
 }
 

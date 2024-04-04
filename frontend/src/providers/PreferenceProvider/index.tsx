@@ -1,56 +1,82 @@
 "use client"
-import { Provider, useReducer } from "react";
-import { AUTH_CONTEXT_INITIAL_STATE, AUTH_REQUEST_TYPE, AuthContext, AUTH_OBJ_TYPE } from "./context";
-import { authReducer } from "./reducer";
-import { postAuthErrorAction, postAuthRequestAction, postAuthSuccessAction } from "./actions";
 
-const apiURL = process.env.NEXT_PUBLIC_API_URL;
+import { useEffect, useReducer } from "react";
+import { PREFERENCE_CONTEXT_INITIAL_STATE, PreferenceContext, PreferenceType } from "./context";
+import { preferenceReducer } from "./reducer";
+import { makeAxiosInstance } from "../authProvider";
+import Utils from "@/utils";
+import { getPreferenceDataErrorAction, getPreferenceDataRequestAction, getPreferenceDataSuccessAction, postPreferenceErrorAction, postPreferenceRequestAction, postPreferenceSuccessAction } from "./actions";
 
-export default function AuthProvider({ children }: { children: React.ReactNode }) {
-    // we will make the state with the reducers
-    const [authState, dispatch] = useReducer(authReducer, AUTH_CONTEXT_INITIAL_STATE);
+export default function PreferenceProvider({ children }: { children: React.ReactNode }) {
+    const [state, dispatch] = useReducer(preferenceReducer, PREFERENCE_CONTEXT_INITIAL_STATE);
+    
+    const accessToken = Utils.getAccessToken();
+    const instance = makeAxiosInstance(accessToken);
 
-    /**
-     * 
-     * @param loginObj login object
-     */
-    function login(loginObj: AUTH_REQUEST_TYPE): void {
-        // conduct the fetch and dispatch based on the response
-        const endpoint = apiURL + "api/TokenAuth/Authenticate";
-        console.log(endpoint);
-        console.log(loginObj);
-        
-        fetch(endpoint, {
-            headers: {
-                "Content-Type": "application/json",
-            },
-            method: "POST",
-            body: JSON.stringify(loginObj),
-            mode: "cors"
-        }).then(res => res.json())
-        .then(data => {
-            console.log(data.result);
-            if (data.result.success) {
-                const res: AUTH_OBJ_TYPE = data.result;
-                dispatch(postAuthSuccessAction(res));
-                
-            }
-        })
-        .catch(err => {
-            console.log(err);
-            dispatch(postAuthErrorAction());
-        })
+    useEffect(() => {
+        // get preference data
+        if (accessToken) {
+            getPreferenceData();
+        }
+    }, []);
+
+    function getPreferenceData() {
+        // get all preference 
+        const endpoint = "/api/services/app/Preference/GetAll";
+        dispatch(getPreferenceDataRequestAction());
+        instance.get(endpoint)
+            .then((response) => {
+                console.log(response.data.result);
+                if (response.data.success) {
+                    // dispatch success action
+                    dispatch(getPreferenceDataSuccessAction(response.data.result.items));
+                } else {
+                    // dispatch error action
+                    dispatch(getPreferenceDataErrorAction());
+                }
+            })
+            .catch((error) => {
+                // dispatch error action
+                dispatch(getPreferenceDataErrorAction());
+            });
     }
-    function logout(): void {
 
+    function postPreference(data: PreferenceType) {
+        // post preference data
+        const endpoint = "/api/services/app/Preference/Create";
+        dispatch(postPreferenceRequestAction());
+        instance.post(endpoint, data)
+            .then((response) => {
+                if (response.data.success) {
+                    // dispatch success action
+                    console.log(response.data.result);
+                    dispatch(postPreferenceSuccessAction(response.data.result));
+                } else {
+                    // dispatch error action
+                    dispatch(postPreferenceErrorAction());
+                }
+            })
+            .catch((error) => {
+                // dispatch error action
+                dispatch(postPreferenceErrorAction());
+            });
     }
-    function refreshToken() {
 
+    function getPreferenceByPatron(patronId: number): PreferenceType {
+        // get preference by patron id
+        const preference = state.preferenceData.find((item) => item.patronId === patronId);
+        return preference;
     }
 
     return (
-        <AuthContext.Provider value={{authObj: authState.authObj, login, logout, refreshToken}}>
+        <PreferenceContext.Provider value={{ 
+            preference: state.preference,
+            preferenceData: state.preferenceData,
+            getPreferenceData,
+            postPreference,
+            getPreferenceByPatron
+        }}>
             {children}
-        </AuthContext.Provider>
+        </PreferenceContext.Provider>
     );
 }

@@ -1,11 +1,7 @@
 "use client";
 import { createAction } from "redux-actions";
-import { History_CONTEXT_STATE_TYPE, History_Type } from "./context";
-
-// experiment
-// export enum HistoryActionEnums {
-//     SetToken = "SET_TOKEN",
-// }
+import { History_CONTEXT_STATE_TYPE, HistoryType } from "./context";
+import { HistoryState } from "next/dist/shared/lib/router/router";
 
 export const HistoryActionEnums = {
     GetHistoryRequest: "GET_History_REQUEST",
@@ -15,6 +11,12 @@ export const HistoryActionEnums = {
     GetHistoryDataRequest: "GET_History_DATA_REQUEST",
     GetHistoryDataSuccess: "GET_History_DATA_SUCCESS",
     GetHistoryDataError: "GET_History_DATA_ERROR",
+
+    PostHistoryRequest: "POST_History_REQUEST",
+    PostHistorySuccess: "POST_History_SUCCESS",
+    PostHistoryError: "POST_History_ERROR",
+
+    UpViewCount: "UP_VIEW_COUNT"
 }
 
 /**
@@ -23,7 +25,7 @@ export const HistoryActionEnums = {
  */
 export const getHistoryRequestAction = createAction(
     HistoryActionEnums.GetHistoryRequest,
-    () => ({ isSuccess: false, isInProgress: true, isError: false, history: undefined, historyData: undefined})
+    () => ({ isSuccess: false, isInProgress: true, isError: false, history: undefined, historyData: undefined, viewCount: 0 })
 )
 
 /**
@@ -31,7 +33,7 @@ export const getHistoryRequestAction = createAction(
  */
 export const getHistorySuccessAction = createAction(
     HistoryActionEnums.GetHistorySuccess,
-    (history: History_Type): any => ({ isSuccess: true, isInProgress: false, isError: false, history, historyData: undefined })
+    (history: HistoryType): any => ({ isSuccess: true, isInProgress: false, isError: false, history, historyData: undefined, viewCount: 0 })
 );
 
 /**
@@ -39,7 +41,7 @@ export const getHistorySuccessAction = createAction(
  */
 export const getHistoryErrorAction = createAction(
     HistoryActionEnums.GetHistorySuccess,
-    () => ({ isSuccess: false, isInProgress: false, isError: true, history: undefined, historyData: undefined})
+    () => ({ isSuccess: false, isInProgress: false, isError: true, history: undefined, historyData: undefined, viewCount: 0 })
 );
 
 /**
@@ -48,7 +50,7 @@ export const getHistoryErrorAction = createAction(
  */
 export const getHistoryDataRequestAction = createAction(
     HistoryActionEnums.GetHistoryDataRequest,
-    () => ({ isSuccess: false, isInProgress: true, isError: false, history: undefined, historyData: undefined})
+    () => ({ isSuccess: false, isInProgress: true, isError: false, history: undefined, historyData: undefined, viewCount: 0 })
 )
 
 /**
@@ -56,7 +58,7 @@ export const getHistoryDataRequestAction = createAction(
  */
 export const getHistoryDataSuccessAction = createAction(
     HistoryActionEnums.GetHistoryDataSuccess,
-    (historyData: History_Type[]): any => ({ isSuccess: true, isInProgress: false, isError: false, history: undefined, historyData })
+    (historyData: HistoryType[]): any => ({ isSuccess: true, isInProgress: false, isError: false, history: undefined, historyData, viewCount: 0})
 );
 
 /**
@@ -64,5 +66,35 @@ export const getHistoryDataSuccessAction = createAction(
  */
 export const getHistoryDataErrorAction = createAction(
     HistoryActionEnums.GetHistoryDataError,
-    () => ({ isSuccess: false, isInProgress: false, isError: true, history: undefined, historyData: undefined})
+    () => ({ isSuccess: false, isInProgress: false, isError: true, history: undefined, historyData: undefined, viewCount: 0 })
+);
+
+/**
+ * Sets the isInProgress to true
+ * The results array is not there yet
+ */
+export const postHistoryRequestAction = createAction(
+    HistoryActionEnums.PostHistoryRequest,
+    () => ({ isSuccess: false, isInProgress: true, isError: false, history: undefined, historyData: undefined, viewCount: 0 })
+);
+
+/**
+ * Sets the isSuccess to true but then all else to false
+ */
+export const postHistorySuccessAction = createAction(
+    HistoryActionEnums.PostHistorySuccess,
+    (history: HistoryType): any => ({ isSuccess: true, isInProgress: false, isError: false, history, historyData: undefined, viewCount: 0})
+);
+
+/**
+ * Sets the isError to true but then all else to false
+ */
+export const postHistoryErrorAction = createAction(
+    HistoryActionEnums.PostHistoryError,
+    () => ({ isSuccess: false, isInProgress: false, isError: true, history: undefined, historyData: undefined, viewCount: 0 })
+);
+
+export const upViewCountAction = createAction(
+    HistoryActionEnums.UpViewCount,
+    (state: History_CONTEXT_STATE_TYPE) => ({ ...state, viewCount: 1 })
 );

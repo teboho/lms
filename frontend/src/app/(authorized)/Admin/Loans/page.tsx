@@ -6,6 +6,7 @@ import BookContext from "@/providers/bookProvider/context";
 import { LoanContext } from "@/providers/loanProvider/context";
 import { useStyles } from "./styles";
 const { Title, Paragraph } = Typography;
+import { useSearchParams } from "next/navigation";  
 
 import { type Dayjs } from "dayjs";
 import Utils from "@/utils";
@@ -14,6 +15,8 @@ const Page = (): React.ReactNode => {
     const { token } = theme.useToken();
     const { getLoans, loans, getLoan } = useContext(LoanContext);
     const { books } = useContext(BookContext);
+    const searchParams = useSearchParams();
+    const params = new URLSearchParams(searchParams);
 
     const { styles, cx } = useStyles();
 
@@ -24,7 +27,15 @@ const Page = (): React.ReactNode => {
         }
     }, [loans]);
 
-    const memoLoans = useMemo(() => loans, [loans]);
+    const memoLoans = useMemo(() => {
+        const bookId = params.get("bookId");
+        console.log("memoLoans book id", bookId);
+        let result = loans;
+        if (bookId) {
+            result = loans?.filter((loan) => loan.bookId === bookId);
+        }
+        return result;
+    }, [loans]);
 
     const getBookById = (bookId: string) => {
         return books?.find((book) => book.id === bookId);
@@ -128,10 +139,7 @@ const Page = (): React.ReactNode => {
     return (
         <>
             <div>
-                <Title level={3}>Loans</Title>
-                <Paragraph>
-                    This is the loans page {loans?.length}
-                </Paragraph>
+                <Title level={3}>Loans( {loans?.length} )</Title>
                 
                 <Table columns={columns} dataSource={data} />
                 <Typography.Title level={3}>Calendar</Typography.Title>

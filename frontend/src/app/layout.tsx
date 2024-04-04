@@ -12,6 +12,8 @@ import AuthorsProvider from "@/providers/authorsProvider";
 import NavBar from "@/components/navBar";
 import InventoryProvider from "@/providers/inventoryProvider";
 import LoanProvider from "@/providers/loanProvider";
+import HistoryProvider from "@/providers/historyProvider";
+import PreferenceProvider from "@/providers/preferenceProvider";
 
 export const metadata: Metadata = {
   title: "savvyshelf",
@@ -38,9 +40,13 @@ export default function RootLayout({
                 <Flex>
                     <InventoryProvider>
                       <LoanProvider>
-                            <Content>
-                              {children}
-                            </Content>                  
+                        <HistoryProvider>
+                        <PreferenceProvider>
+                              <Content>
+                                {children}
+                              </Content>                  
+                        </PreferenceProvider>
+                        </HistoryProvider>
                       </LoanProvider>
                     </InventoryProvider>
                 </Flex>

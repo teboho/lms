@@ -32,7 +32,7 @@ const Book: React.FC<BookProps> = ({ book }) => {
             <Title level={4}>{book?.name}</Title>
             <Paragraph>Type: {BookType[book?.type]}, Year: {book?.year}</Paragraph>
             <Paragraph>ISBN: {book?.isbn}</Paragraph>
-            <Paragraph>Category: {getCategory(book?.categoryId).name}</Paragraph>
+            <Paragraph>Category: {getCategory(book?.categoryId)?.name}</Paragraph>
             {author && <Paragraph>Author: {`${author?.firstName} ${author?.lastName}`} </Paragraph>}
             {/* {book?.type > 0 && <Link href={`/read?bookId=${book?.id}`}>
                 <Button color="green">Read</Button>

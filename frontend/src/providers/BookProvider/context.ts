@@ -1,5 +1,5 @@
 "use client";
-import { Preferences } from "@/app/(authorized)/patron/survey/page";
+import { Preferences } from "@/app/(authorized)/patron/preferences-survey/page";
 import { createContext } from "react";
 import { CATEGORY_INIT, CategoryType } from "../categoryProvider/context";
 import { AuthorDataType, AuthorInitialData } from "../authorsProvider/context";
@@ -67,6 +67,7 @@ export interface BookContextType {
     search: (term: string) => void;
     savePreferences: (prefs: Preferences) => void;
     getBook: (bookId: string) => void;
+    getLocalBook: (bookId: string) => BookDataType;
     getAll: () => void;
     searchTerm: string;
     searchDB: (term: string) => void;
@@ -110,6 +111,7 @@ const BookContext = createContext<BookContextType>({
     search: function (term: string) {}, 
     savePreferences: (prefs: Preferences) => {}, 
     getBook: (bookId: string) => {}, 
+    getLocalBook: (bookId: string) => BOOK_INIT,
     getAll: () => {},
     searchTerm: "",
     searchDB: (term: string) => {},

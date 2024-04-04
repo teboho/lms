@@ -25,7 +25,7 @@ const Categories = (): React.FC | React.ReactNode => {
             
     return (
         <>
-            <div>
+            <div className={cx(styles.padding)}>
                 <Title level={3}>Categories</Title>
                 <Paragraph>
                     This is the categories page
@@ -43,6 +43,9 @@ const Categories = (): React.FC | React.ReactNode => {
                                     title={category?.name}
                                     description={category?.description}
                                 />
+                                <Paragraph>
+                                    Location: {category?.location}
+                                </Paragraph>
                                 {/* Button that view books of this category */}
                                 {/* <Link href={`/patron/books?categoryId=${category?.id}`}>
                                     <Button type="primary">View Books</Button>

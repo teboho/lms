@@ -5,7 +5,7 @@ import { createContext } from "react";
 export interface LoanType {
     id: string;
     patronId: number;
-    bookId: number;
+    bookId: string;
     dateCreated: string;
     dateDue: string;
     dateReturned: string;
@@ -16,7 +16,7 @@ export interface LoanType {
 export const LoanInit: LoanType = {
     "id": "",
     "patronId": 0,
-    "bookId": 0,
+    "bookId": "",
     "dateCreated": "",
     "dateDue": "2024-04-02T12:39:20.538Z",
     "dateReturned": "2024-04-02T12:39:20.538Z",

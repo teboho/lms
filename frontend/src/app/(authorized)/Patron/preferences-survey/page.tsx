@@ -1,5 +1,5 @@
 "use client";
-import { ReactNode, useState, useEffect, useMemo, useContext } from "react";
+import { useState, useEffect, useMemo, useContext } from "react";
 import withAuth from "@/hocs/withAuth";
 import { Button, List, message, Steps, theme } from 'antd';
 import AuthContext from "@/providers/authProvider/context";
@@ -23,7 +23,7 @@ for (var i = 0; i < 10; i++) {
     )
 }
 
-const Survey = (): React.ReactNode => {
+const Page = (): React.ReactNode => {
     const { token } = theme.useToken();
     const [current, setCurrent] = useState(0);
     const [chosen, setChosen] = useState([]);  
@@ -85,13 +85,14 @@ const Survey = (): React.ReactNode => {
     };
 
     const contentStyle: React.CSSProperties = {
-        lineHeight: '260px',
-        textAlign: 'center',
-        color: token.colorTextTertiary,
-        backgroundColor: token.colorFillAlter,
-        borderRadius: token.borderRadiusLG,
-        border: `1px dashed ${token.colorBorder}`,
-        marginTop: 16,
+        // lineHeight: '260px',
+        // textAlign: 'center',
+        // color: token.colorTextTertiary,
+        // backgroundColor: token.colorFillAlter,
+        // borderRadius: token.borderRadiusLG,
+        // border: `1px dashed ${token.colorBorder}`,
+        // marginTop: 16,
+        margin: 16
     };
 
     const steps = [
@@ -124,20 +125,10 @@ const Survey = (): React.ReactNode => {
             <Steps current={current} items={items} />
             <div style={contentStyle}>
                 {current > 0 && steps[current].content}
-                
+                <br />
                 {chosen.length < steps.length && options}
             </div>
             <div style={{ marginTop: 24 }}>
-            {/* {current < steps.length - 1 && (
-                <Button type="primary" onClick={() => next()}>
-                Next
-                </Button>
-            )} */}
-            {/* {current < steps.length - 1 && (
-                <Button type="primary" onClick={() => reset()}>
-                    Restart
-                </Button>
-            )} */}
             {current === steps.length - 1 && (
                 <Button type="primary" onClick={() => message.success('Processing complete!')}>
                 Done
@@ -159,6 +150,7 @@ const Survey = (): React.ReactNode => {
                 header={<h1>What you chose</h1>}
                 bordered
                 dataSource={chosen}
+                style={{ alignContent: 'center' }}
                 renderItem={(item, index) => (
                     <List.Item>
                         {`${item.name}`}
@@ -169,4 +161,4 @@ const Survey = (): React.ReactNode => {
     );
 }
 
-export default withAuth(Survey);
+export default withAuth(Page);

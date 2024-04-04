@@ -120,10 +120,6 @@ const Page = (): React.ReactNode => {
                             />
                         }
                     >
-                        {/* <List.Item.Meta
-                            title={<Link href={`/Book/${book.id}`}>{book.name}</Link>}
-                            description={book.description}
-                        /> */}
                         <Paragraph>
                             Type: {BookType[book.type]}
                             , Year: {book.year}
@@ -135,9 +131,9 @@ const Page = (): React.ReactNode => {
                             Category: {getCategory(book?.categoryId)?.name}
                         </Paragraph>
                         <Paragraph>
-                            Author: {`${getAuthorById(book?.authorId).firstName} ${getAuthorById(book?.authorId).lastName}`}
+                            Author: {`${getAuthorById(book?.authorId)?.firstName} ${getAuthorById(book?.authorId)?.lastName}`}
                         </Paragraph>
-                        {book.type !== 1 && <Link href={`loans?bookId=${book.id}`}>
+                        {book.type !== 1 && <Link href={`/admin/loans?bookId=${book.id}`}>
                             <Button>View Loans</Button>
                         </Link>}
                         {
