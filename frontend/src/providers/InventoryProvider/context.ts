@@ -26,7 +26,7 @@ export const INVENTORY_CONTEXT_INITIAL_STATE: INVENTORY_STATE_TYPE = {
     isPending: false,
     isError: false,
     isSuccess: false,
-    inventoryItems: undefined,
+    inventoryItems: [] as InventoryType[],
     inventory: INVENTORY_INIT,
     searchTerm: ""
 }

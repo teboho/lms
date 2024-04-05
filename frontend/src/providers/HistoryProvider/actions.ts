@@ -40,7 +40,7 @@ export const getHistorySuccessAction = createAction(
  * Sets the isError to true but then all else to false
  */
 export const getHistoryErrorAction = createAction(
-    HistoryActionEnums.GetHistorySuccess,
+    HistoryActionEnums.GetHistoryError,
     () => ({ isSuccess: false, isInProgress: false, isError: true, history: undefined, historyData: undefined, viewCount: 0 })
 );
 

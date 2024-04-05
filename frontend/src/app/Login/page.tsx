@@ -103,7 +103,7 @@ export default function Login(): React.ReactNode {
             </Sider>
             <Sider theme="light" width={"75%"} >
                 <Form className={cx(styles["the-form"])} name="form_item_path" layout="vertical" form={form} onFinish={onFinish}>
-                    <Title className="">Login with your personal information</Title>
+                    <Title className="">Login with your credentials</Title>
                     <MyFormItemGroup prefix={["user"]}>
                         <Row>           
                             <Col span={24}>

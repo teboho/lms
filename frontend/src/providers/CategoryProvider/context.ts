@@ -18,8 +18,8 @@ export interface CATEGORY_STATE_TYPE {
     isPending: boolean;
     isSuccess: boolean;
     isError: boolean;
-    categories?: CategoryType[] | undefined;
-    category?: CategoryType | undefined;
+    categories: CategoryType[] | undefined;
+    category: CategoryType | undefined;
 }
 
 export const CATEGORY_CONTEXT_INITIAL_STATE: CATEGORY_STATE_TYPE = {
@@ -31,8 +31,8 @@ export const CATEGORY_CONTEXT_INITIAL_STATE: CATEGORY_STATE_TYPE = {
 }
 
 export interface CategoryContextType {
-    category: CategoryType;
-    categories: CategoryType[];
+    category: CategoryType | undefined;
+    categories: CategoryType[] | undefined;
     getCategory: (categoryId: string) => CategoryType | undefined;
     getAllCategories: () => void;
 }

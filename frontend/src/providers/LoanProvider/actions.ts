@@ -37,7 +37,7 @@ export const postLoanSuccessAction = createAction(
  * Sets the isError to true but then all else to false
  */
 export const postLoanErrorAction = createAction(
-    LoanActionEnums.PostLoanSuccess,
+    LoanActionEnums.PostLoanError,
     () => ({ isSuccess: false, isPending: false, isError: true, loan: undefined, loans: undefined })
 );
 
@@ -62,7 +62,7 @@ export const getLoanSuccessAction = createAction(
  * Sets the isError to true but then all else to false
  */
 export const getLoanErrorAction = createAction(
-    LoanActionEnums.GetLoanSuccess,
+    LoanActionEnums.GetLoanError,
     () => ({ isSuccess: false, isPending: false, isError: true, loan: undefined, loans: undefined })
 );
 
@@ -82,7 +82,7 @@ export const getLoansSuccessAction = createAction(
     LoanActionEnums.GetLoansSuccess,
     (loans: LoanType[]) => {
         console.log("saving these loans...", loans);
-        return ({ isSuccess: true, isPending: false, isError: false, loan: undefined, loans })
+        return ({ isSuccess: true, isPending: false, isError: false, loan: undefined as LoanType, loans })
     }
 );
 
@@ -90,6 +90,6 @@ export const getLoansSuccessAction = createAction(
  * Sets the isError to true but then all else to false
  */
 export const getLoansErrorAction = createAction(
-    LoanActionEnums.GetLoansSuccess,
+    LoanActionEnums.GetLoansError,
     () => ({ isSuccess: false, isPending: false, isError: true, loan: undefined, loans: undefined })
 );

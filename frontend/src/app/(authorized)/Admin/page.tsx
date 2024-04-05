@@ -16,16 +16,17 @@ const { Title, Paragraph } = Typography;
 const Page = (): React.ReactNode => {
     const { token } = theme.useToken();
     const searchParams = useSearchParams();
-    const { books } = useContext(BookContext);
+    const { books, getAll: getAllBooks } = useContext(BookContext);
     const { inventoryItems, getAll, getInventory } = useContext(InventoryContext);
-    const { categories, getCategory } = useContext(CategoryContext);
-    const { getAuthorById } = useContext(AuthorsContext);
+    const { categories, getCategory, getAllCategories } = useContext(CategoryContext);
+    const { getAuthorById, getAuthors } = useContext(AuthorsContext);
     const [currentBooks, setCurrentBooks] = useState([]);
 
     useEffect(() => {
-        // if (inventoryItems?.length === 0 || !inventoryItems) {
             getAll();
-        // }
+            getAllBooks();
+            getAuthors();
+            getAllCategories();
     }, []);
 
     const memoInventoryItems = useMemo(() => {

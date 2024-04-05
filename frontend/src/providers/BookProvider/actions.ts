@@ -70,7 +70,7 @@ export const getBookSuccessAction = createAction(
  * Sets the isError to true but then all else to false
  */
 export const getBookErrorAction = createAction(
-    BookActionEnums.GetBookSuccess,
+    BookActionEnums.GetBookError,
     () => ({ isSuccess: false, isPending: false, isError: true, book: undefined, books: undefined, searchTerm: "" })
 );
 
@@ -103,7 +103,7 @@ export const getSearchBooksSuccessAction = createAction(
  * Sets the isError to true but then all else to false
  */
 export const getSearchBooksErrorAction = createAction(
-    BookActionEnums.GetSearchBooksSuccess,
+    BookActionEnums.GetSearchBooksError,
     (): any => ({ isSuccess: false, isPending: false, isError: true, books: undefined, searchTerm: "", searchBooks: undefined })
 );
 
@@ -129,6 +129,6 @@ export const postBookSuccessAction = createAction(
  * Sets the isError to true but then all else to false
  */
 export const postBookErrorAction = createAction(
-    BookActionEnums.PostBookSuccess,
+    BookActionEnums.PostBookError,
     (): any => ({ isSuccess: false, isPending: false, isError: true, book: undefined, books: undefined, searchTerm: "" })
 );

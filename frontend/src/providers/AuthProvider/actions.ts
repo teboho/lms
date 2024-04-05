@@ -1,7 +1,6 @@
 "use client";
-import { Action, ActionFunction0, createAction } from "redux-actions";
-import { AUTH_STATE_TYPE, AUTH_RESPONSE_TYPE, REGISTER_RESPONSE_TYPE, UserType, AuthValueType } from "./context";
-import { use } from "react";
+import { createAction } from "redux-actions";
+import { AUTH_RESPONSE_TYPE, REGISTER_RESPONSE_TYPE, UserType, AuthValueType } from "./context";
 
 export const AuthActionEnums = {
     PostAuthRequest: "POST_AUTH_REQUEST",
@@ -37,20 +36,30 @@ export const postAuthSuccessAction = createAction(
 );
 
 /**
- * Sets the isSuccess to true but then all else to false
- */
-export const postRegisterSuccessAction = createAction(
-    AuthActionEnums.PostAuthSuccess,
-    (registerObj: REGISTER_RESPONSE_TYPE) => ({ isSuccess: true, isPending: false, isError: false, registerObj, authObj: undefined as AUTH_RESPONSE_TYPE, userObj: undefined })
-);
-
-/**
  * Sets the isError to true but then all else to false
  */
 export const postAuthErrorAction = createAction(
-    AuthActionEnums.PostAuthSuccess,
+    AuthActionEnums.PostAuthError,
     () => ({ isSuccess: false, isPending: false, isError: true, authObj: undefined, registerObj: undefined, userObj: undefined })
 );
+
+/**
+ * set the isPending to false and isError to true
+ */
+export const postRegisterRequestAction = createAction(
+    AuthActionEnums.PostRegisterRequest,
+    (): any => ({ isSuccess: false, isPending: true, isError: false, registerObj: undefined, authObj: undefined, userObj: undefined })
+);
+
+
+/**
+ * Sets the isSuccess to true but then all else to false
+ */
+export const postRegisterSuccessAction = createAction(
+    AuthActionEnums.PostRegisterSuccess,
+    (registerObj: REGISTER_RESPONSE_TYPE) => ({ isSuccess: true, isPending: false, isError: false, registerObj, authObj: undefined as AUTH_RESPONSE_TYPE, userObj: undefined })
+);
+
 
 export const getUserRequestAction = createAction(
     AuthActionEnums.GetUserRequest,

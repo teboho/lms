@@ -1,6 +1,6 @@
 "use client"
 import { useEffect, useReducer } from "react";
-import AuthContext, { AUTH_INITIAL_STATE, AUTH_REQUEST_TYPE, AUTH_RESPONSE_TYPE, REGISTER_REQUEST_TYPE } from "./context";
+import AuthContext, { AUTH_INITIAL_STATE, AUTH_REQUEST_TYPE, AUTH_RESPONSE_TYPE, REGISTER_REQUEST_TYPE, UserType } from "./context";
 import { authReducer } from "./reducer";
 import { clearAuthAction, getUserErrorAction, getUserRequestAction, getUserSuccessAction, postAuthErrorAction, postAuthRequestAction, postAuthSuccessAction } from "./actions";
 import { useRouter } from 'next/navigation';
@@ -50,7 +50,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
             const userId = parseInt(localStorage.getItem("userId"));
             getUserInfo(userId);
             
-            console.log("Auth has landed...");
+            console.log("Auth mounts for the first time.");
         }
     }, []);
 
@@ -77,6 +77,22 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
             .catch(error => {
                 console.log(error);
                 dispatch(getUserErrorAction());
+            });
+    }
+
+    const getPatronInfo = async (id: number): Promise<UserType> => {
+        // conduct the fetch and dispatch based on the response
+        const endpoint = `/api/services/app/User/Get?Id=${id}`;
+
+        const accessToken = Utils.getAccessToken(); // localStorage.getItem("accessToken");
+        const instance = makeAxiosInstance(accessToken);
+
+        return instance.get(endpoint)
+            .then(response => {
+                return response.data.result;
+            })
+            .catch(error => {
+                console.log(error);
             });
     }
 
@@ -114,9 +130,9 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         .then(data => {
             console.log("Auth login data", data);
             if (data.success) {
-                const res: AUTH_RESPONSE_TYPE = data.result;
-                dispatch(postAuthSuccessAction(res));
+                const res = data.result;
                 console.log("Log in success");
+                dispatch(postAuthSuccessAction(res));
 
                 console.log("saving token", res.accessToken, "|", res.encryptedAccessToken)
                 localStorage.setItem("accessToken", res.accessToken);
@@ -202,7 +218,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     return (
         <AuthContext.Provider 
             value={{
-                authObj: authState.authObj, 
+                authObj: authState?.authObj, 
                 registerObj: authState.registerObj,
                 userObj: authState.userObj, 
                 login, 
@@ -212,7 +228,8 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
                 register, 
                 isLoggedIn, 
                 getUserId,
-                getUserInfo
+                getUserInfo,
+                getPatronInfo
         }}>
             {contextHolder}
             {children}

@@ -19,6 +19,7 @@ export default function HistoryProvider({ children }: { children: React.ReactNod
         if (accessToken) {
             getHistoryData();
         }
+        console.log("History Provider is mounted for first time.")
     }, []);
 
     function getHistoryData() {
@@ -30,13 +31,15 @@ export default function HistoryProvider({ children }: { children: React.ReactNod
                 console.log(response.data.result);
                 if (response.data.success) {
                     // dispatch success action
-                    
+                    dispatch(getHistoryDataSuccessAction(response.data.result.items));
                 } else {
                     // dispatch error action
+                    dispatch(getHistoryDataErrorAction());
                 }
             })
             .catch((error) => {
                 // dispatch error action
+                dispatch(getHistoryDataErrorAction());
             });
     }
 

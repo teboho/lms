@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useMemo, useContext } from "react";
 import withAuth from "@/hocs/withAuth";
-import { Calendar, Table, theme, Typography, } from 'antd';
+import { Button, Calendar, Popover, Table, theme, Typography, } from 'antd';
 import BookContext from "@/providers/bookProvider/context";
 import { LoanContext } from "@/providers/loanProvider/context";
 import { useStyles } from "./styles";
@@ -10,6 +10,8 @@ import { useSearchParams } from "next/navigation";
 
 import { type Dayjs } from "dayjs";
 import Utils from "@/utils";
+import Link from "next/link";
+import ViewPatron from "@/components/viewPatron";
 
 const Page = (): React.ReactNode => {
     const { token } = theme.useToken();
@@ -96,7 +98,7 @@ const Page = (): React.ReactNode => {
         {
             title: 'Patron',
             dataIndex: 'patron',
-            key: 'patron',
+            key: 'patron'
         },
         {
             title: 'Date Created',
@@ -123,11 +125,12 @@ const Page = (): React.ReactNode => {
     const data = memoLoans?.map((loan) => {
         const book = getBookById(loan?.bookId);
         // const patron = Utils.getPatronUserInfo(loan?.patronId);
+        const content = <ViewPatron id={loan.patronId} />;
         return {
             key: loan.id,
             id: loan.id,
             book: book?.name,
-            patron: loan.patronId,
+            patron: (<Popover content={content} title="Patron details"><Button>{loan?.patronId}</Button></Popover>),
             dateCreated: loan.dateCreated,
             dateDue: loan.dateDue,
             dateReturned: loan.dateReturned,

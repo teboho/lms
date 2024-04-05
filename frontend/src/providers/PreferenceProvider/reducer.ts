@@ -17,6 +17,7 @@ export const preferenceReducer = handleActions(
             ...state,
             ...action.payload
         }),
+        
         [PreferenceActionEnums.GetPreferenceDataRequest]: (state, action) => ({
             ...state,
             ...action.payload
@@ -29,6 +30,7 @@ export const preferenceReducer = handleActions(
             ...state,
             ...action.payload
         }),
+
         [PreferenceActionEnums.PostPreferenceRequest]: (state, action) => ({
             ...state,
             ...action.payload

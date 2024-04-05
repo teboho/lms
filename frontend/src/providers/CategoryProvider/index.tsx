@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { Provider, useContext, useEffect, useReducer } from "react";
 import { categoryReducer } from "./reducer";
 import { getCategoriesErrorAction, getCategoriesRequestAction, getCategoriesSuccessAction, getCategoryErrorAction, getCategoryRequestAction, getCategorySuccessAction } from "./actions";
@@ -6,22 +6,27 @@ import { baseURL, makeAxiosInstance } from "../authProvider";
 import axios, { Axios, AxiosInstance } from "axios";
 import CategoryContext, { CATEGORY_CONTEXT_INITIAL_STATE, CategoryType } from "./context";
 import Utils from "@/utils";
-
-const apiURL = process.env.NEXT_PUBLIC_API_URL;
+import AuthContext from "../authProvider/context";
 
 export default function CategoryProvider({ children }: { children: React.ReactNode }) {
     // we will make the state with the reduce3rs
     const [categoryState, dispatch] = useReducer(categoryReducer, CATEGORY_CONTEXT_INITIAL_STATE);
+    const { authObj } = useContext(AuthContext);
 
     const accessToken = Utils.getAccessToken(); // localStorage.getItem("accessToken");
     const instance = makeAxiosInstance(accessToken);
 
     useEffect(() => {
-        // get the categories
-        if (accessToken) {
-            getAllCategories();
-        }
+        console.log("Category Provider is mounted for first time.")
     }, []);
+
+    useEffect(() => {
+        // get the categories
+        // if (accessToken) {
+        //     getAllCategories();
+        // }
+        console.log("auth object has changed...", authObj);
+    }, [authObj]);
 
     // get the categories
     function getAllCategories() {
@@ -33,9 +38,12 @@ export default function CategoryProvider({ children }: { children: React.ReactNo
                 console.log("results", res.data.result.items)
                 if (res.data.success) {
                     // disptach for success
-                    if (res.data.result !== null)
+                    if (res.data.result)
                     {
                         dispatch(getCategoriesSuccessAction(res.data.result.items))
+                    } else{
+                        // dispatch for error
+                        dispatch(getCategoriesErrorAction());
                     }
                 } else {
                     // dispatch for erroe

@@ -132,7 +132,7 @@ export default function InventoryProvider({ children }: { children: React.ReactN
         // before we make the http request, we set pending to true via dispatch
         dispatch(getInventorysRequestAction());
         // the we make the call
-        instance.post(`${endpoint}`, prefs)
+        instance.put(`${endpoint}`, inventory)
             .then(res => {
                 console.log("results", res.data)
                 if (res.data.success) {

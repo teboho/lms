@@ -31,28 +31,28 @@ export default function RootLayout({
       <AuthProvider>
         <CategoryProvider>
           <BookProvider>
-          <AuthorsProvider>
-            <Layout>
-              <Header style={{background: "white"}}>
-                <NavBar />
-              </Header>
+            <AuthorsProvider>
               <Layout>
-                <Flex>
-                    <InventoryProvider>
-                      <LoanProvider>
-                        <HistoryProvider>
-                        <PreferenceProvider>
-                              <Content>
-                                {children}
-                              </Content>                  
-                        </PreferenceProvider>
-                        </HistoryProvider>
-                      </LoanProvider>
-                    </InventoryProvider>
-                </Flex>
+                <Header style={{background: "white"}}>
+                  <NavBar />
+                </Header>
+                <Layout>
+                  <Flex>
+                      <InventoryProvider>
+                        <LoanProvider>
+                          <HistoryProvider>
+                            <PreferenceProvider>
+                                  <Content>
+                                    {children}
+                                  </Content>                  
+                            </PreferenceProvider>
+                          </HistoryProvider>
+                        </LoanProvider>
+                      </InventoryProvider>
+                  </Flex>
+                </Layout>
               </Layout>
-            </Layout>
-          </AuthorsProvider>
+            </AuthorsProvider>
           </BookProvider>
         </CategoryProvider>
       </AuthProvider>

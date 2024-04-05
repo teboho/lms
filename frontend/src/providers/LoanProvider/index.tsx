@@ -125,7 +125,7 @@ export default function LoanProvider({ children }: { children: React.ReactNode }
         //     .catch(() => {
         //         dispatch(getLoansErrorAction());
         //     });
-        return state.loans?.filter(loan => loan.bookId === parseInt(id));
+        return state.loans?.filter(loan => loan.bookId === id);
     }
     
     const getReturnedLoans = (): void => {

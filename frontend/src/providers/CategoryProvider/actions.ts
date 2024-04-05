@@ -26,14 +26,14 @@ export const getCategoryRequestAction = createAction(
  */
 export const getCategorySuccessAction = createAction(
     CategoryActionEnums.GetCategorySuccess,
-    (category: CategoryType): any => ({ isSuccess: true, isPending: false, isError: false, categories: undefined, category })
+    (category: CategoryType) => ({ isSuccess: true, isPending: false, isError: false, categories: undefined, category })
 );
 
 /**
  * Sets the isError to true but then all else to false
  */
 export const getCategoryErrorAction = createAction(
-    CategoryActionEnums.GetCategorySuccess,
+    CategoryActionEnums.GetCategoryError,
     () => ({ isSuccess: false, isPending: false, isError: true, categories: undefined, category: undefined})
 );
 
@@ -58,6 +58,6 @@ export const getCategoriesSuccessAction = createAction(
  * Sets the isError to true but then all else to false
  */
 export const getCategoriesErrorAction = createAction(
-    CategoryActionEnums.GetCategoriesSuccess,
+    CategoryActionEnums.GetCategoriesError,
     () => ({ isSuccess: false, isPending: false, isError: true, categories: undefined, category: undefined})
 );

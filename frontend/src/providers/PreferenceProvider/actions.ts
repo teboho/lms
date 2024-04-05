@@ -37,7 +37,7 @@ export const getPreferenceSuccessAction = createAction(
  * Sets the isError to true but then all else to false
  */
 export const getPreferenceErrorAction = createAction(
-    PreferenceActionEnums.GetPreferenceSuccess,
+    PreferenceActionEnums.GetPreferenceError,
     () => ({ isSuccess: false, isInProgress: false, isError: true, preference: undefined, preferenceData: undefined})
 );
 

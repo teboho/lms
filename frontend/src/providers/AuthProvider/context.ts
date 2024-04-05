@@ -35,7 +35,7 @@ export interface AUTH_STATE_TYPE {
     isPending: boolean;
     isSuccess: boolean;
     isError: boolean;
-    authObj?: AUTH_RESPONSE_TYPE | undefined;
+    authObj: AUTH_RESPONSE_TYPE | undefined;
     registerObj?: REGISTER_RESPONSE_TYPE | undefined;
     userObj: UserType;
 }
@@ -122,6 +122,7 @@ export interface AuthValueType {
     getUserInfo: (id: number) => void;
     isLoggedIn: () => boolean;
     getUserId: () => number;
+    getPatronInfo: (id: number) => Promise<UserType>;
 }
 
 /**
@@ -138,7 +139,8 @@ const AuthContext = createContext<AuthValueType>({
     register: (registerObj: REGISTER_REQUEST_TYPE) => {}, 
     getUserInfo: (id: number) => {},
     isLoggedIn: () => false, 
-    getUserId: () => 0
+    getUserId: () => 0,
+    getPatronInfo: (id: number) => Promise.resolve(User_Init)
 });
 
 export default AuthContext;

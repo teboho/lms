@@ -15,7 +15,7 @@ export const categoryReducer = handleActions(
             ...state,
             ...action.payload
         }), // this handler will change the value of the isError in the state
-        [CategoryActionEnums.GetCategorySuccess]: (state, action) => ({
+        [CategoryActionEnums.GetCategoryError]: (state, action) => ({
             ...state,
             ...action.payload
         }),

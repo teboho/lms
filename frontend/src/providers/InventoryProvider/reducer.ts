@@ -20,6 +20,7 @@ export const inventoryReducer = handleActions(
             ...state,
             ...action.payload
         }),
+        
         [InventoryActionEnums.GetInventoryRequest]: (state, action) => ({
             ...state,
             ...action.payload
@@ -32,10 +33,12 @@ export const inventoryReducer = handleActions(
             ...state,
             ...action.payload
         }),
+
         [InventoryActionEnums.SetSearchTerm]: (state, action) => ({
             ...state,
             ...action.payload
         }),
+
         [InventoryActionEnums.PostInventoryRequest]: (state, action) => ({
             ...state,
             ...action.payload

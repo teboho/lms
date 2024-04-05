@@ -16,6 +16,10 @@ export default function AuthorsProvider({ children }: { children: React.ReactNod
     const instance = makeAxiosInstance(accessToken);
 
     useEffect(() => {
+        console.log("Authors Provider is mounted for first time.")
+    }, []);
+
+    useEffect(() => {
         if (accessToken) {
             getAuthors();
         }

@@ -33,6 +33,7 @@ export default function BookProvider({ children }: { children: React.ReactNode }
         if (accessToken) {
             getAll();
         }
+        console.log("Book Provider is mounted for first time.")
     }, []);
 
     // Axios instance
