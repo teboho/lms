@@ -2,6 +2,5 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/backend/src/Boxfusion.LMS_Backend.Web.Host/App_Data/Logs/Logs.txt
+/backend/src/Boxfusion.LMS_Backend.Web.Host/App_Data/Logs/
 /frontend/.env
-/backend/src/Boxfusion.LMS_Backend.Web.Host/App_Data/Logs/Logs.txt
