@@ -7,6 +7,7 @@ import Sider from "antd/lib/layout/Sider";
 import moduleStyles from "./register.module.css";
 import AuthContext from "@/providers/authProvider/context";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 // Can contain an array of strings or array of numbers
 const MyFormItemContext = React.createContext<(string | number)[]>([]);
 
@@ -126,15 +127,6 @@ export default function Register(): React.ReactNode {
                             </MyFormItemGroup>
                             </Col>
                         </Row>
-                        {/* <Row>           
-                            <Col span={24}>
-                            <MyFormItemGroup prefix={["phone"]}>
-                                <MyFormItem name="phone" label="Phone number">
-                                    <Input />
-                                </MyFormItem>
-                            </MyFormItemGroup>
-                            </Col>
-                        </Row> */}
                         <Row gutter={5}>
                             <MyFormItemGroup prefix={["password"]}>
                                 <Col span={12}>
@@ -149,11 +141,13 @@ export default function Register(): React.ReactNode {
                                 </Col>
                             </MyFormItemGroup>
                         </Row>
-                        <Row>
+                        <Row gutter={50}>
                             <Col>
                                 <Button type="primary" onClick={e => onComplete(e)}>Register</Button>
                             </Col>
-                            <Col><Button className={cx(styles.cancel)} onClick={e => redirect("/")}>Cancel</Button></Col>
+                            <Col>
+                                <Link href="/login"><Button>Already have an account?</Button></Link>
+                            </Col>
                         </Row>
                     </MyFormItemGroup>
                 </Form>

@@ -62,12 +62,13 @@ const AdminLayout = ({ children }: { children: React.ReactNode }): React.ReactNo
         <Layout>
             <Sider style={{background: "white"}} className={cx(styles.right)} width={"25%"}>
                 <Menu
+                    onClick={() => {}}
                     items={adminMenu}
                     className={cx(styles.sticky)}
                     mode="inline"
                 />
             </Sider>
-            <ErrorBoundary fallback={<h1>Sth is wrong</h1>}>
+            <ErrorBoundary fallback={<h1>Something is wrong with the admin content</h1>}>
                 <Content className={cx(styles.content)}>
                     {children}
                 </Content>

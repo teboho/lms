@@ -14,6 +14,6 @@ export const useStyles = createStyles(({css, cx}) => ({
         background: white;
     `,
     padding: css`
-        padding: 10px;
+        padding: 20px;
     `,
 }));

@@ -1,7 +1,7 @@
 'use client';
 import React, { useContext } from "react";
 import { BookType, type BookDataType } from "@/providers/bookProvider/context";
-import { Card, Typography, Image, Button, Space } from "antd";
+import { Card, Typography, Image, Button, Space, ConfigProvider } from "antd";
 import Link from "next/link";
 import AuthorsContext, { AuthorDataType } from "@/providers/authorsProvider/context";
 import CategoryContext from "@/providers/categoryProvider/context";
@@ -31,7 +31,11 @@ const Book: React.FC<BookProps> = ({ book }) => {
             style={{ width: 240 }}
             className={cx(styles.maxHeight)}
         >
-            <Image alt={book?.name} src={book?.imageURL} style={{height: 150}}/>
+            <Image 
+                alt={book?.name} 
+                src={book.imageURL ? book.imageURL : "/assets/images/generic.jpg"} 
+                style={{height: 150}}
+            />
             <Title level={4}>{book?.name}</Title>
             <Paragraph>Type: {BookType[book?.type]}, Year: {book?.year}</Paragraph>
             <Paragraph>ISBN: {book?.isbn}</Paragraph>
@@ -41,9 +45,17 @@ const Book: React.FC<BookProps> = ({ book }) => {
             <div className={styles.buttons}>
                 {book?.type !== 1 && 
                 <Link href={`/patron/loan?bookId=${book?.id}`}>
-                    <Button>Loan</Button>
+                    <ConfigProvider 
+                        theme={{
+                            token: {
+                                colorPrimary: "#00BF63",
+                            }                        
+                        }}
+                    >
+                        <Button type="primary">Loan</Button>
+                    </ConfigProvider>
                 </Link>}
-                <Space size={25} />
+                {" "}
                 <Link href={`/patron/books?bookId=${book?.id}`}>
                     <Button type="primary">View</Button>
                 </Link>

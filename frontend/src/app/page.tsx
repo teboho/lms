@@ -36,6 +36,7 @@ export default function Welcome() {
                   <div>
                     <Link href={"/login"}><Button>Login</Button></Link>
                   </div>
+                  {" "}
                   <div>
                     <Link href={"/register"}><Button>Register</Button></Link>
                   </div>

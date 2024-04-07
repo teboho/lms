@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 // import "./globals.css";
 // import styles from './page.module.css';
-import { Layout, Flex } from "antd";
+import { Layout, Flex, ConfigProvider } from "antd";
 import { Header, Content, Footer } from "antd/lib/layout/layout";
 import AuthProvider from "@/providers/authProvider";
 import CategoryProvider from "@/providers/categoryProvider";
@@ -28,34 +28,43 @@ export default function RootLayout({
   return (
     <html lang="en">
     <body>
-      <AuthProvider>
-        <CategoryProvider>
-          <BookProvider>
-            <AuthorsProvider>
-              <Layout>
-                <Header style={{background: "white"}}>
-                  <NavBar />
-                </Header>
+      <ConfigProvider direction="ltr"
+        theme={{
+          token: {
+            colorPrimary: "#004AAD",
+            
+          },
+        }}
+      >
+        <AuthProvider>
+          <CategoryProvider>
+            <BookProvider>
+              <AuthorsProvider>
                 <Layout>
-                  <Flex>
-                      <InventoryProvider>
-                        <LoanProvider>
-                          <HistoryProvider>
-                            <PreferenceProvider>
-                                  <Content>
-                                    {children}
-                                  </Content>                  
-                            </PreferenceProvider>
-                          </HistoryProvider>
-                        </LoanProvider>
-                      </InventoryProvider>
-                  </Flex>
+                  <Header style={{background: "white"}}>
+                    <NavBar />
+                  </Header>
+                  <Layout>
+                    <Flex>
+                        <InventoryProvider>
+                          <LoanProvider>
+                            <HistoryProvider>
+                              <PreferenceProvider>
+                                    <Content>
+                                      {children}
+                                    </Content>                  
+                              </PreferenceProvider>
+                            </HistoryProvider>
+                          </LoanProvider>
+                        </InventoryProvider>
+                    </Flex>
+                  </Layout>
                 </Layout>
-              </Layout>
-            </AuthorsProvider>
-          </BookProvider>
-        </CategoryProvider>
-      </AuthProvider>
+              </AuthorsProvider>
+            </BookProvider>
+          </CategoryProvider>
+        </AuthProvider>
+      </ConfigProvider>
     </body>
     </html>
   );

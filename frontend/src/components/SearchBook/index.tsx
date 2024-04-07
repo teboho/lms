@@ -4,6 +4,7 @@ import BookContext, { BookType, SearchBookDataType, type BookDataType } from "@/
 import { Card, Typography, Image, Button, Popconfirm, InputNumber, message } from "antd";
 
 import { Guid } from "js-guid";
+import { useStyles } from "./styles";
 
 interface BookProps {
     bookStuff: SearchBookDataType;
@@ -23,6 +24,7 @@ const SearchBook: React.FC<BookProps> = ({ bookStuff }) => {
     const { item2: category } = bookStuff;
     const { item3: author } = bookStuff;
     const [messageApi, contextHolder] = message.useMessage();
+    const { styles, cx } = useStyles();
 
     const onNumberChange = (value: number) => {
         console.log("number change", value);
@@ -84,14 +86,17 @@ const SearchBook: React.FC<BookProps> = ({ bookStuff }) => {
             hoverable
             style={{ width: 240 }}
             title={book.name}
+            className={cx(styles.maxHeight)}
         >
-            <Image alt={book.name} src={book.imageURL} style={{height: 150}}/>
+            <Image alt={book.name} src={book.imageURL ? book.imageURL : "/assets/images/generic.jpg"} style={{height: 150}}/>
             <Paragraph>Type: {BookType[book.type]}, Published: {book.year}</Paragraph>
             <Paragraph>ISBN: {book.isbn}</Paragraph>
             <Paragraph>Category: {category.name}</Paragraph>
             <Paragraph>Author: {`${author.firstName} ${author.lastName}`} </Paragraph>
             <label htmlFor="bookCount">Count</label>
+            {" "}
             <InputNumber id="bookCount" name="bookCount" min={1} max={50} defaultValue={count} onChange={onNumberChange} />
+            <br />
             <br />
             <Popconfirm
                 title="Are you sure you want to add this book?"

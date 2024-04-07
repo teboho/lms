@@ -21,5 +21,5 @@ export const useStyles = createStyles(({css, cx}) => ({
     buttons: css`
         position: absolute;
         bottom: 5px;
-    `,
+    `
 }));

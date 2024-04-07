@@ -31,7 +31,6 @@ const Page = (): React.ReactNode => {
 
     return (
         <Layout>
-            <Sider style={{background: "white"}} className={cx(styles.right)} width={"100%"}>
                 <Content className={cx(styles.content)}>
                     <Typography.Title level={3}>Add A New Book</Typography.Title>
                     <Typography.Paragraph>
@@ -42,28 +41,9 @@ const Page = (): React.ReactNode => {
                         onSearch={onSearch}
                         style={{ width: 400 }}
                     />
-{/*                         
-                    <Select
-                        style={{ width: 200, marginLeft: 20 }}
-                        placeholder="Sort by"
-                        onSelect={(value) => {
-                            let sortedBooks;
-                            if (value === 'name') {
-                                sortedBooks = [...currentBooks].sort((a, b) => a.name.localeCompare(b.name));
-                            } else if (value === 'year') {
-                                sortedBooks = [...currentBooks].sort((a, b) => a.year - b.year);
-                            }
-                            setCurrentBooks(sortedBooks);
-                        }}
-                    >
-                        <Option value="name">Name</Option>
-                        <Option value="year">Year</Option>
-                    </Select> 
-                    */}
                     
                     <GoogleSearchResults />
                 </Content>
-            </Sider>
         </Layout>
     );
 }

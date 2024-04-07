@@ -117,10 +117,14 @@ const Page = (): React.ReactNode => {
                             <Image
                                 width={136}
                                 alt={book.name}
-                                src={book.imageURL}
+                                src={book.imageURL ? book.imageURL : "/assets/images/generic.jpg"}
                             />
                         }
                     >
+                        <List.Item.Meta
+                            title={book?.name}
+                            description={book?.description}
+                        />
                         <Paragraph>
                             Type: {BookType[book.type]}
                             , Year: {book.year}

@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useMemo, useContext } from "react";
 import withAuth from "@/hocs/withAuth";
-import { Button, List, message, Steps, theme, Input } from 'antd';
+import { Button, List, message, Steps, theme, Input, Space, ConfigProvider } from 'antd';
 import AuthContext from "@/providers/authProvider/context";
 import BookContext from "@/providers/bookProvider/context";
 import CategoryContext from "@/providers/categoryProvider/context";
@@ -212,6 +212,7 @@ const Page = (): React.ReactNode => {
                     onSearch={onSearch}
                     style={{ width: 400 }}
                 />
+                {" "}
                 <Button type="primary" onClick={() => setOptions(categoryContextValue.categories)}>
                     Reset
                 </Button>
@@ -226,13 +227,23 @@ const Page = (): React.ReactNode => {
                 <br />
                 {chosen.length < steps.length && (
                     memoOptions?.map((item, index: number) => (
-                        <Button key={`choice_${item.id}`} type="primary" 
-                            onClick={() => {
-                                savePref(index, item)
-                                if (current < steps.length - 1) next();
+                        <>
+                        <ConfigProvider 
+                            theme={{
+                                token: {
+                                    colorPrimary: "#00BF63",
+                                }                        
                             }}>
-                            {item.name}
-                        </Button>
+                                <Button key={`choice_${item.id}`}
+                                    onClick={() => {
+                                        savePref(index, item)
+                                        if (current < steps.length - 1) next();
+                                    }}>
+                                    {item.name}
+                                </Button>
+                            </ConfigProvider>                        
+                        {" "}
+                        </>
                     ))
                 )}
             </div>
@@ -249,7 +260,7 @@ const Page = (): React.ReactNode => {
                     </Button>
                 )}
                 {chosen.length === 3 && (
-                    <Button style={{ margin: '0 8px' }} onClick={() => savePreferences()}>
+                    <Button type="primary" style={{ margin: '0 8px' }} onClick={() => savePreferences()}>
                         Save
                     </Button>
                 )}

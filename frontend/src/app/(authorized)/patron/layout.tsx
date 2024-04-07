@@ -45,8 +45,9 @@ const Layout = ({ children }: { children: React.ReactNode }): React.ReactNode =>
 
     return (
         <AntdLayout>
-            <Sider theme="light" className={cx(styles.right)} width={"25%"}>
+            <Sider theme="light" className={cx(styles.left)} width={"25%"}>
                 <Menu
+                    onClick={() => {}}
                     items={patronMenu}
                     className={cx(styles.sticky)}
                 />

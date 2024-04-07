@@ -24,7 +24,7 @@ const BooksViewer: React.FC<BookProps> = ({ book }) => {
             cover={<Image alt="example" src={book.imageURL} />}
         >
             <Card.Meta title={book.name} description={book.description} />
-            <Link href={`/admin/Books/${book.id}`}>
+            <Link href={`/admin/books/${book.id}`}>
                 <Button type="primary">View</Button>
             </Link>
         </Card>        

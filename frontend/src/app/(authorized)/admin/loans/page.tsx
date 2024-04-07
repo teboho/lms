@@ -9,9 +9,7 @@ const { Title } = Typography;
 import { useSearchParams } from "next/navigation";  
 
 import { type Dayjs } from "dayjs";
-import Utils from "@/utils";
-import Link from "next/link";
-import ViewPatron from "@/components/viewPatron";
+import ViewPatron from "@/components/book copy";
 
 const Page = (): React.ReactNode => {
     const { token } = theme.useToken();

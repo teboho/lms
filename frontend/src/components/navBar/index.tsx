@@ -106,7 +106,7 @@ const NavBar: React.FC = () => {
         );
     }
 
-    return <Menu mode="horizontal" items={outItems} className={cx(styles.sticky)} />;
+    return null;
 }
 
 export default NavBar;

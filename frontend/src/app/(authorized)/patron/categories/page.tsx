@@ -25,7 +25,7 @@ const Categories = (): React.FC | React.ReactNode => {
             
     return (
         <>
-            <div className={cx(styles.padding)}>
+            <div>
                 <Title level={3}>Categories</Title>
                 <Paragraph>
                     This is the categories page
@@ -37,7 +37,7 @@ const Categories = (): React.FC | React.ReactNode => {
                     renderItem={
                         (category: BookType) => (
                             <List.Item
-                                className={cx(styles.hoverable)}
+                                className={cx(styles.hoverable, styles.padding)}
                             >
                                 <List.Item.Meta
                                     title={category?.name}

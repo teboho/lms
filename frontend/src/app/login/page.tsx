@@ -8,6 +8,7 @@ import moduleStyles from "./register.module.css";
 import AuthContext, { AUTH_REQUEST_TYPE } from "@/providers/authProvider/context";
 import { useRouter } from "next/navigation";
 import { stat } from "fs";
+import Link from "next/link";
 
 // Can contain an array of strings or array of numbers
 const MyFormItemContext = React.createContext<(string | number)[]>([]);
@@ -123,11 +124,13 @@ export default function Login(): React.ReactNode {
                                 </Col>
                             </MyFormItemGroup>
                         </Row>
-                        <Row>
+                        <Row gutter={50}>
                             <Col>
                                 <Button type="primary" onClick={onComplete}>Login</Button>
                             </Col>
-                            <Col><Button className={cx(styles.cancel)} onClick={goHome}>Cancel</Button></Col>
+                            <Col>
+                                <Link href="/register"><Button>Don't have an account yet?</Button></Link>
+                            </Col>
                         </Row>
                     </MyFormItemGroup>
                 </Form>

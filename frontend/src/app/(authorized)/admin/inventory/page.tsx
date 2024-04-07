@@ -68,9 +68,8 @@ const Inventory = (): React.ReactNode => {
                     }
                 onSelect={(value) => {
                     console.log(value);
-                    // document.getElementById("inventory-list")?.scrollIntoView();
                     // show only the books that match the category id
-                    const filteredBooks = books?.filter((book) => book.categoryId === value);
+                    const filteredBooks = books?.filter((book) => book?.categoryId === value);
                     // console.log(filteredBooks);
 
                     memoBooks = filteredBooks;
@@ -111,39 +110,39 @@ const Inventory = (): React.ReactNode => {
                 dataSource={currentBooks}
                 renderItem={(book: BookDataType) => (
                     <List.Item
-                        key={book.id}
+                        key={book?.id}
                         extra={
                             <Image
                                 width={272}
-                                alt={book.name}
-                                src={book.imageURL}
+                                alt={book?.name}
+                                src={book.imageURL ? book.imageURL : "/assets/images/generic.jpg"}
                             />
                         }
                     >
                         <List.Item.Meta
-                            title={<Link href={`/Book/${book.id}`}>{book.name}</Link>}
-                            description={book.description}
+                            title={book?.name}
+                            description={book?.description}
                         />
                         <Paragraph>
-                            Type: {BookType[book.type]}
-                            , Year: {book.year}
+                            Type: {BookType[book?.type]}
+                            , Year: {book?.year}
                         </Paragraph>
                         <Paragraph>
-                            ISBN: {book.isbn}
+                            ISBN: {book?.isbn}
                         </Paragraph>
                         <Paragraph>
                             Category: {getCategory(book?.categoryId)?.name}
                         </Paragraph>
                         <Paragraph>
-                            Author: {`${getAuthorById(book?.authorId).firstName} ${getAuthorById(book?.authorId).lastName}`}
+                            Author: {`${getAuthorById(book?.authorId)?.firstName} ${getAuthorById(book?.authorId)?.lastName}`}
                         </Paragraph>
-                        {book.type !== 1 && <Link href={`loans?bookId=${book.id}`}>
+                        {book?.type !== 1 && <Link href={`loans?bookId=${book?.id}`}>
                             <Button>View Loans</Button>
                         </Link>}
                         {
-                            book.type !== 1 && filterInventoryItems(book.id) && (
+                            book?.type !== 1 && filterInventoryItems(book?.id) && (
                                 <Paragraph>
-                                    Inventory Count: {filterInventoryItems(book.id).count}
+                                    Inventory Count: {filterInventoryItems(book?.id)?.count}
                                 </Paragraph>
                             )
                         }
