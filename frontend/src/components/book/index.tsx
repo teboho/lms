@@ -1,11 +1,11 @@
 'use client';
 import React, { useContext } from "react";
 import { BookType, type BookDataType } from "@/providers/bookProvider/context";
-import { Card, Typography, Image, Button, Space, ConfigProvider } from "antd";
+import { Card, Typography, Image, Button, ConfigProvider } from "antd";
 import Link from "next/link";
-import AuthorsContext, { AuthorDataType } from "@/providers/authorsProvider/context";
+import AuthorsContext from "@/providers/authorsProvider/context";
 import CategoryContext from "@/providers/categoryProvider/context";
-import { useStyles } from "./styles";
+import { useStyles } from "./style";
 
 interface BookProps {
     book: BookDataType;

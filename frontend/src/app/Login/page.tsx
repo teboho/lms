@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useEffect } from "react";
+import React, { MouseEvent, useContext, useEffect } from "react";
 import { useMainStyles } from "./style";
 import { Layout, Flex, Form, Input, Button, Row, Col, Tag, Typography, message } from "antd";
 import { Header, Content, Footer } from "antd/lib/layout/layout";
@@ -33,7 +33,7 @@ function toArr(str: string | number | (string | number)[]): (string | number)[] 
  */
 const MyFormItemGroup = ({ prefix, children }: MyFormItemGroupProps) => {
     const prefixPath = React.useContext(MyFormItemContext); // an empty array...line 9
-    const concatPath = React.useMemo(() => [...prefixPath, ...toArr(prefix)], [prefix, prefix]);
+    const concatPath = React.useMemo(() => [...prefixPath, ...toArr(prefix)], [prefix, prefixPath]);
 
     return (
         <MyFormItemContext.Provider value={concatPath}>
@@ -64,15 +64,16 @@ interface FormInputDataType {
 export default function Login(): React.ReactNode {
     const [form] = Form.useForm<FormInputDataType>();
     const { login, authObj } = useContext(AuthContext);
-    const { styles, cx, theme } = useMainStyles();
+    const { styles, cx } = useMainStyles();
     const  { push } = useRouter();
 
-    useEffect(() => {
-        if (authObj?.accessToken) {
-            push("/");
-        }
-    }
-    , []);
+    // useEffect(() => {
+    //     if (authObj?.accessToken) {
+    //         push("/");
+    //     }
+    // }
+    // // eslint-disable-next-line react-hooks/exhaustive-deps
+    // , []);
 
     const onFinish = (value: object): void => {
         console.log("Hello World");
@@ -85,7 +86,7 @@ export default function Login(): React.ReactNode {
      * Get the data from the form and send it to the backend
      * @param e event
      */
-    const onComplete = (e: Event) => {
+    const onComplete = () => {
         const authReq: AUTH_REQUEST_TYPE = {
             password: form.getFieldValue("user").password.password,
             userNameOrEmailAddress: form.getFieldValue("user").email.email,
@@ -109,7 +110,7 @@ export default function Login(): React.ReactNode {
                         <Row>           
                             <Col span={24}>
                             <MyFormItemGroup prefix={["email"]}>
-                                <MyFormItem name="email" label="Email/Username">
+                                <MyFormItem name="email" label="Email/Username" prefix={""}>
                                     <Input />
                                 </MyFormItem>
                             </MyFormItemGroup>
@@ -118,7 +119,7 @@ export default function Login(): React.ReactNode {
                         <Row gutter={5}>
                             <MyFormItemGroup prefix={["password"]}>
                                 <Col span={12}>
-                                    <MyFormItem name="password" label="Password">
+                                    <MyFormItem name="password" label="Password" prefix={""}>
                                         <Input.Password />
                                     </MyFormItem>
                                 </Col>
@@ -126,10 +127,10 @@ export default function Login(): React.ReactNode {
                         </Row>
                         <Row gutter={50}>
                             <Col>
-                                <Button type="primary" onClick={onComplete}>Login</Button>
+                                <Button type="primary" onClick={e => onComplete()}>Login</Button>
                             </Col>
                             <Col>
-                                <Link href="/register"><Button>Don't have an account yet?</Button></Link>
+                                <Link href="/register"><Button>Don{"&apos;"}t have an account yet?</Button></Link>
                             </Col>
                         </Row>
                     </MyFormItemGroup>

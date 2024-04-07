@@ -23,6 +23,10 @@
     <ProjectReference Include="..\Boxfusion.LMS_Backend.EntityFrameworkCore\Boxfusion.LMS_Backend.EntityFrameworkCore.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Azure.Communication.Email" Version="1.0.1" />
+    <PackageReference Include="Azure.Communication.Messages" Version="1.0.0" />
+    <PackageReference Include="Azure.Communication.PhoneNumbers" Version="1.1.0" />
+    <PackageReference Include="Azure.Communication.Sms" Version="1.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageReference Include="Abp.AspNetCore" Version="9.1.0" />

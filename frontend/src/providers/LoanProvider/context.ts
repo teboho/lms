@@ -3,14 +3,14 @@ import { createContext } from "react";
 
 // Loan type
 export interface LoanType {
-    id: string;
+    id?: string;
     patronId: number;
     bookId: string;
-    dateCreated: string;
-    dateDue: string;
-    dateReturned: string;
-    isReturned: boolean;
-    isOverdue: boolean;
+    dateCreated?: string | Date;
+    dateDue?: string | Date;
+    dateReturned?: string | Date;
+    isReturned?: boolean;
+    isOverdue?: boolean;
     confirmed?: boolean;
 }
 

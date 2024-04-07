@@ -9,7 +9,6 @@ import { HistoryContext } from "@/providers/historyProvider/context";
 import Utils from "@/utils";
 import { Table, theme } from 'antd';
 import { useContext, useEffect } from "react";
-import { render } from "react-dom";
  
 
 const Page = (): React.ReactNode => {

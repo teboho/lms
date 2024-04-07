@@ -1,7 +1,7 @@
 'use client';
 
 import { Layout as AntdLayout, Menu, MenuProps } from "antd";
-import React, { useContext, useEffect, useMemo } from "react";
+import React from "react";
 import { useStyles } from "./styles";
 import Link from "next/link";
 import withAuth from "@/hocs/withAuth";
@@ -45,14 +45,14 @@ const Layout = ({ children }: { children: React.ReactNode }): React.ReactNode =>
 
     return (
         <AntdLayout>
-            <Sider theme="light" className={cx(styles.left)} width={"25%"}>
+            <Sider theme="light" className={cx(styles.left)} width={"20%"}>
                 <Menu
                     onClick={() => {}}
                     items={patronMenu}
                     className={cx(styles.sticky)}
                 />
             </Sider>
-            <Sider theme="light" className={cx(styles.right, styles.padding)} width={"75%"}>
+            <Sider theme="light" className={cx(styles.right, styles.padding)} width={"80%"}>
                 {children}
             </Sider>
         </AntdLayout>

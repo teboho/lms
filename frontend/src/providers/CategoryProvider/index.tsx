@@ -1,9 +1,8 @@
 "use client";
-import { Provider, useContext, useEffect, useReducer } from "react";
+import { useContext, useEffect, useReducer } from "react";
 import { categoryReducer } from "./reducer";
-import { getCategoriesErrorAction, getCategoriesRequestAction, getCategoriesSuccessAction, getCategoryErrorAction, getCategoryRequestAction, getCategorySuccessAction } from "./actions";
-import { baseURL, makeAxiosInstance } from "../authProvider";
-import axios, { Axios, AxiosInstance } from "axios";
+import { getCategoriesErrorAction, getCategoriesRequestAction, getCategoriesSuccessAction } from "./actions";
+import { makeAxiosInstance } from "../authProvider";
 import CategoryContext, { CATEGORY_CONTEXT_INITIAL_STATE, CategoryType } from "./context";
 import Utils from "@/utils";
 import AuthContext from "../authProvider/context";

@@ -1,12 +1,9 @@
 "use client";
 import React, { useContext } from "react";
 import { useMainStyles } from "./style";
-import { Layout, Flex, Form, Input, Button, Row, Col, Tag, Typography } from "antd";
-import { Header, Content, Footer } from "antd/lib/layout/layout";
+import { Flex, Form, Input, Button, Row, Col, Tag, Typography } from "antd";
 import Sider from "antd/lib/layout/Sider";
-import moduleStyles from "./register.module.css";
 import AuthContext from "@/providers/authProvider/context";
-import { redirect } from "next/navigation";
 import Link from "next/link";
 // Can contain an array of strings or array of numbers
 const MyFormItemContext = React.createContext<(string | number)[]>([]);
@@ -75,7 +72,7 @@ export default function Register(): React.ReactNode {
      * Get the data from the form and send it to the backend
      * @param e event
      */
-    const onComplete = (e: Event) => {
+    const onComplete = () => {
         const formstuff = form.getFieldValue("user");
         const user = {
             name: formstuff.name.name,
@@ -107,12 +104,12 @@ export default function Register(): React.ReactNode {
                         <Row gutter={5}>
                             <MyFormItemGroup prefix={["name"]}>
                                 <Col span={12}>
-                                    <MyFormItem name="name" label="First Name">
+                                    <MyFormItem name="name" label="First Name" prefix={""}>
                                         <Input />
                                     </MyFormItem>
                                 </Col>
                                 <Col span={12}>
-                                    <MyFormItem name="surname" label="Last Name">
+                                    <MyFormItem name="surname" label="Last Name" prefix={""}>
                                         <Input />
                                     </MyFormItem>
                                 </Col>
@@ -121,7 +118,7 @@ export default function Register(): React.ReactNode {
                         <Row>           
                             <Col span={24}>
                             <MyFormItemGroup prefix={["email"]}>
-                                <MyFormItem name="email" label="Email">
+                                <MyFormItem name="email" label="Email" prefix={""}>
                                     <Input />
                                 </MyFormItem>
                             </MyFormItemGroup>
@@ -130,12 +127,12 @@ export default function Register(): React.ReactNode {
                         <Row gutter={5}>
                             <MyFormItemGroup prefix={["password"]}>
                                 <Col span={12}>
-                                    <MyFormItem name="password" label="Password">
+                                    <MyFormItem name="password" label="Password" prefix={""}>
                                         <Input.Password />
                                     </MyFormItem>
                                 </Col>
                                 <Col span={12}>
-                                    <MyFormItem name="confirm" label="Confirm">
+                                    <MyFormItem name="confirm" label="Confirm" prefix={""}>
                                         <Input.Password />
                                     </MyFormItem>
                                 </Col>
@@ -143,7 +140,7 @@ export default function Register(): React.ReactNode {
                         </Row>
                         <Row gutter={50}>
                             <Col>
-                                <Button type="primary" onClick={e => onComplete(e)}>Register</Button>
+                                <Button type="primary" onClick={e => onComplete()}>Register</Button>
                             </Col>
                             <Col>
                                 <Link href="/login"><Button>Already have an account?</Button></Link>

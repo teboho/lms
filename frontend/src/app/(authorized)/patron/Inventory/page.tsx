@@ -26,8 +26,8 @@ const Page = (): React.ReactNode => {
     }, [inventoryItems]);
 
     let memoBooks = useMemo(() => {
-        setCurrentBooks(prev => books?.sort((a, b) => a.categoryId - b.categoryId));
-        return books?.sort((a, b) => a.categoryId - b.categoryId);
+        setCurrentBooks(prev => books?.sort((a: BookDataType, b: BookDataType) => a.categoryId.localeCompare(b.categoryId)));
+        return books?.sort((a, b) => a.categoryId.localeCompare(b.categoryId));
     }, [books]);
 
     const memoCategories = useMemo(() => {
@@ -35,7 +35,7 @@ const Page = (): React.ReactNode => {
     }, [categories]);
 
     // filter the inventory items by book id
-    function filterInventoryItems(bookId: number) {
+    function filterInventoryItems(bookId: string) {
         return memoInventoryItems?.filter((item) => item.bookId === bookId)[0];
     }
 
@@ -114,7 +114,7 @@ const Page = (): React.ReactNode => {
                         }
                     >
                         <List.Item.Meta
-                            title={<Link href={`/Book/${book.id}`}>{book.name}</Link>}
+                            title={<Link href={`/patron/books?bookId=${book.id}`}>{book.name}</Link>}
                             description={book.description}
                         />
                         <Paragraph>

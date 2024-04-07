@@ -123,12 +123,12 @@ const Page = (): React.ReactNode => {
     const savePreferences = (): void => {
         console.log(chosen);
         var prefs: Preferences = {
+            patronId: user?.id,
             primaryCategoryId: chosen[0].id,
             secondaryCategoryId: chosen[1].id,
             tertiaryCategoryId: chosen[2].id
         };
         bookContextObject.savePreferences({
-            patronId: user?.id,
             ...prefs
         });
     }

@@ -7,12 +7,12 @@ import withAuth from "@/hocs/withAuth";
 import { Typography, Image, Button , List, message, Steps, theme, Select, Space } from 'antd';
 import { BookDataType, BookType } from "@/providers/bookProvider/context";
 
-import CategoryContext from "@/providers/categoryProvider/context";
+import CategoryContext, { CategoryType } from "@/providers/categoryProvider/context";
 import { useStyles } from "./styles";
 
 const { Title, Paragraph } = Typography;
 
-const Categories = (): React.FC | React.ReactNode => {
+const Categories = (): React.ReactNode => {
     const { token } = theme.useToken();
     const { categories, category, getAllCategories, getCategory } = useContext(CategoryContext);
     const { styles, cx } = useStyles();
@@ -35,7 +35,7 @@ const Categories = (): React.FC | React.ReactNode => {
                     itemLayout="horizontal"
                     dataSource={categories}
                     renderItem={
-                        (category: BookType) => (
+                        (category: CategoryType) => (
                             <List.Item
                                 className={cx(styles.hoverable, styles.padding)}
                             >

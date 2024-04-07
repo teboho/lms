@@ -6,7 +6,7 @@ import withAuth from "@/hocs/withAuth";
 import { theme } from 'antd';
 import BookContext from "@/providers/bookProvider/context";
 
-const Pay = (): React.FC | React.ReactNode => {
+const Pay = (): React.ReactNode => {
     const { token } = theme.useToken();
     const searchParams = useSearchParams();
     const params = new URLSearchParams(searchParams);
