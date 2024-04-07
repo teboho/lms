@@ -10,6 +10,7 @@ import Utils from "@/utils";
 import { Card, Col, Row, Table, theme } from 'antd';
 import { useContext, useEffect, useMemo, useState } from "react"; 
 import { jwtDecode } from "jwt-decode";
+import Link from "next/link";
 
 const Page = (): React.ReactNode => {
     const { token } = theme.useToken();
@@ -53,7 +54,8 @@ const Page = (): React.ReactNode => {
     return (
         <div>
             <h1>Preferences</h1>
-            <Row gutter={16}>
+            {preferences ? (
+                <Row gutter={16}>
                 <Col span={8}>
                     <Card title={`1: ${getCategory(preferences?.primaryCategoryId)?.name}`} bordered={true} hoverable>
                         {getCategory(preferences?.primaryCategoryId)?.description}
@@ -73,6 +75,12 @@ const Page = (): React.ReactNode => {
                     </Card>
                 </Col>
             </Row>
+            ) : (
+                <>
+                    <p>You have not yet chosen preferences</p>
+                    <p>Choose your preferences <Link href="/patron/preferences-survey">here</Link></p>
+                </>
+            )}
 
         </div>
     );
