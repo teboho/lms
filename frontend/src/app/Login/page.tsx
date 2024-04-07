@@ -94,7 +94,7 @@ export default function Login(): React.ReactNode {
     }
 
     return (
-        <Flex className={styles.form}>
+        <Flex className={styles.form} align="center" justify="center">
             <Sider width={"25%"} style={{background: "#004aad"}} className={cx(styles["left-sider"])}>
                 <Flex vertical>
                     <Tag color="green"><Title level={4}>Step 1: Fill in your details</Title></Tag>

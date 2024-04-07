@@ -1,5 +1,5 @@
 "use client";
-import { ReactNode, useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import withAuth from "@/hocs/withAuth";
 import { List } from "antd";
 import BookContext from "@/providers/bookProvider/context";
@@ -11,9 +11,16 @@ import Loan from "@/components/loan";
 const Page = (): React.ReactNode => {
     const { styles, cx } = useStyles();
     const { books } = useContext(BookContext);
-    const { getLoansByPatron, loans: providerLoans } = useContext(LoanContext);
+    const { getLoansByPatron, loans: providerLoans, getLoans } = useContext(LoanContext);
 
     const [loans, setLoans] = useState<LoanType[]>([]);
+
+    useEffect(() => {
+        const accessToken = Utils.getAccessToken();
+        if (accessToken && (!loans || loans.length === 0)) {
+            getLoans();
+        }   
+    }, [])
 
     useEffect(() => {
         const patronId = Utils.getPatronId();

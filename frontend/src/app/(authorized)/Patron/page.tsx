@@ -1,5 +1,5 @@
 "use client";
-import { ReactNode, use, useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import withAuth from "@/hocs/withAuth";
 import { Button, Layout, Select, Space } from "antd";
 import BookContext from "@/providers/bookProvider/context";
@@ -7,14 +7,18 @@ import {useStyles} from "./styles";
 import AuthContext from "@/providers/authProvider/context";
 import SearchResults from "@/components/searchResults";
 import CategoryContext from "@/providers/categoryProvider/context";
+import InventoryContext from "@/providers/inventoryProvider/context";
+import AuthorsContext from "@/providers/authorsProvider/context";
 
 const { Content } = Layout;
 const { Option } = Select;
 
 const Page = (): React.ReactNode => {
     const { userObj } = useContext(AuthContext);
-    const { books, getAll, searchTerm } = useContext(BookContext);
-    const { categories } = useContext(CategoryContext);
+    const { books, getAll: getAllBooks , searchTerm} = useContext(BookContext);
+    const { inventoryItems, getAll, getInventory } = useContext(InventoryContext);
+    const { categories, getCategory, getAllCategories } = useContext(CategoryContext);
+    const { getAuthorById, getAuthors } = useContext(AuthorsContext);
     const { styles, cx } = useStyles();
 
     const [currentBooks, setCurrentBooks] = useState([]);
@@ -22,6 +26,9 @@ const Page = (): React.ReactNode => {
 
     useEffect(() => {
         getAll();
+        getAllBooks();
+        getAuthors();
+        getAllCategories();
         setCurrentBooks(books);
     }, []);
 
@@ -33,13 +40,11 @@ const Page = (): React.ReactNode => {
             getAll();
         }
     }, [userObj]);
-
     
     useEffect(() => {
         console.log("Books", books);
         setCurrentBooks(books);
-    }
-    , [books]);
+    }, [books]);
 
     const user = useMemo(() => userObj, [userObj]);
     let memoBooks = useMemo(() => currentBooks, [currentBooks]);
@@ -65,14 +70,14 @@ const Page = (): React.ReactNode => {
         </Select>
     ); 
     return (
-        <Content className={cx(styles.content)}>
+        <Content className={cx(styles.content, styles.padding)}>
             <h1>Welcome back to savvyshelf</h1>     
             {/* antd dropdown filter by category */}
             {chooseCategory}
             <Button onClick={() => {
                 setCurrentBooks(books);
-                // clear the selected category
-                // chooseCategory.props.onSelect(undefined);
+                // clear search term
+                // chooseCategory.
             }}>
                 Clear
             </Button>

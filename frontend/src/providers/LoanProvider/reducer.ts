@@ -45,8 +45,24 @@ export const loanReducer = handleActions(
         [LoanActionEnums.GetLoansError]: (state, action) => ({
             ...state,
             ...action.payload
-        })
+        }),
         
+        [LoanActionEnums.PutLoanRequest]: (state, action) => ({
+            ...state,
+            ...action.payload
+        }),
+        [LoanActionEnums.PutLoanSuccess]: (state, action) => ({
+            ...state,
+            ...action.payload
+        }),
+        [LoanActionEnums.PutLoanError]: (state, action) => ({
+            ...state,
+            ...action.payload
+        }),
+        [LoanActionEnums.ClearLoan]: (state, action) => ({
+            ...state,
+            ...action.payload
+        })
     },
     LOAN_CONTEXT_INITIAL_STATE
 )

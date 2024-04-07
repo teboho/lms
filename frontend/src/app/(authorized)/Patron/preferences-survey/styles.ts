@@ -12,5 +12,9 @@ export const useStyles = createStyles(({css, cx}) => ({
         width: 100%;
         border: 1px solid red;
         background: white;
-    `
+    `,
+    center: css`
+        align-items: center;
+        text-align: center;
+    `,
 }));

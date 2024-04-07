@@ -37,7 +37,6 @@ const Page = (): React.ReactNode => {
                     <Typography.Paragraph>
                         In order to add a new book, please search for the book you want to add.
                     </Typography.Paragraph>
-                    {/* add search bar */}
                     <Search
                         placeholder="Enter book title"
                         onSearch={onSearch}

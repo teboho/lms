@@ -1,10 +1,12 @@
 "use client";
 import { useState, useEffect, useMemo, useContext } from "react";
 import withAuth from "@/hocs/withAuth";
-import { Button, List, message, Steps, theme } from 'antd';
+import { Button, List, message, Steps, theme, Input } from 'antd';
 import AuthContext from "@/providers/authProvider/context";
 import BookContext from "@/providers/bookProvider/context";
 import CategoryContext from "@/providers/categoryProvider/context";
+import Utils from "@/utils";
+import { useStyles } from "./styles";
 
 export type Preferences = {
     primaryCategoryId: number;
@@ -23,6 +25,8 @@ for (var i = 0; i < 10; i++) {
     )
 }
 
+const { Search } = Input;
+
 const Page = (): React.ReactNode => {
     const { token } = theme.useToken();
     const [current, setCurrent] = useState(0);
@@ -31,10 +35,26 @@ const Page = (): React.ReactNode => {
     const {userObj, getUserId} = useContext(AuthContext);
     const bookContextObject = useContext(BookContext);
     const categoryContextValue = useContext(CategoryContext);
+    const [_options, setOptions] = useState(null);
+    const {styles, cx} = useStyles();
 
     useEffect(() => {
-        setChosen(prev => []);
+        setChosen([]);
+        const accessToken = Utils.getAccessToken();
+        if (accessToken) {
+            categoryContextValue.getAllCategories();
+        }
+        setOptions(categoryContextValue.categories);
     }, [])
+
+    useEffect(() => {
+        console.log("categories", categoryContextValue.categories);
+        setOptions(categoryContextValue.categories);
+    }, [categoryContextValue.categories])
+
+    const memoOptions = useMemo(() => {
+        return _options;
+    }, [_options]);
     
     const user = useMemo(() => {
         return userObj;
@@ -110,7 +130,8 @@ const Page = (): React.ReactNode => {
         },
     ];
     const items = steps.map((item) => ({ key: item.title, title: item.title }));
-    const options = categoryContextValue?.categories?.map((item, index) => (
+
+    let options = memoOptions?.map((item, index) => (
         <Button key={`choice_${item.id}`} type="primary" 
             onClick={() => {
                 savePref(index, item)
@@ -120,30 +141,62 @@ const Page = (): React.ReactNode => {
         </Button>
     ));
 
+    const onSearch = (value: string) => {
+        console.log(value);
+        const results = memoOptions.filter((item) => item?.name?.toLowerCase().includes(value));
+        console.log(results);
+        setOptions(results);
+    }
+                
     return (
         <>
-            <Steps current={current} items={items} />
-            <div style={contentStyle}>
-                {current > 0 && steps[current].content}
-                <br />
-                {chosen.length < steps.length && options}
+            <div> 
+                <Search
+                    placeholder="Enter book title"
+                    onSearch={onSearch}
+                    style={{ width: 400 }}
+                />
+                <Button type="primary" onClick={() => setOptions(categoryContextValue.categories)}>
+                    Reset
+                </Button>
             </div>
+
+            <Steps current={current} items={items} />
+
+            {/* the choices */}
+            <div style={contentStyle}>
+                <div className={cx(styles.center)}>{current >= 0 && steps[current].content}</div>
+                <br />
+                <br />
+                {chosen.length < steps.length && (
+                    memoOptions?.map((item, index) => (
+                        <Button key={`choice_${item.id}`} type="primary" 
+                            onClick={() => {
+                                savePref(index, item)
+                                if (current < steps.length - 1) next();
+                            }}>
+                            {item.name}
+                        </Button>
+                    ))
+                )}
+            </div>
+            
             <div style={{ marginTop: 24 }}>
-            {current === steps.length - 1 && (
-                <Button type="primary" onClick={() => message.success('Processing complete!')}>
-                Done
-                </Button>
-            )}
-            {chosen.length > 0 && (
-                <Button style={{ margin: '0 8px' }} onClick={() => prev()}>
-                Previous
-                </Button>
-            )}
-            {chosen.length === 3 && (
-                <Button style={{ margin: '0 8px' }} onClick={() => savePreferences()}>
-                Save
-                </Button>
-            )}
+                {current === steps.length - 1 && (
+                    <Button type="primary" onClick={() => message.success('Processing complete!')}>
+                        Done
+                    </Button>
+                )}
+                {chosen.length > 0 && (
+                    <Button style={{ margin: '0 8px' }} onClick={() => prev()}>
+                        Previous
+                    </Button>
+                )}
+                {chosen.length === 3 && (
+                    <Button style={{ margin: '0 8px' }} onClick={() => savePreferences()}>
+                        Save
+                    </Button>
+                )}
             </div> 
             <br />
             <List 

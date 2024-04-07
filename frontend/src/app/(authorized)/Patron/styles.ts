@@ -28,4 +28,7 @@ export const useStyles = createStyles(({css, cx}) => ({
         position: sticky;
         top: 0;
     `,
+    padding: css`
+        padding: 10px;
+    `
 }));

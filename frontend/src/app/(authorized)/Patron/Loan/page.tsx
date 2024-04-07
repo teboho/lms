@@ -18,19 +18,21 @@ const Loan = (): React.ReactNode => {
     const params = new URLSearchParams(searchParams);
     const [dueDate, setDueDate] = useState<Date | null>(null);
     const [] = useState(null);  
-    const { getBook, book } = useContext(BookContext);
+    const { getLocalBook } = useContext(BookContext);
     const { inventoryItems } = useContext(InventoryContext);
     const { authObj } = useContext(AuthContext);
-    const { makeLoan, updateLoan } = useContext(LoanContext);
+    const { makeLoan, clearLoan, loan } = useContext(LoanContext);
     const { cx, styles } = useStyles();
+    const [book, setBook] = useState(null);
+
 
     useEffect(() => {
+        clearLoan();
         console.log("Loan useEffect");
-
         const bookId = params.get("bookId");
 
         if (bookId) {
-            getBook(bookId);
+            setBook(getLocalBook(bookId))
         }
     }, []);
 
@@ -48,6 +50,11 @@ const Loan = (): React.ReactNode => {
     }
 
     const onCheckout = () => {
+        if (!dueDate) {
+            alert("Choose a due date");
+            return;
+        }   
+        
         let userId = authObj?.userId;
         if (!userId) {
             userId = parseInt(localStorage.getItem("userId"));
@@ -84,14 +91,14 @@ const Loan = (): React.ReactNode => {
                     <Button type="primary" onClick={onCheckout}>Checkout</Button>
                     <Space />
                     
-                    {/* {loanState.isSuccess  && 
+                    {loan && 
                     (
                         <Result
                             status="success"
                             title="Loan successful"
                             subTitle="The book has been successfully loaned out."
                         />
-                    )} */}
+                    )} 
                 </Col>
     
                 <Col span={8}>
@@ -101,7 +108,7 @@ const Loan = (): React.ReactNode => {
                             name={"dueDate"}
                         >
                             <DatePicker 
-                            title="Select a date to return the book"    
+                                title="Select a date to return the book"    
                                 open={true}
                                 disabledDate={(current) => 
                                     current && (current < moment().endOf('day') || current > moment().add(5, 'days').endOf('day'))

@@ -1,17 +1,18 @@
 "use client"
 import { useEffect, useReducer } from "react";
 import { LoanContext, LoanType, LOAN_CONTEXT_INITIAL_STATE } from "./context";
-import { getLoanErrorAction, getLoanRequestAction, getLoansErrorAction, getLoansRequestAction, getLoansSuccessAction, getLoanSuccessAction, postLoanErrorAction, postLoanRequestAction, postLoanSuccessAction } from "./actions";
+import { clearLoanAction, getLoanErrorAction, getLoanRequestAction, getLoansErrorAction, getLoansRequestAction, getLoansSuccessAction, getLoanSuccessAction, postLoanErrorAction, postLoanRequestAction, postLoanSuccessAction, putLoanErrorAction, putLoanRequestAction, putLoanSuccessAction } from "./actions";
 import { loanReducer } from "./reducer";
 import { makeAxiosInstance } from "../authProvider";
 import Utils from "@/utils";
+import { message } from "antd";
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function LoanProvider({ children }: { children: React.ReactNode }) {
     // we will make the state with the reducers
     const [state, dispatch] = useReducer(loanReducer, LOAN_CONTEXT_INITIAL_STATE);
-
+    const [messageApi, contextHolder] = message.useMessage();
     const accessToken = Utils.getAccessToken();
     const instance = makeAxiosInstance(accessToken);
 
@@ -27,7 +28,7 @@ export default function LoanProvider({ children }: { children: React.ReactNode }
         dispatch(postLoanRequestAction());
         instance.post(`${apiURL}/${endpoint}`, loanObj)
             .then(res => {
-                console.log("loan create", res.data);
+                console.log("loan create result", res.data);
                 if (res.data.success) {
                     dispatch(postLoanSuccessAction(res.data.result));
                 } else {
@@ -91,40 +92,11 @@ export default function LoanProvider({ children }: { children: React.ReactNode }
             });
     }
 
-    // get loans by patron
     const getLoansByPatron = (id: number): LoanType[] => {
-        // const endpoint = `api/services/app/Loan/GetByPatron?patronId=${id}`;
-        // dispatch(getLoansRequestAction());
-        // instance.get(`${endpoint}`)
-        //     .then(res => {
-        //         console.log("results of getting loans by patron", res.data.result);
-        //         if (res.data.success) {
-        //             dispatch(getLoansSuccessAction(res.data.result.items));
-        //         } else {
-        //             dispatch(getLoansErrorAction());
-        //         }
-        //     })
-        //     .catch(() => {
-        //         dispatch(getLoansErrorAction());
-        //     });
         return state.loans?.filter(loan => loan.patronId === id);
     }
     
     const  getLoansByBook = (id: string): LoanType[] => {
-        // const endpoint = `api/services/app/Loan/GetByBook?bookId=${id}`;
-        // dispatch(getLoansRequestAction());
-        // instance.get(`${endpoint}`)
-        //     .then(res => {
-        //         console.log("results of getting loans by book", res.data);
-        //         if (res.data.success) {
-        //             dispatch(getLoansSuccessAction(res.data.result.items));
-        //         } else {
-        //             dispatch(getLoansErrorAction());
-        //         }
-        //     })
-        //     .catch(() => {
-        //         dispatch(getLoansErrorAction());
-        //     });
         return state.loans?.filter(loan => loan.bookId === id);
     }
     
@@ -145,12 +117,58 @@ export default function LoanProvider({ children }: { children: React.ReactNode }
             });
     }
 
+    function putLoan(loan: LoanType) {
+        const endpoint = `api/services/app/Loan/Update`;
+        dispatch(putLoanRequestAction());
+        instance.put(`${endpoint}`, loan)
+            .then(res => {
+                console.log("results of updating loan", res.data);
+                if (res.data.success) {
+                    dispatch(putLoanSuccessAction(res.data.result));
+                    messageApi.success("Book loan confirmed");
+                } else {
+                    dispatch(putLoanErrorAction());
+                    messageApi.error("Book loan confirmation unsuccessful")
+                }
+            })
+            .catch(() => {
+                dispatch(putLoanErrorAction());
+                messageApi.error("Book loan confirmation unsuccessful");
+            });
+    }
+
+    function getReturnLoan(id: string): void {
+        const endpoint = `api/services/app/Loan/ReturnLoan`;
+        dispatch(putLoanRequestAction()); // using this because we are updating the loan
+        instance.get(`${endpoint}?Id=${id}`)
+            .then(res => {
+                console.log("results of returning loan", res.data);
+                if (res.data.success) {
+                    dispatch(putLoanSuccessAction(res.data.result));
+                    messageApi.success("Book loan returned");
+                } else {
+                    dispatch(putLoanErrorAction());
+                    messageApi.error("Book loan return unsuccessful")
+                }
+            })
+            .catch(() => {
+                dispatch(putLoanErrorAction());
+                messageApi.error("Book loan return unsuccessful");
+            });
+    }
+
+    function clearLoan() {
+        dispatch(clearLoanAction())
+    }
+
     return (
         <LoanContext.Provider value={{ 
             loan: state.loan, 
-            loans: state.loans, 
-            makeLoan, updateLoan, getLoan, getLoans, getLoansByBook, getLoansByPatron, getReturnedLoans 
+            loans: state.loans,
+            clearLoan, 
+            makeLoan, updateLoan, getLoan, getLoans, getLoansByBook, getLoansByPatron, getReturnedLoans, putLoan, getReturnLoan
         }}>
+            {contextHolder}
             {children}
         </LoanContext.Provider>
     );

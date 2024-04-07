@@ -53,7 +53,7 @@ export const getBooksErrorAction = createAction(
  */
 export const getBookRequestAction = createAction(
     BookActionEnums.GetBookRequest,
-    ():any => ({ isSuccess: false, isPending: true, isError: false, book: undefined, books: undefined })
+    ():any => ({ isSuccess: false, isPending: true, isError: false, book: undefined, books: undefined, searchTerm: "" })
 )
 
 /**
@@ -61,7 +61,7 @@ export const getBookRequestAction = createAction(
  */
 export const getBookSuccessAction = createAction(
     BookActionEnums.GetBookSuccess,
-    (book: BookDataType):any => ({ isSuccess: true, isPending: false, isError: false, book, books: [] as BookDataType[] })
+    (book: BookDataType):any => ({ isSuccess: true, isPending: false, isError: false, book, books: undefined, searchTerm: "" })
 );
 
 

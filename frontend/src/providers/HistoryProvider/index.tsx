@@ -15,11 +15,11 @@ export default function HistoryProvider({ children }: { children: React.ReactNod
     const instance = makeAxiosInstance(accessToken);
 
     useEffect(() => {
+        console.log("History Provider is mounted for first time.")
         // get history data
         if (accessToken) {
             getHistoryData();
         }
-        console.log("History Provider is mounted for first time.")
     }, []);
 
     function getHistoryData() {
@@ -28,7 +28,7 @@ export default function HistoryProvider({ children }: { children: React.ReactNod
         dispatch(getHistoryDataRequestAction());
         instance.get(endpoint)
             .then((response) => {
-                console.log(response.data.result);
+                console.log("all the history data so far", response.data.result);
                 if (response.data.success) {
                     // dispatch success action
                     dispatch(getHistoryDataSuccessAction(response.data.result.items));

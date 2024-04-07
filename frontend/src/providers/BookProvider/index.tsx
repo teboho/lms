@@ -145,13 +145,10 @@ export default function BookProvider({ children }: { children: React.ReactNode }
         // the we make the call
         instance.get(`${endpoint}`)
             .then(res => {
-                // console.log("book result", res.data.result)
+                console.log("book result", res.data.result)
                 if (res.data.success) {
                     // disptach for success
-                    if (res.data.result !== null)
-                    {
-                        dispatch(getBookSuccessAction(res.data.result))
-                    }
+                    dispatch(getBookSuccessAction(res.data.result))
                 } else {
                     // dispatch for erroe
                     dispatch(getBookErrorAction());
@@ -165,24 +162,23 @@ export default function BookProvider({ children }: { children: React.ReactNode }
         console.log(endpoint);
         console.log(prefs);
         
-        // // before we make the http request, we set pending to true via dispatch
-        // dispatch(getBooksRequestAction());
-        // // the we make the call
-        // instance.post(`${endpoint}`, prefs)
-        //     .then(res => {
-        //         console.log("results", res.data)
-        //         if (res.data.success) {
-        //             // disptach for success
-        //             if (res.data.result !== null)
-        //             {
-        //                 dispatch(getBooksSuccessAction(res.data.result))
-        //             }
-        //         } else {
-        //             // dispatch for erroe
-        //             dispatch(getBooksErrorAction());
-        //         }
-        //             dispatch(getBooksErrorAction());
-        //     }).catch(err =>  dispatch(getBooksErrorAction()));
+        dispatch(getBooksRequestAction());
+        // the we make the call
+        instance.post(`${endpoint}`, prefs)
+            .then(res => {
+                console.log("results", res.data)
+                if (res.data.success) {
+                    // disptach for success
+                    if (res.data.result !== null)
+                    {
+                        dispatch(getBooksSuccessAction(res.data.result))
+                    }
+                } else {
+                    // dispatch for erroe
+                    dispatch(getBooksErrorAction());
+                }
+                    dispatch(getBooksErrorAction());
+            }).catch(err =>  dispatch(getBooksErrorAction()));
     }
 
     /**

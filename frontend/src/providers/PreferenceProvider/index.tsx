@@ -64,7 +64,7 @@ export default function PreferenceProvider({ children }: { children: React.React
 
     function getPreferenceByPatron(patronId: number): PreferenceType {
         // get preference by patron id
-        const preference = state.preferenceData.find((item) => item.patronId === patronId);
+        const preference = state.preferenceData?.find((item) => item.patronId === patronId);
         return preference;
     }
 
