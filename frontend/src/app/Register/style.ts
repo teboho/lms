@@ -8,9 +8,10 @@ export const useMainStyles = createStyles(({css, cx}) => ({
         border-left: none;
     `,
     form: css`
-        border: 1px solid #004aad;
+        /*border: 1px solid #004aad;*/
         border-radius: 20px;
         padding: 20px;
+        background: white;
     `,
     sider: css`
         margin: 100px;
@@ -21,9 +22,9 @@ export const useMainStyles = createStyles(({css, cx}) => ({
     `,
     "left-sider": css`
         padding: 20px;
-        padding-top: 250px;
-        border-right: 1px solid #004aad;
-        border-radius: 10% 30% 50% 70%; /*border-radius: 20px;*/
+        /* padding-top: 250px; */
+        /*border-right: 1px solid #004aad;
+        border-radius: 10% 30% 50% 70%; border-radius: 20px;*/
         background: #004aad;
     `,
     layout: css`

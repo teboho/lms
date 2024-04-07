@@ -24,4 +24,11 @@ namespace Boxfusion.LMS_Backend.Domain
         [ForeignKey(nameof(AuthorId))]
         public Author AuthorModel { get; set; }
     }
+
+    public enum BookType
+    {
+        Physical = 0,
+        Ebook = 1,
+        Both = 3
+    }
 }

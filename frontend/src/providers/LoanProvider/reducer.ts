@@ -1,25 +1,68 @@
 import { handleActions } from "redux-actions";
-import { AuthActionEnums } from "./actions";
-import { AUTH_CONTEXT_INITIAL_STATE } from "./context";
+import { LOAN_CONTEXT_INITIAL_STATE } from "./context";
+import { LoanActionEnums } from "./actions";
 
 /**
  * A reducer t
  */
-export const authReducer = handleActions(
+export const loanReducer = handleActions(
     {
         // this handler will change the value of the isPending in the state
-        [AuthActionEnums.PostAuthRequest]: (state, action) => ({
+        [LoanActionEnums.PostLoanRequest]: (state, action) => ({
             ...state,
             ...action.payload
         }),  // this handler will change the value of the isSuccess in the state
-        [AuthActionEnums.PostAuthSuccess]: (state, action) => ({
+        [LoanActionEnums.PostLoanSuccess]: (state, action) => ({
             ...state,
             ...action.payload
         }), // this handler will change the value of the isError in the state
-        [AuthActionEnums.PostAuthError]: (state, action) => ({
+        [LoanActionEnums.PostLoanError]: (state, action) => ({
+            ...state,
+            ...action.payload
+        }),
+        // this handler will change the value of the isPending in the state
+        [LoanActionEnums.GetLoanRequest]: (state, action) => ({
+            ...state,
+            ...action.payload
+        }),  // this handler will change the value of the isSuccess in the state
+        [LoanActionEnums.GetLoanSuccess]: (state, action) => ({
+            ...state,
+            ...action.payload
+        }), // this handler will change the value of the isError in the state
+        [LoanActionEnums.GetLoanError]: (state, action) => ({
+            ...state,
+            ...action.payload
+        }),
+        // this handler will change the value of the isPending in the state
+        [LoanActionEnums.GetLoansRequest]: (state, action) => ({
+            ...state,
+            ...action.payload
+        }),  // this handler will change the value of the isSuccess in the state
+        [LoanActionEnums.GetLoansSuccess]: (state, action) => ({
+            ...state,
+            ...action.payload
+        }), // this handler will change the value of the isError in the state
+        [LoanActionEnums.GetLoansError]: (state, action) => ({
+            ...state,
+            ...action.payload
+        }),
+        
+        [LoanActionEnums.PutLoanRequest]: (state, action) => ({
+            ...state,
+            ...action.payload
+        }),
+        [LoanActionEnums.PutLoanSuccess]: (state, action) => ({
+            ...state,
+            ...action.payload
+        }),
+        [LoanActionEnums.PutLoanError]: (state, action) => ({
+            ...state,
+            ...action.payload
+        }),
+        [LoanActionEnums.ClearLoan]: (state, action) => ({
             ...state,
             ...action.payload
         })
     },
-    AUTH_CONTEXT_INITIAL_STATE
+    LOAN_CONTEXT_INITIAL_STATE
 )

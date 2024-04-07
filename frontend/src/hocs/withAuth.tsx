@@ -1,29 +1,21 @@
 "use client";
 import React from 'react';
-import { Button } from 'antd';
 import { useRouter } from 'next/navigation';
+import Utils from '@/utils';
 
 /**
  * This hoc will protect pages which need the user to be logged in
  * @param {*} WrappedComponent the component to protect
  */
-const withAuth = (WrappedComponent: ({children}: {children: React.ReactNode}) => React.ReactNode): React.ReactNode | ((props: {children: React.ReactNode}) => React.ReactNode) => {
+const withAuth = (WrappedComponent: (({children}: {children: React.ReactNode}) => React.ReactNode) | React.FC): React.FC | ((props: {children: React.ReactNode}) => React.ReactNode) => {
 
     const WithAuth = (props: {children: React.ReactNode}): React.ReactNode => {
         "use client";
         const router = useRouter();
-        const token = localStorage.getItem("accessToken");
-        console.log(token, token)
-
-        // check token validity
-        if (token) {
-            // Ath this rate we should redresh the token from here
-            console.log("token", token)
-            router.push("/Home");
-        }
-
+        const token = Utils.getAccessToken(); // localStorage.getItem("accessToken");
+        
         if (token === undefined || token === null) {
-            router.push("/Login")
+            router.push("/login")
         } 
         // Our inner component needs to return the wrapped component and provide it with its props
         return <WrappedComponent {...props} />;

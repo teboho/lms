@@ -1,25 +1,28 @@
 "use client";
 import { createAction } from "redux-actions";
-import { Payment_CONTEXT_STATE_TYPE, Payment_OBJ_TYPE } from "./context";
-
-// experiment
-// export enum PaymentActionEnums {
-//     SetToken = "SET_TOKEN",
-// }
+import { PAYMENT_CONTEXT_TYPE, PAYMENT_TYPE } from "./context";
 
 export const PaymentActionEnums = {
     PostPaymentRequest: "POST_Payment_REQUEST",
     PostPaymentSuccess: "POST_Payment_SUCCESS",
-    PostPaymentError: "POST_Payment_ERROR"
+    PostPaymentError: "POST_Payment_ERROR",
+
+    GetPaymentRequest: "GET_Payment_REQUEST",
+    GetPaymentSuccess: "GET_Payment_SUCCESS",
+    GetPaymentError: "GET_Payment_ERROR",
+
+    GetPaymentsRequest: "GET_Payments_REQUEST",
+    GetPaymentsSuccess: "GET_Payments_SUCCESS",
+    GetPaymentsError: "GET_Payments_ERROR",
 }
 
 /**
- * Sets the isInProgress to true
+ * Sets the isPending to true
  * The results array is not there yet
  */
 export const postPaymentRequestAction = createAction(
     PaymentActionEnums.PostPaymentRequest,
-    (): Payment_CONTEXT_STATE_TYPE => ({ isSuccess: false, isInProgress: true, isError: false, PaymentObj: undefined})
+    () => ({ isSuccess: false, isPending: true, isError: false, payment: undefined, payments: undefined })
 )
 
 /**
@@ -27,13 +30,63 @@ export const postPaymentRequestAction = createAction(
  */
 export const postPaymentSuccessAction = createAction(
     PaymentActionEnums.PostPaymentSuccess,
-    (PaymentObj: Payment_OBJ_TYPE): any => ({ isSuccess: true, isInProgress: false, isError: false, PaymentObj})
+    (payment: PAYMENT_TYPE) => ({ isSuccess: true, isPending: false, isError: false, payment, payments: undefined as PAYMENT_TYPE[]})
 );
 
 /**
  * Sets the isError to true but then all else to false
  */
 export const postPaymentErrorAction = createAction(
-    PaymentActionEnums.PostPaymentSuccess,
-    () => ({ isSuccess: false, isInProgress: false, isError: true, PaymentObj: {}})
+    PaymentActionEnums.PostPaymentError,
+    () => ({ isSuccess: false, isPending: false, isError: true, payment: undefined, payments: undefined })
+);
+
+/**
+ * Sets the isPending to true
+ * The results array is not there yet
+ */
+export const getPaymentRequestAction = createAction(
+    PaymentActionEnums.GetPaymentRequest,
+    () => ({ isSuccess: false, isPending: true, isError: false, payment: undefined, payments: undefined })
+);
+
+/**
+ * Sets the isSuccess to true but then all else to false
+ */
+export const getPaymentSuccessAction = createAction(
+    PaymentActionEnums.GetPaymentSuccess,
+    (payment: PAYMENT_TYPE) => ({ isSuccess: true, isPending: false, isError: false, payment, payments: undefined })
+);
+
+/**
+ * Sets the isError to true but then all else to false
+ */
+export const getPaymentErrorAction = createAction(
+    PaymentActionEnums.GetPaymentError,
+    () => ({ isSuccess: false, isPending: false, isError: true, payment: undefined, payments: undefined })
+);
+
+/**
+ * Sets the isPending to true
+ * The results array is not there yet
+ */
+export const getPaymentsRequestAction = createAction(
+    PaymentActionEnums.GetPaymentsRequest,
+    () => ({ isSuccess: false, isPending: true, isError: false, payment: undefined, payments: undefined })
+);
+
+/**
+ * Sets the isSuccess to true but then all else to false
+ */
+export const getPaymentsSuccessAction = createAction(
+    PaymentActionEnums.GetPaymentsSuccess,
+    (payments: PAYMENT_TYPE[]) => ({ isSuccess: true, isPending: false, isError: false, payment: undefined as PAYMENT_TYPE, payments })
+);
+
+/**
+ * Sets the isError to true but then all else to false
+ */
+export const getPaymentsErrorAction = createAction(
+    PaymentActionEnums.GetPaymentsError,
+    () => ({ isSuccess: false, isPending: false, isError: true, payment: undefined, payments: undefined })
 );

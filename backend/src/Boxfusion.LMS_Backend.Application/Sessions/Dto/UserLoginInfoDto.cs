@@ -6,7 +6,7 @@ using System;
 namespace Boxfusion.LMS_Backend.Sessions.Dto
 {
     [AutoMapFrom(typeof(User))]
-    public class UserLoginInfoDto : EntityDto<Guid>
+    public class UserLoginInfoDto : EntityDto<long>
     {
         public string Name { get; set; }
 

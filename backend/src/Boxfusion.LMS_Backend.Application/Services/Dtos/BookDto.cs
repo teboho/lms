@@ -18,7 +18,7 @@ namespace Boxfusion.LMS_Backend.Services.Dtos
         public long Year { get; set; }
         public string? ImageURL { get; set; }
         public string ISBN { get; set; }
-        public long CategoryId { get; set; }
+        public Guid CategoryId { get; set; }
         public Guid AuthorId { get; set; }
     }
 }

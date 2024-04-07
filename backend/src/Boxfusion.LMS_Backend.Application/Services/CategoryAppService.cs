@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services;
+using Abp.Authorization;
 using Abp.Domain.Repositories;
 using Boxfusion.LMS_Backend.Domain;
 using Boxfusion.LMS_Backend.Services.Dtos;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace Boxfusion.LMS_Backend.Services
 {
+    [AbpAuthorize]
     public class CategoryAppService : AsyncCrudAppService<Category, CategoryDto, Guid>, ICategoryAppService
     {
         public CategoryAppService(IRepository<Category, Guid> repository) : base(repository)

@@ -12,5 +12,9 @@ export const useStyles = createStyles(({css, cx}) => ({
     `,
     flex: css`
         gap: 50px;
-    `
+    `,
+    sticky: css`
+        position: sticky;
+        top: 0;
+    `,
 }));

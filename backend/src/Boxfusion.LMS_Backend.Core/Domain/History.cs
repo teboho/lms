@@ -1,4 +1,5 @@
 ﻿using Abp.Domain.Entities;
+using Boxfusion.LMS_Backend.Authorization.Users;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -10,9 +11,9 @@ namespace Boxfusion.LMS_Backend.Domain
 {
     public class History : Entity<Guid>
     {
-        public Guid PatronId { get; set; }
+        public long PatronId { get; set; }
         [ForeignKey(nameof(PatronId))]
-        public Patron PatronModel { get; set; }
+        public User UserModel { get; set; }
         public DateTime DateRead { get; set; }
         public Guid BookId { get; set; }
         [ForeignKey(nameof(BookId))]

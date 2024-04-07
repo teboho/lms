@@ -1,10 +1,12 @@
 ﻿using Abp.Application.Services;
+using Abp.Authorization;
 using Abp.Domain.Repositories;
 using Abp.Extensions;
 using Abp.Runtime.Session;
 using Boxfusion.LMS_Backend.Authorization.Users;
 using Boxfusion.LMS_Backend.Domain;
 using Boxfusion.LMS_Backend.Sessions;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -15,10 +17,12 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using static System.Reflection.Metadata.BlobBuilder;
 
 namespace Boxfusion.LMS_Backend.Services.AskGoogle
 {
+
     public class AskGoogleAppService : LMS_BackendAppServiceBase, IAskGoogleAppService
     {
         static HttpClient client;
@@ -41,6 +45,7 @@ namespace Boxfusion.LMS_Backend.Services.AskGoogle
                 new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
+        [AbpAuthorize]
         public async Task<Category> SearchCategory(string name)
         {
             return SearchForCategory(name);
@@ -59,6 +64,11 @@ namespace Boxfusion.LMS_Backend.Services.AskGoogle
         {
             var author = _authorRepo.GetAll().Where(a => (a.FirstName.ToLower().Equals(firstname) && a.LastName.ToLower().Equals(lastname.ToLower()))).FirstOrDefault();
             return author;
+        }
+        public Book SearchForBook(string name)
+        {
+            var book = _booksRepository.GetAll().Where(b => b.Name.ToLower().Equals(name.ToLower())).FirstOrDefault();
+            return book;
         }
 
         public async Task<List<Category>> GetAllCategory()
@@ -118,14 +128,119 @@ namespace Boxfusion.LMS_Backend.Services.AskGoogle
             return await response.Content.ReadAsStringAsync();
         }
 
-        public async Task<List<Tuple<Book, Category, Author>>> TestVolumes(string query)
+        /// <summary>
+        /// adding a newbook will require checking google apis
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public async Task<List<Tuple<Book, Category, Author>>> PoulateVolumes(string query)
+        {
+            var startIndex = _random.Next(0, 1000); // Adjust based on the number of available books
+                                                    //HttpResponseMessage response = await client.GetAsync(
+                                                    //    $"volumes?q={query}&startIndex={startIndex}&maxResults=30");
+            #region run
+            var volumes = await RunQuery(query, startIndex); // response.Content.ReadFromJsonAsync<Result>();
+            var books = new List<Tuple<Book, Category, Author>>();
+            #endregion
+            if (volumes.Items != null)
+            {
+                if (volumes.Items.Count > 0)
+                {
+                    foreach (Volume v in volumes.Items)
+                    {
+                        // we need to search if such a category does not already exist in the categories db... same with Author
+                        try
+                        {
+                            var firstAuthor = v.VolumeInfo.Authors.FirstOrDefault();
+                            string first = "";
+                            string last = "";
+                            if (!firstAuthor.IsNullOrEmpty())
+                            {
+                                string[] split = firstAuthor.Split(' ');
+                                first = split[0];
+                                last = split[1];
+                            }
+                            Author author = SearchForAuthor(first, last);
+                            if (author == null)
+                            {
+                                author = new Author
+                                {
+                                    FirstName = first,
+                                    LastName = last,
+                                };
+                                // add to the database
+                                author = _authorRepo.Insert(author);
+                                CurrentUnitOfWork.SaveChanges();
+                            }
+                            string catName = v.VolumeInfo.Categories == null ? "Category" : (v.VolumeInfo.Categories[0] != null ? v.VolumeInfo.Categories[0] : "Category");
+                            Category category = SearchForCategory(catName);
+                            if (category == null)
+                            {
+                                category = new Category
+                                {
+                                    Name = v.VolumeInfo.Categories == null ? "Category" : (v.VolumeInfo.Categories[0] != null ? v.VolumeInfo.Categories[0] : "Category"),
+                                    Description = catName,
+                                    location = "Room4,Column7"
+                                };
+                                // add to the database
+                                category = _catRepo.Insert(category);
+                                CurrentUnitOfWork.SaveChanges();
+                            }
+
+                            Random random = new Random();
+                            // random between 0 , 1 or 2
+                            byte b = (byte)(random.Next(0, 3));
+                            string strYear = v.VolumeInfo.PublishedDate == null ? "0000" : (v.VolumeInfo.PublishedDate.Split("-")[0]);
+                            int intYear = int.Parse(strYear);
+                            Book book = SearchForBook(v.VolumeInfo.Title);
+                            if (book == null)
+                            {
+                                book = new Book
+                                {
+                                    Name = v.VolumeInfo.Title,
+                                    Description = v.VolumeInfo.Description == null ? v.VolumeInfo.Subtitle : v.VolumeInfo.Description,
+                                    ImageURL = v.VolumeInfo.ImageLinks == null ? "" : (v.VolumeInfo.ImageLinks.Thumbnail != null ? v.VolumeInfo.ImageLinks.Thumbnail : ""),
+                                    ISBN = v.VolumeInfo.IndustryIdentifiers == null ? "" : (v.VolumeInfo.IndustryIdentifiers[1].Identifier != null ? v.VolumeInfo.IndustryIdentifiers[1].Identifier : ""),
+                                    Type = b,
+                                    Year = intYear,
+                                    AuthorId = author.Id,
+                                    CategoryId = category.Id
+                                };
+                                // add book to db
+                                book = _booksRepository.Insert(book);
+                                CurrentUnitOfWork.SaveChanges();
+                            }
+                            //books.Add(book);
+                            Tuple<Book, Category, Author> tuple = new Tuple<Book, Category, Author>(book, category, author);
+                            books.Add(tuple);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.ToString());
+                        }
+                    }
+                }
+            }
+            
+            return books;
+        }
+
+        public async Task<Result> RunQuery(string query, int startIndex)
+        {
+            HttpResponseMessage response = await client.GetAsync(
+                $"volumes?q={query}&startIndex={startIndex}&maxResults=30");
+            var volumes = await response.Content.ReadFromJsonAsync<Result>();
+            return volumes;
+        }
+
+        [HttpGet]
+        public async Task<List<Tuple<Book, Category, Author>>> SearchVolumes(string query)
         {
             var startIndex = _random.Next(0, 1000); // Adjust based on the number of available books
             HttpResponseMessage response = await client.GetAsync(
-                $"volumes?q={query}&startIndex={startIndex}&maxResults=10");
+                $"volumes?q={query}&startIndex={startIndex}&maxResults=30");
             var volumes = await response.Content.ReadFromJsonAsync<Result>();
-            var books = new List<Tuple<Book, Category, Author>> ();
-
+            var books = new List<Tuple<Book, Category, Author>>();
 
             if (volumes.Items != null)
             {
@@ -154,11 +269,13 @@ namespace Boxfusion.LMS_Backend.Services.AskGoogle
                                     LastName = last,
                                 };
                                 // add to the database
-                                author  = _authorRepo.Insert(author);
-                                CurrentUnitOfWork.SaveChanges();
+                                // author = _authorRepo.Insert(author);
+                                // CurrentUnitOfWork.SaveChanges();
                             }
                             string catName = v.VolumeInfo.Categories == null ? "Category" : (v.VolumeInfo.Categories[0] != null ? v.VolumeInfo.Categories[0] : "Category");
                             Category category = SearchForCategory(catName);
+                            Random random = new Random();
+                            
                             if (category == null)
                             {
                                 category = new Category
@@ -168,34 +285,39 @@ namespace Boxfusion.LMS_Backend.Services.AskGoogle
                                     location = "Room4,Column7"
                                 };
                                 // add to the database
-                                category = _catRepo.Insert(category);
-                                CurrentUnitOfWork.SaveChanges();
+                                // category = _catRepo.Insert(category);
+                                // CurrentUnitOfWork.SaveChanges();
                             }
 
-                            Random random = new Random();
+                            random = new Random();
                             // random between 0 , 1 or 2
-                            byte b = (byte)(random.Next(0, 3));
+                            byte b = 0; //(byte)(random.Next(0, 3));
                             string strYear = v.VolumeInfo.PublishedDate == null ? "0000" : (v.VolumeInfo.PublishedDate.Split("-")[0]);
                             int intYear = int.Parse(strYear);
-                            Book book = new Book
+                            Book book = SearchForBook(v.VolumeInfo.Title);
+                            if (book == null)
                             {
-                                Name = v.VolumeInfo.Title,
-                                Description = v.VolumeInfo.Description == null ? v.VolumeInfo.Subtitle : v.VolumeInfo.Description,
-                                ImageURL = v.VolumeInfo.ImageLinks == null ? "" : (v.VolumeInfo.ImageLinks.Thumbnail != null ? v.VolumeInfo.ImageLinks.Thumbnail : ""),
-                                ISBN = v.VolumeInfo.IndustryIdentifiers == null ? "" : (v.VolumeInfo.IndustryIdentifiers[1].Identifier != null ? v.VolumeInfo.IndustryIdentifiers[1].Identifier : ""),
-                                Type = b,
-                                Year = intYear,
-                                AuthorId = author.Id,
-                                CategoryId = category.Id
-                            };
-                            // add book to db
-                            book = _booksRepository.Insert(book);
-                            CurrentUnitOfWork.SaveChanges();
+                                book = new Book
+                                {
+                                    Name = v.VolumeInfo.Title,
+                                    Description = v.VolumeInfo.Description == null ? v.VolumeInfo.Subtitle : v.VolumeInfo.Description,
+                                    ImageURL = v.VolumeInfo.ImageLinks == null ? "" : (v.VolumeInfo.ImageLinks.Thumbnail != null ? v.VolumeInfo.ImageLinks.Thumbnail : ""),
+                                    ISBN = v.VolumeInfo.IndustryIdentifiers == null ? "" : (v.VolumeInfo.IndustryIdentifiers[1].Identifier != null ? v.VolumeInfo.IndustryIdentifiers[1].Identifier : ""),
+                                    Type = b,
+                                    Year = intYear,
+                                    AuthorId = author.Id,
+                                    CategoryId = category.Id
+                                };
+                                // add book to db
+                                // book = _booksRepository.Insert(book);
+                                // CurrentUnitOfWork.SaveChanges();
+                            }
                             //books.Add(book);
                             Tuple<Book, Category, Author> tuple = new Tuple<Book, Category, Author>(book, category, author);
                             books.Add(tuple);
                         }
-                        catch (Exception ex) { 
+                        catch (Exception ex)
+                        {
                             Console.WriteLine(ex.ToString());
                         }
                     }

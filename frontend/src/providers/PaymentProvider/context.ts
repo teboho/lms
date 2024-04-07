@@ -1,39 +1,54 @@
 "use client";
 import { createContext } from "react";
 
-export interface AUTH_OBJ_TYPE {
-    "accessToken": string;
-    "encryptedAccessToken": string;
-    "expireInSeconds": number;
-    "userId": number;
-  }
+// Payment
+// {
+//     "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+//     "loanId": 0,
+//     "dateCreated": "2024-04-05T08:01:54.359Z",
+//     "amount": 0
+//   }
 
-export interface AUTH_CONTEXT_STATE_TYPE {
-    isInProgress: boolean;
-    isSuccess: boolean;
-    isError: boolean;
-    authObj?: AUTH_OBJ_TYPE;
+export interface PAYMENT_TYPE {
+    id: string;
+    loanId: number;
+    dateCreated: string;
+    amount: number;
 }
 
-export interface AUTH_REQUEST_TYPE {
-    "userNameOrEmailAddress": string;
-    "password": string;
-    "rememberClient": boolean;
+export const PAYMENT_INIT: PAYMENT_TYPE = {
+    id: "",
+    loanId: 0,
+    dateCreated: "",
+    amount: 0
 }
 
-export const AUTH_CONTEXT_INITIAL_STATE = {
-    isInProgress: false,
-    isError: false,
+export interface PAYMENT_CONTEXT_TYPE {
+    payment: PAYMENT_TYPE;
+    payments: PAYMENT_TYPE[];
+    makePayment: (payment: PAYMENT_TYPE) => void;
+    getPayments: () => void;
+    getPayment: (paymentId: string) => PAYMENT_TYPE;
+}
+
+export const PAYMENT_CONTEXT_DEFAULT = {
+    payment: PAYMENT_INIT,
+    payments: [] as PAYMENT_TYPE[],
+    makePayment: () => {},
+    getPayments: () => {},
+    getPayment: () => PAYMENT_INIT
+}
+
+export const PAYMENT_CONTEXT_INITIAL_STATE = {
+    payment: PAYMENT_INIT,
+    payments: [] as PAYMENT_TYPE[],
     isSuccess: false,
-    authObj: {
-        "accessToken": "string",
-        "encryptedAccessToken": "string",
-        "expireInSeconds": 0,
-        "userId": 0
-      }
+    isPending: false,
+    isError: false
 }
 
 /**
  * Default value that the provider will pass is an empty object
  */
-export const AuthContext = createContext({ });
+const PaymentContext = createContext<PAYMENT_CONTEXT_TYPE>(PAYMENT_CONTEXT_DEFAULT);
+export default PaymentContext;

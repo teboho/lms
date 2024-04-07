@@ -5,7 +5,8 @@ import { Layout, Flex, Form, Input, Button, Row, Col, Tag, Typography } from "an
 import { Header, Content, Footer } from "antd/lib/layout/layout";
 import Sider from "antd/lib/layout/Sider";
 import moduleStyles from "./register.module.css";
-import { AuthContext } from "@/providers/AuthProvider/context";
+import AuthContext from "@/providers/authProvider/context";
+import { redirect } from "next/navigation";
 // Can contain an array of strings or array of numbers
 const MyFormItemContext = React.createContext<(string | number)[]>([]);
 
@@ -63,7 +64,7 @@ interface FormInputDataType {
 export default function Register(): React.ReactNode {
     const [form] = Form.useForm<FormInputDataType>();
     const { styles, cx, theme } = useMainStyles();
-    const { register, state } = useContext(AuthContext);
+    const { register } = useContext(AuthContext);
 
     const onFinish = (values: object): void => {
         console.log(values);
@@ -81,14 +82,17 @@ export default function Register(): React.ReactNode {
             emailAddress: formstuff.email.email,
             password: formstuff.password.password,
             userName: formstuff.email.email,
-            isActive: true
+            isActive: true,
+            roleNames: [
+                "PATRON"
+            ],
         }
         console.log(user);
         register(user);
     }
 
     return (
-        <Flex className={styles.form}>
+        <Flex className={styles.form} align="center" justify="center">
             <Sider width={"25%"} style={{background: "#004aad"}} className={cx(styles["left-sider"])}>
                 <Flex vertical>
                     <Tag color="green"><Title level={4}>Step 1: Fill in your details</Title></Tag>
@@ -147,9 +151,9 @@ export default function Register(): React.ReactNode {
                         </Row>
                         <Row>
                             <Col>
-                                <Button type="primary" onClick={onComplete}>Register</Button>
+                                <Button type="primary" onClick={e => onComplete(e)}>Register</Button>
                             </Col>
-                            <Col><Button className={cx(styles.cancel)}>Cancel</Button></Col>
+                            <Col><Button className={cx(styles.cancel)} onClick={e => redirect("/")}>Cancel</Button></Col>
                         </Row>
                     </MyFormItemGroup>
                 </Form>

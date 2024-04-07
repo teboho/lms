@@ -14,8 +14,8 @@ namespace Boxfusion.LMS_Backend.Services.Dtos
     [AutoMap(typeof(History))]
     public class HistoryDto : EntityDto<Guid>
     {
-        public Guid PatronId { get; set; }
+        public long PatronId { get; set; }
         public DateTime DateRead { get; set; }
-        public long BookId { get; set; }
+        public Guid BookId { get; set; }
     }
 }

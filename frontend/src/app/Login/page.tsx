@@ -5,7 +5,7 @@ import { Layout, Flex, Form, Input, Button, Row, Col, Tag, Typography, message }
 import { Header, Content, Footer } from "antd/lib/layout/layout";
 import Sider from "antd/lib/layout/Sider";
 import moduleStyles from "./register.module.css";
-import { AUTH_REQUEST_TYPE, AuthContext } from "@/providers/AuthProvider/context";
+import AuthContext, { AUTH_REQUEST_TYPE } from "@/providers/authProvider/context";
 import { useRouter } from "next/navigation";
 import { stat } from "fs";
 
@@ -62,9 +62,16 @@ interface FormInputDataType {
 
 export default function Login(): React.ReactNode {
     const [form] = Form.useForm<FormInputDataType>();
-    const { login, state } = useContext(AuthContext);
+    const { login, authObj } = useContext(AuthContext);
     const { styles, cx, theme } = useMainStyles();
     const  { push } = useRouter();
+
+    useEffect(() => {
+        if (authObj?.accessToken) {
+            push("/");
+        }
+    }
+    , []);
 
     const onFinish = (value: object): void => {
         console.log("Hello World");
@@ -87,7 +94,7 @@ export default function Login(): React.ReactNode {
     }
 
     return (
-        <Flex className={styles.form}>
+        <Flex className={styles.form} align="center" justify="center">
             <Sider width={"25%"} style={{background: "#004aad"}} className={cx(styles["left-sider"])}>
                 <Flex vertical>
                     <Tag color="green"><Title level={4}>Step 1: Fill in your details</Title></Tag>
@@ -96,12 +103,12 @@ export default function Login(): React.ReactNode {
             </Sider>
             <Sider theme="light" width={"75%"} >
                 <Form className={cx(styles["the-form"])} name="form_item_path" layout="vertical" form={form} onFinish={onFinish}>
-                    <Title className="">Login with your personal information</Title>
+                    <Title className="">Login with your credentials</Title>
                     <MyFormItemGroup prefix={["user"]}>
                         <Row>           
                             <Col span={24}>
                             <MyFormItemGroup prefix={["email"]}>
-                                <MyFormItem name="email" label="Email">
+                                <MyFormItem name="email" label="Email/Username">
                                     <Input />
                                 </MyFormItem>
                             </MyFormItemGroup>
