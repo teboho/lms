@@ -7,6 +7,8 @@ import BookContext from "@/providers/bookProvider/context";
 import CategoryContext from "@/providers/categoryProvider/context";
 import Utils from "@/utils";
 import { useStyles } from "./styles";
+import { PreferenceContext } from "@/providers/preferenceProvider/context";
+import { jwtDecode } from "jwt-decode";
 
 export type Preferences = {
     primaryCategoryId: number;
@@ -35,6 +37,7 @@ const Page = (): React.ReactNode => {
     const {userObj, getUserId} = useContext(AuthContext);
     const bookContextObject = useContext(BookContext);
     const categoryContextValue = useContext(CategoryContext);
+    const { getPreferenceData, getPreferenceByPatron, preferenceData } = useContext(PreferenceContext);
     const [_options, setOptions] = useState(null);
     const {styles, cx} = useStyles();
 
@@ -45,7 +48,53 @@ const Page = (): React.ReactNode => {
             categoryContextValue.getAllCategories();
         }
         setOptions(categoryContextValue.categories);
+
+        // get the user's current preferences so that if they have any, we can display them and allow them to change
+        const userId = getUserId();
+        if (userId) {
+            const prefs = getPreferenceByPatron(userId);
+            
+            console.log("This user's preferences: ", prefs);
+            if (prefs) {
+                setChosen(prev => ([
+                    getCategory(prefs.primaryCategoryId),
+                    getCategory(prefs.secondaryCategoryId),
+                    getCategory(prefs.tertiaryCategoryId)
+                ]));
+
+                // remove the chosen categories from the options
+                const _deleted = categoryContextValue
+                    .categories
+                    ?.filter(c => c.id !== prefs.primaryCategoryId && c.id !== prefs.secondaryCategoryId && c.id !== prefs.tertiaryCategoryId);
+                setOptions(_deleted);
+            }
+        }
     }, [])
+
+    useEffect(() => {
+        if (preferenceData) {
+            console.log("preferenceData", preferenceData);
+        }
+        const accessToken = Utils.getAccessToken();
+        if (accessToken) {
+            const decoded = jwtDecode(accessToken);
+            const userId = decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
+            console.log(decoded);
+            const patronId = Number.parseInt(userId)
+
+            const prefs = getPreferenceByPatron(patronId);
+            console.log("This user's preferences: ", prefs);
+            if (prefs) {
+                setChosen(prev => ([
+                    getCategory(prefs.primaryCategoryId),
+                    getCategory(prefs.secondaryCategoryId),
+                    getCategory(prefs.tertiaryCategoryId)
+                ]));
+                // also set the current step to the last one
+                // setCurrent(2);
+            } 
+        }       
+    }, [preferenceData]);
 
     useEffect(() => {
         console.log("categories", categoryContextValue.categories);
@@ -82,6 +131,13 @@ const Page = (): React.ReactNode => {
             patronId: user?.id,
             ...prefs
         });
+    }
+
+    const getCategory = (id: string) => {
+        console.log("Getting category with id: ", id);
+        const category = categoryContextValue.categories?.find(c => c.id === id);
+        console.log("Category: ", category);
+        return category;
     }
 
     const next = () => {
@@ -169,7 +225,7 @@ const Page = (): React.ReactNode => {
                 <br />
                 <br />
                 {chosen.length < steps.length && (
-                    memoOptions?.map((item, index) => (
+                    memoOptions?.map((item, index: number) => (
                         <Button key={`choice_${item.id}`} type="primary" 
                             onClick={() => {
                                 savePref(index, item)
