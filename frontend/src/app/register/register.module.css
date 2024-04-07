@@ -1,0 +1,11 @@
+.half {
+    width: 40%;
+}
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.row .half {
+    width: 40%;
+}
