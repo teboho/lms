@@ -22,6 +22,7 @@ namespace Boxfusion.LMS_Backend.Domain
         public DateTime? DateReturned { get; set; }
         public bool IsReturned { get; set; }
         public bool IsOverdue { get; set; }
+        public bool Confirmed { get; set; }
 
         public Loan()
         {

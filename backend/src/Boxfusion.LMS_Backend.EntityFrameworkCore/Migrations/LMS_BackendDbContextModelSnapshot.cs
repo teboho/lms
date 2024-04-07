@@ -1707,6 +1707,9 @@ namespace Boxfusion.LMS_Backend.Migrations
                     b.Property<Guid>("BookId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool>("Confirmed")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 

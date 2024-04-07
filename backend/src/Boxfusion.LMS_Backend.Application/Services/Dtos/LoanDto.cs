@@ -20,5 +20,6 @@ namespace Boxfusion.LMS_Backend.Services.Dtos
         public DateTime? DateReturned { get; set; }
         public bool IsReturned { get; set; }
         public bool IsOverdue { get; set; }
+        public bool Confirmed { get; set; } // this is for the librarian to confirm the loan
     }
 }
