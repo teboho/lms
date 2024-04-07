@@ -28,30 +28,6 @@ const Page = (): React.ReactNode => {
         getHistoryByPatron(userId);
     }, []);
 
-    //example of history item   {
-//     "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-//     "patronId": 0,
-//     "dateRead": "2024-04-04T17:19:14.465Z",
-//     "bookId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-//   }
-// example of book item {
-//     "name": "string",
-//     "description": "string",
-//     "type": 0,
-//     "year": 0,
-//     "imageURL": "string",
-//     "isbn": "string",
-//     "categoryId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-//     "authorId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-//     "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-//   }
-// example of category item {
-//     "name": "string",
-//     "description": "string",
-//     "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-// "location": "string"
-//   }
-
     const columns = [
         {
             title: 'Book Name',
@@ -91,12 +67,19 @@ const Page = (): React.ReactNode => {
         },
     ];
     
+    function formatDate(_date: string) {
+        let date = new Date(_date);
+        let formattedDate = `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+
+        return formattedDate;
+    }
+
     const historyRender = historyData?.map((item) => {
         const book = getLocalBook(item.bookId);
         return {
             key: item.id,
             bookName: book?.name,
-            dateRead: item.dateRead,
+            dateRead: formatDate(item.dateRead),
             bookType: BookType[book?.type],
             bookYear: book?.year,
             bookISBN: book?.isbn,
