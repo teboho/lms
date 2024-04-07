@@ -13,25 +13,28 @@ import { jwtDecode } from "jwt-decode";
 
 const Page = (): React.ReactNode => {
     const { token } = theme.useToken();
-    const {  } = useContext(PreferenceContext);
-    const { getLocalBook } = useContext(BookContext);
-    const { getCategory } = useContext(CategoryContext);
-    const { getAuthorById } = useContext(AuthorsContext);
+    const { categories, getAllCategories } = useContext(CategoryContext);
     const { getPreferenceData, getPreferenceByPatron, preferenceData } = useContext(PreferenceContext);
     const [preferences, setPreferences] = useState<PreferenceType>(null);
+
     const accessToken = Utils.getAccessToken();
-    const instance = makeAxiosInstance(accessToken);
-    // const userId = Utils.userId;
-    // const patronId = Utils.getPatronUserInfo(userId);
 
     useEffect(() => {
         if (accessToken) {            
             getPreferenceData();
+            getAllCategories();
         }
     }, []);
 
+    const getCategory = (id: string) => {
+        console.log("Getting category with id: ", id);
+        const category = categories?.find(c => c.id === id);
+        console.log("Category: ", category);
+        return category;
+    }
+
     useEffect(() => {
-        if (accessToken) {
+        if (accessToken && preferenceData) {
             const decoded = jwtDecode(accessToken);
             const userId = decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
             console.log(decoded);
@@ -39,41 +42,38 @@ const Page = (): React.ReactNode => {
 
             const prefs = getPreferenceByPatron(patronId);
             // setPreferences(getPreferenceByPatron(userId));
-            console.log("Preferences", prefs);
+            console.log("This user's preferences: ", prefs);
             if (prefs) {
                 // const prefs = preferenceData?.find(p => p.patronId === patronId);
                 setPreferences(prev => prefs);
             }
         }
     }, [preferenceData]);
-
-    const primaryCategory = useMemo(() => getCategory(preferences?.primaryCategoryId), [getCategory, preferences?.primaryCategoryId]);
-    const secondaryCategory = getCategory(preferences?.secondaryCategoryId);
-    const tertiaryCategory = getCategory(preferences?.tertiaryCategoryId);
     
     return (
         <div>
             <h1>Preferences</h1>
             <Row gutter={16}>
                 <Col span={8}>
-                <Card title={getCategory(preferences?.primaryCategoryId)?.name} bordered={false}>
-                    {primaryCategory?.description}
-                    <p>{primaryCategory?.location}</p>
-                </Card>
+                    <Card title={`1: ${getCategory(preferences?.primaryCategoryId)?.name}`} bordered={true} hoverable>
+                        {getCategory(preferences?.primaryCategoryId)?.description}
+                        <p>{getCategory(preferences?.primaryCategoryId)?.location}</p>
+                    </Card>
                 </Col>
                 <Col span={8}>
-                <Card title={secondaryCategory?.name} bordered={false}>
-                    {secondaryCategory?.description}
-                    <p>{secondaryCategory?.location}</p>
-                </Card>
+                    <Card title={`2: ${getCategory(preferences?.secondaryCategoryId)?.name}`} bordered={true} hoverable>
+                        {getCategory(preferences?.secondaryCategoryId)?.description}
+                        <p>{getCategory(preferences?.secondaryCategoryId)?.location}</p>
+                    </Card>
                 </Col>
                 <Col span={8}>
-                <Card title={tertiaryCategory?.name} bordered={false}>
-                    {tertiaryCategory?.description}
-                    <p>{tertiaryCategory?.location}</p>
-                </Card>
+                    <Card title={`3: ${getCategory(preferences?.tertiaryCategoryId)?.name}`} bordered={true} hoverable>
+                        {getCategory(preferences?.tertiaryCategoryId)?.description}
+                        <p>{getCategory(preferences?.tertiaryCategoryId)?.location}</p>
+                    </Card>
                 </Col>
             </Row>
+
         </div>
     );
 }

@@ -51,7 +51,7 @@ const Layout = ({ children }: { children: React.ReactNode }): React.ReactNode =>
                     className={cx(styles.sticky)}
                 />
             </Sider>
-            <Sider theme="light" className={cx(styles.right)} width={"75%"}>
+            <Sider theme="light" className={cx(styles.right, styles.padding)} width={"75%"}>
                 {children}
             </Sider>
         </AntdLayout>
