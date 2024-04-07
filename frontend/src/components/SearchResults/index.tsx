@@ -22,7 +22,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ books, searchTerm }) => {
     return (
         <>
             {searchTerm && searchTerm.length > 0 ? <Title level={3}>Search Results for {searchTerm}</Title> : <Title level={3}>Explore our library...</Title>}
-            <Flex  gap={20} justify="center" align="center" wrap="wrap">
+            <Flex gap={20} justify="center" align="center" wrap="wrap">
                 {books?.map((book, index) => (
                     <div key={`search_col_${index}`}>
                         <Book book={book} />

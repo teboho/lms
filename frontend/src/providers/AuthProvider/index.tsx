@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { message } from "antd";
 import axios from "axios";
 import Utils from "@/utils";
+import { jwtDecode } from "jwt-decode";
 
 export const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -212,7 +213,14 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     }
 
     function getUserId() {
-        return authState.authObj.userId;
+        if (authState.authObj) return authState.authObj.userId;
+        else {
+            const accessToken = localStorage.getItem("accessToken");
+            if (accessToken) {
+                const decoded = jwtDecode(accessToken);
+                return Number.parseInt(decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"]);
+            }
+        }
     }
 
     return (

@@ -12,5 +12,14 @@ export const useStyles = createStyles(({css, cx}) => ({
     `,
     flex: css`
         gap: 50px;
-    `
+    `, 
+    maxHeight: css`
+        height: 500px;
+        max-height: 500px;
+    `,
+    // at the bottom of the parent div
+    buttons: css`
+        position: absolute;
+        bottom: 5px;
+    `,
 }));
