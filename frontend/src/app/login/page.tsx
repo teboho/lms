@@ -67,14 +67,6 @@ export default function Login(): React.ReactNode {
     const { styles, cx } = useMainStyles();
     const  { push } = useRouter();
 
-    // useEffect(() => {
-    //     if (authObj?.accessToken) {
-    //         push("/");
-    //     }
-    // }
-    // // eslint-disable-next-line react-hooks/exhaustive-deps
-    // , []);
-
     const onFinish = (value: object): void => {
         console.log("Hello World");
     }

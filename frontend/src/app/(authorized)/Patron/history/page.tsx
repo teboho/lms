@@ -13,7 +13,7 @@ import { useContext, useEffect } from "react";
 
 const Page = (): React.ReactNode => {
     const { token } = theme.useToken();
-    const { historyData, history, getHistoryByPatron } = useContext(HistoryContext);
+    const { historyData, history, getHistoryByPatron,  } = useContext(HistoryContext);
     const { getLocalBook } = useContext(BookContext);
     const { getCategory } = useContext(CategoryContext);
     const { getAuthorById } = useContext(AuthorsContext);
@@ -24,7 +24,9 @@ const Page = (): React.ReactNode => {
     const patronId = Utils.getPatronUserInfo(userId);
 
     useEffect(() => {
-        getHistoryByPatron(userId);
+        if (accessToken) {
+            getHistoryByPatron(userId);
+        }   
     }, []);
 
     const columns = [

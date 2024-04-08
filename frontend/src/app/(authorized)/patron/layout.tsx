@@ -35,7 +35,7 @@ const patronMenu: MenuItem[] = [
     getItem(<Link href={"/patron/"}>Patron</Link>, "patron", undefined, undefined, 'group'),
     getItem(<Link href={"/patron/categories/"}>Categories</Link>, "patron-categories", undefined, undefined, undefined),
     getItem(<Link href={"/patron/loans/"}>My Loans</Link>, "patron-myloans", undefined, undefined, undefined),
-    getItem(<Link href={"/patron/payments/"}>Payments</Link>, "patron-payments", undefined, undefined, undefined),
+    // getItem(<Link href={"/patron/payments/"}>Payments</Link>, "patron-payments", undefined, undefined, undefined),
     getItem("Preferences", "patron-preferences", undefined, preferencesMenu, "group"),
     getItem(<Link href="/patron/history">History</Link>, "patron-history", undefined, undefined, undefined),
 ];

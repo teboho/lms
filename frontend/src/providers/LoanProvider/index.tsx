@@ -40,7 +40,7 @@ export default function LoanProvider({ children }: { children: React.ReactNode }
                     dispatch(postLoanSuccessAction(res.data.result));
                     const email: EmailType = {
                         subject: "Book Loan",
-                        message: `You have successfully borrowed the book ${res.data.result.bookTitle}, which is due on ${res.data.result.dueDate}. Please return the book on time.`,
+                        message: `You have successfully borrowed the book ${loanObj.bookId}, which is due on ${loanObj.dateDue}. Please return the book on time.`,
                         toEmail: emailAdd
                     }
                     sendEmail(email);
@@ -139,6 +139,7 @@ export default function LoanProvider({ children }: { children: React.ReactNode }
                 if (res.data.success) {
                     dispatch(putLoanSuccessAction(res.data.result));
                     messageApi.success("Book loan confirmed");
+                    
                 } else {
                     dispatch(putLoanErrorAction());
                     messageApi.error("Book loan confirmation unsuccessful")

@@ -50,7 +50,7 @@ const adminMenu: MenuItem[] = [
     getItem(<Link href="/admin">Admin</Link>, "admin", undefined, undefined, 'group'),
     getItem("Categories", "categories", undefined, categoryMenu, 'group'),
     getItem("Inventory", "inventory", undefined, inventoryMenu, 'group'),
-    getItem("Payments", "payments", undefined, paymentsMenu, 'group'),
+    // getItem("Payments", "payments", undefined, paymentsMenu, 'group'),
     getItem("Loans", "loans", undefined, loanMenu, 'group')
     ,
 ];

@@ -73,6 +73,11 @@ const Page = (): React.ReactNode => {
                             <Link href={`/patron/loan?bookId=${filterBook?.id}`}>
                                 <Button>Loan</Button>
                             </Link>
+                            {/* <Link 
+                                href={`https://books.google.com/books?dq=isbn:${filterBook?.isbn}&hl=en&newbks=1&newbks_redir=1&sa=X&ved=2ahUKEwi3_5OekLKFAxWlQ_EDHdCZAPkQ6AF6BAgHEAI`}
+                            >
+                                <Button>View on google</Button>
+                            </Link> */}
                         </Col>
                     </Row>
                     <hr />
