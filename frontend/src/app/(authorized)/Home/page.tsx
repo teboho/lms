@@ -37,13 +37,10 @@ const Page = (): React.ReactNode => {
     if (user?.roleNames?.includes("ADMIN")) {
         return (
             <>   
-                <Layout>
+                {/* <Layout>
                     <Sider width={"25%"} className={cx(styles.border, styles.bgwhite)}>
-                        {/* vertical ant ANtd menu with options ...*/}
                         <Menu>
                             <Menu.Item key="1" onClick={() => push("/")}>Admin</Menu.Item>
-                            {/* <Menu.Item key="2" onClick={() => redirect("/admin/users")}>Users</Menu.Item> */}
-                            {/* <Menu.Item key="3" onClick={() => redirect("/admin/books")}>Books</Menu.Item> */}
                             <Menu.Item key="4" onClick={() => push("/categories")}>Categories</Menu.Item>
                             <Menu.Item key="5" onClick={() => push("/inventory")}>Inventory</Menu.Item>
                             <Menu.Item key="6" onClick={() => push("/loans")}>Loans</Menu.Item>
@@ -57,18 +54,18 @@ const Page = (): React.ReactNode => {
                                 <p>user id: {user?.id}</p>
                                 <p>email: {user?.emailAddress}</p>
                             </div>
-                            {/* Inventory */}
                             <h1>Inventory</h1>
                         </Content>
                     </Sider>
-                </Layout>
+                </Layout> */}
+                <h1>Admin</h1>
             </>
         );
     }   
 
     return (
         <>   
-            <Layout>
+            {/* <Layout>
                 <Sider width={"25%"} style={{background: "white"}}>
                     <Preferences />
                     <History />
@@ -81,13 +78,12 @@ const Page = (): React.ReactNode => {
                             <p>surname: {user?.surname}</p>
                             <p>user id: {user?.id}</p>
                             <p>email: {user?.emailAddress}</p>
-                            {/* <p>fullname: {fulluser?.fullName}</p>
-                            <p>rolenames: {JSON.stringify(fulluser?.roleNames)}</p> */}
                         </div>
                         <SearchResults books={books} searchTerm={searchTerm} />
                     </Content>
                 </Sider>
-            </Layout>
+            </Layout> */}
+            <h1>Patron</h1>
         </>
     );
 }

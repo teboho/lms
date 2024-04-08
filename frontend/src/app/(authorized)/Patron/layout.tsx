@@ -1,7 +1,7 @@
 'use client';
 
 import { Layout as AntdLayout, Menu, MenuProps } from "antd";
-import React, { useContext, useEffect, useMemo } from "react";
+import React from "react";
 import { useStyles } from "./styles";
 import Link from "next/link";
 import withAuth from "@/hocs/withAuth";
@@ -35,7 +35,7 @@ const patronMenu: MenuItem[] = [
     getItem(<Link href={"/patron/"}>Patron</Link>, "patron", undefined, undefined, 'group'),
     getItem(<Link href={"/patron/categories/"}>Categories</Link>, "patron-categories", undefined, undefined, undefined),
     getItem(<Link href={"/patron/loans/"}>My Loans</Link>, "patron-myloans", undefined, undefined, undefined),
-    getItem(<Link href={"/patron/payments/"}>Payments</Link>, "patron-payments", undefined, undefined, undefined),
+    // getItem(<Link href={"/patron/payments/"}>Payments</Link>, "patron-payments", undefined, undefined, undefined),
     getItem("Preferences", "patron-preferences", undefined, preferencesMenu, "group"),
     getItem(<Link href="/patron/history">History</Link>, "patron-history", undefined, undefined, undefined),
 ];
@@ -45,13 +45,14 @@ const Layout = ({ children }: { children: React.ReactNode }): React.ReactNode =>
 
     return (
         <AntdLayout>
-            <Sider theme="light" className={cx(styles.right)} width={"25%"}>
+            <Sider theme="light" className={cx(styles.left)} width={"20%"}>
                 <Menu
+                    onClick={() => {}}
                     items={patronMenu}
                     className={cx(styles.sticky)}
                 />
             </Sider>
-            <Sider theme="light" className={cx(styles.right, styles.padding)} width={"75%"}>
+            <Sider theme="light" className={cx(styles.right, styles.padding)} width={"80%"}>
                 {children}
             </Sider>
         </AntdLayout>

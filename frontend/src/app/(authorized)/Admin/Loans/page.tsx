@@ -9,9 +9,8 @@ const { Title } = Typography;
 import { useSearchParams } from "next/navigation";  
 
 import { type Dayjs } from "dayjs";
-import Utils from "@/utils";
-import Link from "next/link";
 import ViewPatron from "@/components/viewPatron";
+
 
 const Page = (): React.ReactNode => {
     const { token } = theme.useToken();
@@ -85,7 +84,7 @@ const Page = (): React.ReactNode => {
         );
     }
 
-    const cellRender = (current, info) => {
+    const cellRender = (current: any, info: any) => {
         // console.log("cellRender", current, info);
         if (!current || !info) {
             return (

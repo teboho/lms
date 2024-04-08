@@ -1,14 +1,12 @@
 'use client';
-import React, { useContext, useMemo, useReducer, useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import { Flex, Input, Button, Drawer } from "antd";
-import { DatabaseOutlined } from "@ant-design/icons";
-import type { DrawerProps, MenuProps, RadioChangeEvent } from "antd";
+import type { DrawerProps, MenuProps } from "antd";
 import Menu from "antd/lib/menu/menu";
 import  { useStyles } from "./styles";
 import { SearchProps } from "antd/es/input";
 import Link from "next/link";
 import Image from "next/image";
-import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import AuthContext from "@/providers/authProvider/context";
 import BookContext from "@/providers/bookProvider/context";
 
@@ -106,7 +104,7 @@ const NavBar: React.FC = () => {
         );
     }
 
-    return <Menu mode="horizontal" items={outItems} className={cx(styles.sticky)} />;
+    return null;
 }
 
 export default NavBar;

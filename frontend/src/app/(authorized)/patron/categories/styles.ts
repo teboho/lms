@@ -20,6 +20,6 @@ export const useStyles = createStyles(({css, cx}) => ({
         }
     `,
     padding: css`  
-        padding: 10px;
+        padding: 20px;
     `,
 }));

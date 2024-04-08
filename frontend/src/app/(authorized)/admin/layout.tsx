@@ -50,7 +50,7 @@ const adminMenu: MenuItem[] = [
     getItem(<Link href="/admin">Admin</Link>, "admin", undefined, undefined, 'group'),
     getItem("Categories", "categories", undefined, categoryMenu, 'group'),
     getItem("Inventory", "inventory", undefined, inventoryMenu, 'group'),
-    getItem("Payments", "payments", undefined, paymentsMenu, 'group'),
+    // getItem("Payments", "payments", undefined, paymentsMenu, 'group'),
     getItem("Loans", "loans", undefined, loanMenu, 'group')
     ,
 ];
@@ -62,12 +62,13 @@ const AdminLayout = ({ children }: { children: React.ReactNode }): React.ReactNo
         <Layout>
             <Sider style={{background: "white"}} className={cx(styles.right)} width={"25%"}>
                 <Menu
+                    onClick={() => {}}
                     items={adminMenu}
                     className={cx(styles.sticky)}
                     mode="inline"
                 />
             </Sider>
-            <ErrorBoundary fallback={<h1>Sth is wrong</h1>}>
+            <ErrorBoundary fallback={<h1>Something is wrong with the admin content</h1>}>
                 <Content className={cx(styles.content)}>
                     {children}
                 </Content>

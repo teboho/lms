@@ -1,10 +1,7 @@
 "use client";
 import Image from "next/image";
 import styles from "./page.module.css";
-import { Layout, Flex, Button } from "antd";
-import Sider from "antd/lib/layout/Sider";
-import { Header, Content,  } from "antd/lib/layout/layout";
-import NavBar from "@/components/NavBar";
+import { Flex, Button } from "antd";
 import Link from "next/link";
 import { useContext } from "react";
 import AuthContext from "@/providers/authProvider/context";
@@ -36,6 +33,7 @@ export default function Welcome() {
                   <div>
                     <Link href={"/login"}><Button>Login</Button></Link>
                   </div>
+                  {" "}
                   <div>
                     <Link href={"/register"}><Button>Register</Button></Link>
                   </div>

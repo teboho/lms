@@ -1,11 +1,13 @@
 "use client"
-import { useEffect, useReducer } from "react";
+import { useContext, useEffect, useReducer, useState } from "react";
 import { LoanContext, LoanType, LOAN_CONTEXT_INITIAL_STATE } from "./context";
 import { clearLoanAction, getLoanErrorAction, getLoanRequestAction, getLoansErrorAction, getLoansRequestAction, getLoansSuccessAction, getLoanSuccessAction, postLoanErrorAction, postLoanRequestAction, postLoanSuccessAction, putLoanErrorAction, putLoanRequestAction, putLoanSuccessAction } from "./actions";
 import { loanReducer } from "./reducer";
 import { makeAxiosInstance } from "../authProvider";
 import Utils from "@/utils";
 import { message } from "antd";
+import { jwtDecode } from "jwt-decode";
+import CommunicationContext, { EmailType } from "../communicationProvider/context";
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -15,11 +17,16 @@ export default function LoanProvider({ children }: { children: React.ReactNode }
     const [messageApi, contextHolder] = message.useMessage();
     const accessToken = Utils.getAccessToken();
     const instance = makeAxiosInstance(accessToken);
+    const [emailAdd, setEmailAdd] = useState(null);
+    const { sendEmail } = useContext(CommunicationContext);
 
     useEffect(() => {
         console.log("Loan Provider is mounted");
         if (accessToken) {
             getLoans();
+            const decoded = jwtDecode(accessToken);
+            console.log("email----------------", decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"]);
+            setEmailAdd(decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"]);
         }
     }, []);
     
@@ -31,6 +38,12 @@ export default function LoanProvider({ children }: { children: React.ReactNode }
                 console.log("loan create result", res.data);
                 if (res.data.success) {
                     dispatch(postLoanSuccessAction(res.data.result));
+                    const email: EmailType = {
+                        subject: "Book Loan",
+                        message: `You have successfully borrowed the book ${loanObj.bookId}, which is due on ${loanObj.dateDue}. Please return the book on time.`,
+                        toEmail: emailAdd
+                    }
+                    sendEmail(email);
                 } else {
                     dispatch(postLoanErrorAction());
                 }
@@ -126,6 +139,7 @@ export default function LoanProvider({ children }: { children: React.ReactNode }
                 if (res.data.success) {
                     dispatch(putLoanSuccessAction(res.data.result));
                     messageApi.success("Book loan confirmed");
+                    
                 } else {
                     dispatch(putLoanErrorAction());
                     messageApi.error("Book loan confirmation unsuccessful")

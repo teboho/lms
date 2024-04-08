@@ -65,7 +65,7 @@ export default function HistoryProvider({ children }: { children: React.ReactNod
     }
 
     function getHistoryByPatron(patronId: number) {
-        // get history by patron id
+        console.log("patron id", patronId);
         const endpoint = "/api/services/app/History/GetByPatron";
         dispatch(getHistoryDataRequestAction());
         instance.get(`${endpoint}?patronId=${patronId}`, { params: { patronId } })

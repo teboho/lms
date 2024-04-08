@@ -14,7 +14,7 @@ interface BookProps {
 
 const { Title, Paragraph } = Typography;
 
-const Read = (): React.FC | React.ReactNode => {
+const Read = (): React.ReactNode => {
     const { token } = theme.useToken();
     const searchParams = useSearchParams();
     const params = new URLSearchParams(searchParams);

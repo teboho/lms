@@ -1,8 +1,7 @@
 "use client";
-import { ReactNode, useContext, useEffect, useMemo } from "react";
+import { useContext, useEffect, useMemo } from "react";
 import withAuth from "@/hocs/withAuth";
-import { Flex, Layout, Input, List, Typography } from "antd";
-import type { SearchProps } from "antd/es/input";
+import { Layout, List } from "antd";
 import BookContext from "@/providers/bookProvider/context";
 const { Content, Sider } = Layout;
 import {useStyles} from "./styles";
@@ -10,7 +9,7 @@ import Book from "@/components/Book";
 import SearchResults from "@/components/searchResults";
 import Utils from "@/utils";
 
-const AllBooks = (): React.FC | React.ReactNode => {
+const AllBooks = (): React.ReactNode => {
     const { books, getAll } = useContext(BookContext);
     const { styles, cx } = useStyles();
 

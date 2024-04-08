@@ -9,8 +9,9 @@ import moment from "moment";
 import Image from "next/image";
 import InventoryContext from "@/providers/inventoryProvider/context";
 import AuthContext from "@/providers/authProvider/context";
-import { LoanContext } from "@/providers/loanProvider/context";
+import { LoanContext, LoanType } from "@/providers/loanProvider/context";
 import { useStyles } from "./styles"; 
+import CommunicationContext from "@/providers/communicationProvider/context";
 
 const Loan = (): React.ReactNode => {
     const { token } = theme.useToken();
@@ -22,9 +23,9 @@ const Loan = (): React.ReactNode => {
     const { inventoryItems } = useContext(InventoryContext);
     const { authObj } = useContext(AuthContext);
     const { makeLoan, clearLoan, loan } = useContext(LoanContext);
+    const { sendEmail } = useContext(CommunicationContext);
     const { cx, styles } = useStyles();
     const [book, setBook] = useState(null);
-
 
     useEffect(() => {
         clearLoan();
@@ -59,11 +60,14 @@ const Loan = (): React.ReactNode => {
         if (!userId) {
             userId = parseInt(localStorage.getItem("userId"));
         }
-        const _loan = {
+        const _loan: LoanType = {
             patronId: userId,
             bookId: memoBook?.id,
             dateDue: dueDate,
             dateCreated: new Date(),
+            dateReturned: null,
+            isReturned: false
+
         };
         // _loan.dateDue.setHours(_loan.dateDue.getHours() + 2); // Add 2 hours to the due date not working
         console.log(_loan);

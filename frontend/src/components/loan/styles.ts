@@ -5,6 +5,6 @@ export const useMainStyles = createStyles(({ css, cx }) => ({
     color: red;
   `,
   padding: css`
-    padding: 10px;
+    padding: 20px;
   `,
 }));

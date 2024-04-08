@@ -12,5 +12,9 @@ export const useStyles = createStyles(({css, cx}) => ({
     `,
     flex: css`
         gap: 50px;
-    `
+    `, 
+    maxHeight: css`
+        height: 500px;
+        max-height: 500px;
+    `,
 }));
