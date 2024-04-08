@@ -130,7 +130,7 @@ export default function Login(): React.ReactNode {
                                 <Button type="primary" onClick={e => onComplete()}>Login</Button>
                             </Col>
                             <Col>
-                                <Link href="/register"><Button>Don{"&apos;"}t have an account yet?</Button></Link>
+                                <Link href="/register"><Button>Don&apos;t have an account yet?</Button></Link>
                             </Col>
                         </Row>
                     </MyFormItemGroup>
