@@ -21,7 +21,8 @@
     "react": "^18",
     "react-dom": "^18",
     "react-error-boundary": "^4.0.13",
-    "redux-actions": "^3.0.0"
+    "redux-actions": "^3.0.0",
+    "remixicons": "^1.0.0"
   },
   "devDependencies": {
     "@types/node": "^20",
