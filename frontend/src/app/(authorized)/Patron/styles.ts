@@ -14,9 +14,7 @@ export const useStyles = createStyles(({css, cx}) => ({
         background: grey;*/
     `,
     left: css`
-        width: 100%;
-        /*border: 1px solid red;*/
-        background: #00A0AD;
+
     `,
     border: css`
         border: 1px solid blue;
@@ -28,7 +26,15 @@ export const useStyles = createStyles(({css, cx}) => ({
         position: sticky;
         top: 0;
     `,
+    "left-menu": css`
+        background:  #d0e1e1;
+        height: 100vh;
+    `,
     padding: css`
-        padding: 20px;
+        padding-right: 20px;
+        padding-left: 20px;
+    `, 
+    layout: css`
+        height: 100%;
     `
 }));

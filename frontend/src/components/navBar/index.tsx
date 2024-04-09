@@ -9,6 +9,8 @@ import Link from "next/link";
 import Image from "next/image";
 import AuthContext from "@/providers/authProvider/context";
 import BookContext from "@/providers/bookProvider/context";
+import { UserOutlined } from "@ant-design/icons";
+import 'remixicon/fonts/remixicon.css'
 
 const outItems: MenuProps['items'] = [
     {
@@ -64,26 +66,23 @@ const NavBar: React.FC = () => {
     if (accessToken) {
         const inItems: MenuProps['items'] = [
             {
-                label: <Link href={"/"}>Home</Link>, 
+                label: <Link href={"/"}></Link>, 
                 key: 'home',
-                icon: <Image src="/assets/images/LMS-logo1-transparent.png" width={30} height={30} alt="logo"/>
+                icon: <Image src="/assets/images/LMS-hq.png" width={50} height={50} alt="logo"/>
             }
         ];
 
         return (
-            <Flex className={cx(styles.flex, styles.sticky)} justify="space-between" align="center">
-                <Menu 
-                    mode="horizontal"
-                    items={inItems}
-                />
+            <Flex  style={{background: "#d0e1e1", paddingRight: 20, width: "96vw"}} className={cx(styles.flex, styles.sticky)} justify="space-between" align="center">
+                <Link href={"/"}><Image src="/assets/images/LMS-hq.png" width={50} height={50} alt="logo"/></Link>
                 <Search 
                     className={cx(styles.search)} 
-                    placeholder="search for book" 
+                    placeholder="Search" 
                     onChange={e => handleSearch(e.target.value)} 
                     onSearch={onSearch} 
                 />
                 <span>
-                    <Button style={{borderRadius: "50%"}} onClick={showDrawer}>Profile</Button>
+                    <Button style={{borderRadius: "50%"}} onClick={showDrawer} icon={<UserOutlined />}></Button>
                     <Drawer
                         title="Profile information"
                         placement={"right" as DrawerProps["placement"]}
@@ -91,11 +90,14 @@ const NavBar: React.FC = () => {
                         onClose={onClose}
                         open={open}
                         key={"right"}
+                        style={{
+                            background: "#d0e1e1"
+                        }}
                     >
                         {/* Show user information */}
                         <p>{user?.fullName}</p>
                         <p>{user?.emailAddress}</p>
-                        <p>{JSON.stringify(user?.roleNames)}</p>
+                        <p>{user?.roleNames[0]}</p>
                         <hr />
                         <Button onClick={logout}>Logout</Button>
                     </Drawer>

@@ -40,8 +40,10 @@ export interface BOOK_STATE_TYPE {
     isPending: boolean;
     isSuccess: boolean;
     isError: boolean;
+
     books: BookDataType[] | undefined;
     book?: BookDataType;
+    
     searchTerm: string;
     searchBooks?: SearchBookType;
 }

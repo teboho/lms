@@ -7,7 +7,7 @@ import BookContext, { BookType } from "@/providers/bookProvider/context";
 import CategoryContext from "@/providers/categoryProvider/context";
 import { PreferenceContext, PreferenceType } from "@/providers/preferenceProvider/context";
 import Utils from "@/utils";
-import { Card, Col, Row, Table, theme } from 'antd';
+import { Card, Col, Row, Table, theme, Typography } from 'antd';
 import { useContext, useEffect, useMemo, useState } from "react"; 
 import { jwtDecode } from "jwt-decode";
 import Link from "next/link";
@@ -50,10 +50,10 @@ const Page = (): React.ReactNode => {
             }
         }
     }, [preferenceData]);
-    
+    const { Title } = Typography;
     return (
         <div>
-            <h1>Preferences</h1>
+            <Title>Preferences</Title>
             {preferences ? (
                 <Row gutter={16}>
                 <Col span={8}>

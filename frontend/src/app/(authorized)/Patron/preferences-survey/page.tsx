@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useMemo, useContext } from "react";
 import withAuth from "@/hocs/withAuth";
-import { Button, List, message, Steps, theme, Input, Space, ConfigProvider } from 'antd';
+import { Button, List, message, Steps, theme, Input, ConfigProvider, Typography } from 'antd';
 import AuthContext from "@/providers/authProvider/context";
 import BookContext from "@/providers/bookProvider/context";
 import CategoryContext from "@/providers/categoryProvider/context";
@@ -28,6 +28,7 @@ for (var i = 0; i < 10; i++) {
 }
 
 const { Search } = Input;
+const  { Title } = Typography;
 
 const Page = (): React.ReactNode => {
     const { token } = theme.useToken();
@@ -203,9 +204,11 @@ const Page = (): React.ReactNode => {
         console.log(results);
         setOptions(results);
     }
-                
+           
     return (
-        <>
+        <div className={cx(styles.padding)}>
+            <Title level={1}>Add / Modify Your Preferences</Title>
+
             <div> 
                 <Search
                     placeholder="Enter book title"
@@ -213,18 +216,17 @@ const Page = (): React.ReactNode => {
                     style={{ width: 400 }}
                 />
                 {" "}
-                <Button type="primary" onClick={() => setOptions(categoryContextValue.categories)}>
+                {/* <Button type="primary" onClick={() => setOptions(categoryContextValue.categories)}>
                     Reset
-                </Button>
+                </Button> */}
             </div>
 
-            <Steps current={current} items={items} />
+            {/* <Steps current={current} items={items} /> */}
 
             {/* the choices */}
             <div style={contentStyle}>
-                <div className={cx(styles.center)}>{current >= 0 && steps[current].content}</div>
-                <br />
-                <br />
+                {/* <div className={cx(styles.center)}>{current >= 0 && steps[current].content}</div> */}
+                
                 {chosen.length < steps.length && (
                     memoOptions?.map((item, index: number) => (
                         <>
@@ -277,7 +279,7 @@ const Page = (): React.ReactNode => {
                     </List.Item>
                 )}
             />
-        </>
+        </div>
     );
 }
 

@@ -1,4 +1,3 @@
-
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 // import "./globals.css";
@@ -32,8 +31,7 @@ export default function RootLayout({
       <ConfigProvider direction="ltr"
         theme={{
           token: {
-            colorPrimary: "#004AAD",
-            
+            colorPrimary: "#004AAD",    
           },
         }}
       >
@@ -42,7 +40,7 @@ export default function RootLayout({
             <BookProvider>
               <AuthorsProvider>
                 <Layout>
-                  <Header style={{background: "white"}}>
+                  <Header style={{background: "#d0e1e1"}}>
                     <NavBar />
                   </Header>
                   <Layout>

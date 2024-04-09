@@ -16,4 +16,7 @@ export const useStyles = createStyles(({css, cx}) => ({
     padding: css`
         padding: 20px;
     `,
+    center: css`
+        text-align: center;
+    `
 }));

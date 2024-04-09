@@ -4,6 +4,7 @@ import BookContext, { BookType } from "@/providers/bookProvider/context";
 import { Button, Flex, Image, Tag, Typography } from "antd";
 import CategoryContext from "@/providers/categoryProvider/context";
 import AuthorsContext from "@/providers/authorsProvider/context";
+import { useMainStyles } from './styles';
 
 const { Paragraph } = Typography;
 
@@ -17,6 +18,7 @@ const Loan = ({ item }: { item: LoanType }): React.ReactNode => {
     const { getCategory } = useContext(CategoryContext);
     const { getAuthorById } = useContext(AuthorsContext);
     const { getReturnLoan } = useContext(LoanContext);
+    const { cx, styles } = useMainStyles();
 
     const cost = item.isOverdue ? 0.25 : 0.0;
     const book = getLocalBook(item?.bookId);
@@ -29,13 +31,28 @@ const Loan = ({ item }: { item: LoanType }): React.ReactNode => {
         getReturnLoan(id);
     }
 
+    
+    function formatDate(_date: string) {
+        let date = new Date(_date);
+        let formattedDate = `${date.toLocaleDateString()}`;
+
+        return formattedDate;
+    }
+
     return (
-        <Flex gap={50}>
+        <Flex gap={50} className={cx(styles.border, styles.padding)}>
             <div>
                 <Image
-                    width={200}
+                    className={cx(styles.image)}
                     src={book?.imageURL}
                     alt="book image"
+                    style={{
+                        borderRadius: 20,                
+                        width: 200,
+                        height: 250,
+                        objectFit: "cover",
+                        objectPosition: "50% 0%"
+                    }}
                 />
             </div>
             <div>
@@ -55,14 +72,14 @@ const Loan = ({ item }: { item: LoanType }): React.ReactNode => {
             </div>
             <div>
                 <Paragraph>
-                    Due Date: {item.dateDue}
+                    Due Date: {formatDate(item.dateDue)}
                 </Paragraph>
                 <Paragraph>
-                    Date Created: {item.dateCreated}
+                    Date Created: {formatDate(item.dateCreated)}
                 </Paragraph>
-                <Paragraph>
-                    Date Returned: {item.dateReturned}
-                </Paragraph>
+                {new Date(item.dateReturned).getFullYear() !== 1970 && (<Paragraph>
+                    Date Returned: {formatDate(item.dateReturned)}
+                </Paragraph>)}
                 <Paragraph>
                     Cost: ${cost}
                 </Paragraph>

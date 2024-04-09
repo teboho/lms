@@ -1,7 +1,7 @@
 "use client";
 import { useContext, useEffect, useState } from "react";
 import withAuth from "@/hocs/withAuth";
-import { List } from "antd";
+import { Col, List, Row, Space, Typography } from "antd";
 import BookContext from "@/providers/bookProvider/context";
 import {useStyles} from "./styles";
 import { LoanContext, LoanType } from "@/providers/loanProvider/context";
@@ -28,17 +28,18 @@ const Page = (): React.ReactNode => {
         setLoans(getLoansByPatron(patronId));   
     }, [providerLoans]);
 
+    
+
     return (
         <div className={cx(styles.padding)}>   
-            <h1>My Loans</h1>
-            <List
-                dataSource={loans}
-                renderItem={(item) => (
-                    <List.Item>
+            <Typography.Title level={2} className={cx(styles.center)}>My Loans</Typography.Title >
+            <Row gutter={16}>
+                {loans?.map((item) => (
+                    <Col key={`loan_number_${item.id}`} span={12} style={{padding: 20}}>
                         <Loan item={item} />
-                    </List.Item>
-                )}
-            />
+                    </Col>
+                ))}
+            </Row>
         </div>
     );
 }

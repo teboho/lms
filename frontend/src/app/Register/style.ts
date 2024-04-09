@@ -1,6 +1,9 @@
 import { createStyles } from 'antd-style';
 
 export const useMainStyles = createStyles(({css, cx}) => ({
+    bg: css`
+        background: #d0e1e1;
+    `,
     border: css`
         border: 1px solid #004aad;
         border-radius: 20px;
@@ -8,17 +11,14 @@ export const useMainStyles = createStyles(({css, cx}) => ({
         border-left: none;
     `,
     form: css`
-        /*border: 1px solid #004aad;*/
-        border-radius: 20px;
-        padding: 20px;
-        background: white;
+        background: #d0e1e1;
+        height: 90vh;
     `,
     sider: css`
         margin: 100px;
     `,
     "the-form": css`
         margin: 100px;
-        padding: 20px;
     `,
     "left-sider": css`
         padding: 20px;

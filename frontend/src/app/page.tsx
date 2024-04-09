@@ -22,7 +22,7 @@ export default function Welcome() {
   
   return (
     <main className={styles.main}>
-          <Flex align="center">
+          <Flex align="center" style={{background: "#d0e1e1"}}>
               <Image src={"/assets/images/book.gif"} alt="book" width={350} height={350} />
               <Flex align="center" vertical justify="center" gap={100}>
                 <div>

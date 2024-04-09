@@ -1,7 +1,7 @@
 "use client";
 import { useContext, useEffect, useMemo, useState } from "react";
 import withAuth from "@/hocs/withAuth";
-import { Button, Layout, Select, Space } from "antd";
+import { Button, Flex, Layout, Select, Space, Typography } from "antd";
 import BookContext from "@/providers/bookProvider/context";
 import {useStyles} from "./styles";
 import AuthContext from "@/providers/authProvider/context";
@@ -71,33 +71,41 @@ const Page = (): React.ReactNode => {
     ); 
     return (
         <Content className={cx(styles.content, styles.padding)}>
-            <h1>Welcome back to savvyshelf</h1>     
-            {/* antd dropdown filter by category */}
-            {chooseCategory}
-            <Button onClick={() => {
-                setCurrentBooks(books);
-                // clear search term
-                // chooseCategory.
-            }}>
-                Clear
-            </Button>
-            <Space />
-            <Select
-                style={{ width: 200, marginLeft: 20 }}
-                placeholder="Sort by"
-                onSelect={(value) => {
-                    let sortedBooks;
-                    if (value === 'name') {
-                        sortedBooks = [...currentBooks].sort((a, b) => a.name.localeCompare(b.name));
-                    } else if (value === 'year') {
-                        sortedBooks = [...currentBooks].sort((a, b) => a.year - b.year);
-                    }
-                    setCurrentBooks(sortedBooks);
-                }}
-            >
-                <Option value="name">Name</Option>
-                <Option value="year">Year</Option>
-            </Select>
+            <Flex justify="space-between" align="stretch">
+                <Typography.Title level={1}>Welcome back to savvyshelf</Typography.Title>     
+                <div
+                    style={{
+                        paddingTop: 35,
+                        bottom:  0
+                    }}
+                >
+                    {chooseCategory}
+                    <Button onClick={() => {
+                        setCurrentBooks(books);
+                        // clear search term
+                        // chooseCategory.
+                    }}>
+                        Clear
+                    </Button>
+                    <Space />
+                    <Select
+                        style={{ width: 200, marginLeft: 20 }}
+                        placeholder="Sort by"
+                        onSelect={(value) => {
+                            let sortedBooks;
+                            if (value === 'name') {
+                                sortedBooks = [...currentBooks].sort((a, b) => a.name.localeCompare(b.name));
+                            } else if (value === 'year') {
+                                sortedBooks = [...currentBooks].sort((a, b) => a.year - b.year);
+                            }
+                            setCurrentBooks(sortedBooks);
+                        }}
+                    >
+                        <Option value="name">Name</Option>
+                        <Option value="year">Year</Option>
+                    </Select>    
+                </div>        
+            </Flex>
 
             <SearchResults books={memoBooks} searchTerm={searchTerm} />
         </Content>

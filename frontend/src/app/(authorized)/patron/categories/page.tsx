@@ -14,7 +14,7 @@ const { Title, Paragraph } = Typography;
 
 const Categories = (): React.ReactNode => {
     const { token } = theme.useToken();
-    const { categories, category, getAllCategories, getCategory } = useContext(CategoryContext);
+    const { categories, getAllCategories, getCategory } = useContext(CategoryContext);
     const { styles, cx } = useStyles();
 
     useEffect(() => {
@@ -24,38 +24,41 @@ const Categories = (): React.ReactNode => {
     }, []);
             
     return (
-        <>
-            <div>
-                <Title level={3}>Categories</Title>
+        <div>
+            <div style={{textAlign: "center"}}>
+                <Title level={2}>Categories</Title>
                 <Paragraph>
                     This is the categories page
                 </Paragraph>
-                {/* Table of categories */}
-                <List
-                    itemLayout="horizontal"
-                    dataSource={categories}
-                    renderItem={
-                        (category: CategoryType) => (
-                            <List.Item
-                                className={cx(styles.hoverable, styles.padding)}
-                            >
-                                <List.Item.Meta
-                                    title={category?.name}
-                                    description={category?.description}
-                                />
+            </div>
+            {/* Table of categories */}
+            <List
+                itemLayout="horizontal"
+                dataSource={categories}
+                renderItem={
+                    (category: CategoryType, index: number) => (
+                        <List.Item
+                            id={`category_${index}}`}
+                            className={cx(styles.hoverable, styles.athing)}
+                        >
+                            <List.Item.Meta
+                                title={category?.name}
+                                description={category?.description}
+                            />
+                            <div style={{textAlign: "center"}}>
                                 <Paragraph>
                                     Location: {category?.location}
                                 </Paragraph>
-                                {/* Button that view books of this category */}
-                                {/* <Link href={`/patron/books?categoryId=${category?.id}`}>
-                                    <Button type="primary">View Books</Button>
-                                </Link> */}
-                            </List.Item>
-                        )
-                    }
-                />
-            </div>
-        </>
+                            </div>
+                            {/* Button that view books of this category */}
+                            {/* <Link href={`/patron/books?categoryId=${category?.id}`}>
+                                <Button type="primary">View Books</Button>
+                            </Link> */}
+                        </List.Item>
+                    )
+                }
+            />
+        </div>
     );
 }
 
