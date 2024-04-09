@@ -40,7 +40,7 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 <img src="assets/admin-home.png" alt="Admin Home" width="500" height="auto"><em>Admin Home</em>
 <img src="assets/admin-categories.png" alt="Admin categories" width="500" height="auto"><em>Admin cateories</em>
 
-<img src="assets/Admin-profile.png" alt="Admin profile" width="500" height="auto"><em>Admin profile</em>
+<img src="assets/admin-profile.png" alt="Admin profile" width="500" height="auto"><em>Admin profile</em>
 <img src="assets/admin-loans-1.png" alt="admin loans 1" width="500" height="auto">  <em>Admin loans 1</em>
 
 <img src="assets/admin-loans-2.png" alt="admin loans 2" width="500" height="auto">  <em>Admin loans 2</em>
