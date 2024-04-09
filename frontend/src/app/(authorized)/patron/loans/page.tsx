@@ -4,9 +4,11 @@ import withAuth from "@/hocs/withAuth";
 import { Col, List, Row, Space, Typography } from "antd";
 import BookContext from "@/providers/bookProvider/context";
 import {useStyles} from "./styles";
+import style from "./loans.module.css";
 import { LoanContext, LoanType } from "@/providers/loanProvider/context";
 import Utils from "@/utils";
 import Loan from "@/components/loan";
+
 
 const Page = (): React.ReactNode => {
     const { styles, cx } = useStyles();
@@ -28,11 +30,9 @@ const Page = (): React.ReactNode => {
         setLoans(getLoansByPatron(patronId));   
     }, [providerLoans]);
 
-    
-
     return (
-        <div className={cx(styles.padding)}>   
-            <Typography.Title level={2} className={cx(styles.center)}>My Loans</Typography.Title >
+        <div className={cx(styles.padding, styles.cardSize)}>   
+            <Typography.Title level={1} className={cx(styles.center)}>My Loans</Typography.Title >
             <Row gutter={16}>
                 {loans?.map((item) => (
                     <Col key={`loan_number_${item.id}`} span={12} style={{padding: 20}}>

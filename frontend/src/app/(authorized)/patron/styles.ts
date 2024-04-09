@@ -14,7 +14,7 @@ export const useStyles = createStyles(({css, cx}) => ({
         background: grey;*/
     `,
     left: css`
-
+        height: 100;
     `,
     border: css`
         border: 1px solid blue;

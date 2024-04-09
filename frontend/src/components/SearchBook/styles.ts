@@ -17,4 +17,7 @@ export const useStyles = createStyles(({css, cx}) => ({
         height: 500px;
         max-height: 500px;
     `,
+    bgblue: css`
+        background:  #d0e1e1;
+    `
 }));

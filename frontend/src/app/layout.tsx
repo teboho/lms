@@ -40,7 +40,7 @@ export default function RootLayout({
             <BookProvider>
               <AuthorsProvider>
                 <Layout>
-                  <Header style={{background: "#d0e1e1"}}>
+                  <Header style={{position: "sticky", width: "100vw" , top: 0, zIndex: 1000, background: "#d0e1e1"}}>
                     <NavBar />
                   </Header>
                   <Layout>

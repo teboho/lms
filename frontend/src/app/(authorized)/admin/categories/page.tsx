@@ -24,33 +24,31 @@ const Categories = (): React.ReactNode => {
 
 
     return (
-        <>
-            <div>
-                <Title level={3}>Categories</Title>
-                <Paragraph>
-                    This is the categories page
-                </Paragraph>
-                {/* Table of categories */}
-                <List
-                    itemLayout="horizontal"
-                    dataSource={categories}
-                    renderItem={
-                        (category: CategoryType) => (
-                            <List.Item>
-                                <List.Item.Meta
-                                    title={category?.name}
-                                    description={category?.description}
-                                />
-                                {/* Button that view books of this category */}
-                                <Link href={`/admin/books?categoryId=${category?.id}`}>
-                                    <Button type="primary">View Books</Button>
-                                </Link>
-                            </List.Item>
-                        )
-                    }
-                />
-            </div>
-        </>
+        <div>
+            <Title level={3}>Categories</Title>
+            <Paragraph>
+                This is the categories page
+            </Paragraph>
+            {/* Table of categories */}
+            <List
+                itemLayout="horizontal"
+                dataSource={categories}
+                renderItem={
+                    (category: CategoryType) => (
+                        <List.Item>
+                            <List.Item.Meta
+                                title={category?.name}
+                                description={category?.description}
+                            />
+                            {/* Button that view books of this category */}
+                            <Link href={`/admin/books?categoryId=${category?.id}`}>
+                                <Button type="primary">View Books</Button>
+                            </Link>
+                        </List.Item>
+                    )
+                }
+            />
+        </div>
     );
 }
 

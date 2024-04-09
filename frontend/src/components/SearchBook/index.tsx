@@ -86,7 +86,7 @@ const SearchBook: React.FC<BookProps> = ({ bookStuff }) => {
             hoverable
             style={{ width: 240 }}
             title={book.name}
-            className={cx(styles.maxHeight)}
+            className={cx(styles.maxHeight, styles.bgblue)}
         >
             <Image alt={book.name} src={book.imageURL ? book.imageURL : "/assets/images/generic.jpg"} style={{height: 150}}/>
             <Paragraph>Type: {BookType[book.type]}, Published: {book.year}</Paragraph>
@@ -106,7 +106,7 @@ const SearchBook: React.FC<BookProps> = ({ bookStuff }) => {
                 okText="Add book"
                 cancelText="Cancel"
             >
-                <Button type="primary" >Add</Button>
+                <Button type="primary">Add</Button>
             </Popconfirm>
         </Card>
     );    

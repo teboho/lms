@@ -25,6 +25,7 @@ function getItem(
       children,
       label,
       type,
+      onclick
     } as MenuItem;
 }
 
@@ -52,7 +53,7 @@ const Layout = ({ children }: { children: React.ReactNode }): React.ReactNode =>
                 <Menu
                     onClick={() => {}}
                     items={patronMenu}
-                    className={cx(styles["left-menu"])}
+                    className={cx(styles.sticky, styles["left-menu"])}
                 />
             </Sider>
             <AntdLayout className={cx(styles.right, styles.padding)}>

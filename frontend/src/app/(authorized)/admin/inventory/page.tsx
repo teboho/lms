@@ -51,7 +51,7 @@ const Inventory = (): React.ReactNode => {
     return (
         <>
             <div>
-                <Title level={3}>Inventory</Title>
+                <Title level={2}>Inventory</Title>
                 <Paragraph>
                     This is the inventory page
                 </Paragraph>

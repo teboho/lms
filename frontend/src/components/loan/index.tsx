@@ -40,7 +40,7 @@ const Loan = ({ item }: { item: LoanType }): React.ReactNode => {
     }
 
     return (
-        <Flex gap={50} className={cx(styles.border, styles.padding)}>
+        <Flex gap={50} className={cx(styles.border, styles.padding, styles["height"])}>
             <div>
                 <Image
                     className={cx(styles.image)}

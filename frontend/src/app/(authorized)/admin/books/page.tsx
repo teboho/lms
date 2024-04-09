@@ -26,7 +26,7 @@ const Page = (): React.ReactNode => {
     return (
         <>
             <div>
-                <Title level={3}>Inventory</Title>
+                <Title level={2}>Inventory</Title>
                 <Paragraph>
                     This is the inventory page for category: {getCategory(params.get("categoryId"))?.name}
                 </Paragraph>

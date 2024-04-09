@@ -1,6 +1,6 @@
 'use client';
 import React, { useContext, useMemo, useState } from "react";
-import { Flex, Input, Button, Drawer } from "antd";
+import { Flex, Input, Button, Drawer, Avatar } from "antd";
 import type { DrawerProps, MenuProps } from "antd";
 import Menu from "antd/lib/menu/menu";
 import  { useStyles } from "./styles";
@@ -11,6 +11,7 @@ import AuthContext from "@/providers/authProvider/context";
 import BookContext from "@/providers/bookProvider/context";
 import { UserOutlined } from "@ant-design/icons";
 import 'remixicon/fonts/remixicon.css'
+import logo from '@/assets/LMS-logo1-transparent.png';
 
 const outItems: MenuProps['items'] = [
     {
@@ -68,13 +69,13 @@ const NavBar: React.FC = () => {
             {
                 label: <Link href={"/"}></Link>, 
                 key: 'home',
-                icon: <Image src="/assets/images/LMS-hq.png" width={50} height={50} alt="logo"/>
+                icon: <Avatar src="/assets/images/LMS-hq.png" size={"large"} alt="logo"/>
             }
         ];
 
         return (
-            <Flex  style={{background: "#d0e1e1", paddingRight: 20, width: "96vw"}} className={cx(styles.flex, styles.sticky)} justify="space-between" align="center">
-                <Link href={"/"}><Image src="/assets/images/LMS-hq.png" width={50} height={50} alt="logo"/></Link>
+            <Flex style={{ background: "#d0e1e1", marginLeft: 0, paddingLeft: 20, paddingRight: 20, width: "96vw", height: 60 }} className={cx(styles.flex, styles.sticky)} justify="space-between" align="center">
+                <div style={{paddingTop: 20}}><Link href={"/"}><Image src={"/assets/images/LMS-hq.png"} width={50} height={50} alt="logo"/></Link></div>
                 <Search 
                     className={cx(styles.search)} 
                     placeholder="Search" 

@@ -3,8 +3,10 @@ import { ReactNode, useState, useEffect, useMemo, useContext } from "react";
 import { useSearchParams } from "next/navigation";
 
 import withAuth from "@/hocs/withAuth";
-import { theme } from 'antd';
+import { theme, Typography } from 'antd';
 import AuthContext from "@/providers/authProvider/context";
+
+const { Title } = Typography;
 
 const Payments = (): React.ReactNode => {
     const { token } = theme.useToken();
@@ -26,7 +28,7 @@ const Payments = (): React.ReactNode => {
 
     return (
         <>
-           <h1>Patron information</h1>
+            <Title>Patron information</Title>
             {patronId && <h2>Patron ID: {patronId}</h2>}
             {/* fill the width of the page with patron details */}
             <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>

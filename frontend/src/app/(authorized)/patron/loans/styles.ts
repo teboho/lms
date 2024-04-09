@@ -7,6 +7,7 @@ export const useStyles = createStyles(({css, cx}) => ({
     content: css`
         width: 100%;
         /*border: 1px solid red;*/
+        
     `,
     right: css`
         width: 100%;
@@ -18,5 +19,8 @@ export const useStyles = createStyles(({css, cx}) => ({
     `,
     center: css`
         text-align: center;
+    `,
+    cardSize: css`
+        height: 500px;
     `
 }));

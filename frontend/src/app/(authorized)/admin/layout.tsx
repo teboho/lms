@@ -25,6 +25,7 @@ function getItem(
       children,
       label,
       type,
+      onclick
     } as MenuItem;
 }
 
@@ -61,11 +62,11 @@ const AdminLayout = ({ children }: { children: React.ReactNode }): React.ReactNo
 
     return (
         <Layout>
-            <Sider style={{background: "white"}} className={cx(styles.right)} width={"25%"}>
+            <Sider style={{background: "#d0e1e1"}} className={cx(styles.sticky, styles.right)} width={"250"}>
                 <Menu
                     onClick={() => {}}
                     items={adminMenu}
-                    className={cx(styles.sticky)}
+                    className={cx(styles.sticky, styles.bgblue)}
                     mode="inline"
                 />
             </Sider>

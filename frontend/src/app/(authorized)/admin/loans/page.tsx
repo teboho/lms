@@ -5,12 +5,11 @@ import { Button, Calendar, Popover, Table, Tag, theme, Typography, Segmented, Ta
 import BookContext from "@/providers/bookProvider/context";
 import { LoanContext } from "@/providers/loanProvider/context";
 import { useStyles } from "./styles";
-const { Title } = Typography;
 import { useSearchParams } from "next/navigation";  
-
 import { type Dayjs } from "dayjs";
 import ViewPatron from "@/components/viewPatron";
 
+const { Title, Paragraph } = Typography;
 
 const Page = (): React.ReactNode => {
     const { token } = theme.useToken();
@@ -76,7 +75,7 @@ const Page = (): React.ReactNode => {
                 <li key={`loan_for_${loan?.bookId}`}>
                     <div className="events-content">
                         <Popover content={dateContent} title="Book Details">
-                            <Tag color={loan?.isReturned ? "blue" : "red"}>{book?.name}</Tag>
+                            <Tag  style={{ width: "90%", textWrap: "wrap"}} color={loan?.isReturned ? "blue" : "red"}>{book?.name}</Tag>
                         </Popover>
                     </div>
                 </li>
@@ -149,6 +148,14 @@ const Page = (): React.ReactNode => {
         putLoan(_loan);
     }
 
+    
+    function formatDate(_date: string) {
+        let date = new Date(_date);
+        let formattedDate = `${date.toLocaleDateString()}`;
+
+        return formattedDate;
+    }
+
     const data = memoLoans?.map((loan) => {
         const book = getBookById(loan?.bookId);
         // const patron = Utils.getPatronUserInfo(loan?.patronId);
@@ -158,9 +165,9 @@ const Page = (): React.ReactNode => {
             id: loan.id,
             book: book?.name,
             patron: (<Popover content={content} title="Patron details"><Button>{loan?.patronId}</Button></Popover>),
-            dateCreated: loan.dateCreated,
-            dateDue: loan.dateDue,
-            dateReturned: loan.dateReturned,
+            dateCreated: formatDate(loan.dateCreated),
+            dateDue: formatDate(loan.dateDue),
+            dateReturned: formatDate(loan.dateReturned),
             status: loan?.isReturned ? (<Tag color="blue">{"Returned"}</Tag>) : (<Tag color="red">{"Not Returned"}</Tag>),
             isOverdue: loan?.isOverdue ? "Overdue" : "Not Overdue",
             confirm: loan?.confirmed ? 
@@ -211,18 +218,17 @@ const Page = (): React.ReactNode => {
     }
 
     return (
-        <>
-            <div>
-                <Title level={3}>Loans( {loans?.length} )</Title>
-                <Segmented<string>
-                    options={options}
-                    onChange={onSegmentOptionChange}
-                />
-                <Table columns={columns} dataSource={data} />
-                <Typography.Title level={3}>Calendar</Typography.Title>
-                <Calendar className={cx(styles.padding)} cellRender={cellRender} />
-            </div>
-        </>
+        <div>
+            <Title level={2}>Loans ({loans?.length} in total)</Title>
+            <Segmented<string>
+                options={options}
+                onChange={onSegmentOptionChange}
+            />
+            <Table columns={columns} dataSource={data} />
+            <Title level={2}>Calendar</Title>
+            <Paragraph>Expected book returns</Paragraph>
+            <Calendar className={cx(styles.padding)} cellRender={cellRender} />
+        </div>
     );
 }
 
