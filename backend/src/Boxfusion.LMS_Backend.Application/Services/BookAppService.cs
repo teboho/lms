@@ -108,18 +108,69 @@ namespace Boxfusion.LMS_Backend.Services
             };
         }
 
-        public List<Book> SearchForBook(string term)
+        public List<Book> SearchForBookByName(string term)
         {
             var books = _bookRepository.GetAll().Where(a => (a.Name.ToLower().Contains(term.ToLower()))).ToList();
             return books;
         }
+        public List<Book> SearchForBookByDescription(string term)
+        {
+            var books = _bookRepository.GetAll().Where(a => (a.Description.ToLower().Contains(term.ToLower()))).ToList();
+            return books;
+        }
+
+        // search by category
+        public List<Book> SearchForBookByCategory(string term)
+        {
+            var books = _bookRepository.GetAll();
+            var categories = _categoryRepository.GetAll().Where(a => a.Name.ToLower().Contains(term.ToLower()));
+            var booksByCategory = from book in books
+                                join category in categories on book.CategoryId equals category.Id
+                                select book;
+            return booksByCategory.ToList();
+        }
+
+        public List<Book> SearchForBookByAuthor(string term)
+        {
+            var books = _bookRepository.GetAll();
+            var authors = _authorRepository.GetAll().Where(a => (a.FirstName.ToLower().Contains(term.ToLower()) || a.LastName.ToLower().Contains(term.ToLower())));
+            var booksByAuthor = from book in books
+                                join author in authors on book.AuthorId equals author.Id
+                                select book;
+            return booksByAuthor.ToList();
+        }
+
         public async Task<List<Book>> GetSearchBooks(string name)
         {
-            return SearchForBook(name);
+            if (IsISBNSearch(name))
+            {
+                var books = _bookRepository.GetAll().Where(a => a.ISBN == name).ToList();
+                return books;
+            }
+
+            var searchByNameResults = SearchForBookByName(name);
+            
+            // search by description
+            var searchByDescriptionResults = SearchForBookByDescription(name);
+            searchByNameResults.AddRange(searchByDescriptionResults);
+            // search by author
+            var searchByAuthorResults = SearchForBookByAuthor(name);
+            searchByNameResults.AddRange(searchByAuthorResults);
+            // search by category
+            var searchByCategoryResults = SearchForBookByCategory(name);
+            searchByNameResults.AddRange(searchByCategoryResults);
+
+            return searchByNameResults;
         }
+
+        private bool IsISBNSearch(string term)
+        {
+            return (term.Length == 13 && term.All(char.IsDigit)) || (term.Length == 10 && term.All(char.IsDigit)) || (term.Length == 10 && term.ElementAt(9) == 'X');
+        }
+
         public async Task<List<Book>> GetSearchGoogleBooks(string name)
         {
-            return SearchForBook(name);
+            return SearchForBookByName(name);
         }
 
         /// <summary>
