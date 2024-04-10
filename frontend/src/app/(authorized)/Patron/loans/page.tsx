@@ -30,7 +30,7 @@ const Page = (): React.ReactNode => {
     }, [providerLoans]);
 
     return (
-        <div className={cx(styles.content, styles.padding, styles.cardSize)}>   
+        <div style={{height: "100%"}} className={cx(styles.content, styles.padding, styles.cardSize)}>   
             <Typography.Title level={1} className={cx(styles.center)}>My Loans</Typography.Title >
             <Row gutter={16}>
                 {loans?.map((item) => (

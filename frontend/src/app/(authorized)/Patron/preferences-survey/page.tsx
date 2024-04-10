@@ -1,21 +1,13 @@
 "use client";
 import { useState, useEffect, useMemo, useContext } from "react";
 import withAuth from "@/hocs/withAuth";
-import { Button, List, message, Steps, theme, Input, ConfigProvider, Typography } from 'antd';
+import { Button, List, message, Steps, theme, Input, ConfigProvider, Typography, Flex } from 'antd';
 import AuthContext from "@/providers/authProvider/context";
-import BookContext from "@/providers/bookProvider/context";
 import CategoryContext from "@/providers/categoryProvider/context";
 import Utils from "@/utils";
 import { useStyles } from "./styles";
-import { PreferenceContext } from "@/providers/preferenceProvider/context";
+import { PreferenceContext, PreferenceType } from "@/providers/preferenceProvider/context";
 import { jwtDecode } from "jwt-decode";
-
-export type Preferences = {
-    primaryCategoryId: number;
-    secondaryCategoryId: number;
-    tertiaryCategoryId: number;
-    patronId: number;
-}
 
 const cats: {name: string, id: number}[] = [];
 for (var i = 0; i < 10; i++) {
@@ -36,9 +28,8 @@ const Page = (): React.ReactNode => {
     const [chosen, setChosen] = useState([]);  
     const [deleted, setDeleted] = useState([]);  
     const {userObj, getUserId} = useContext(AuthContext);
-    const bookContextObject = useContext(BookContext);
     const categoryContextValue = useContext(CategoryContext);
-    const { getPreferenceData, getPreferenceByPatron, preferenceData } = useContext(PreferenceContext);
+    const { postPreference, getPreferenceByPatron, preferenceData } = useContext(PreferenceContext);
     const [_options, setOptions] = useState(null);
     const {styles, cx} = useStyles();
 
@@ -113,13 +104,13 @@ const Page = (): React.ReactNode => {
     }
 
     const savePreferences = (): void => {
-        var prefs: Preferences = {
+        var prefs: PreferenceType = {
             patronId: user?.id,
             primaryCategoryId: chosen[0].id,
             secondaryCategoryId: chosen[1].id,
             tertiaryCategoryId: chosen[2].id
         };
-        bookContextObject.savePreferences({
+        postPreference({
             ...prefs
         });
     }
@@ -202,7 +193,7 @@ const Page = (): React.ReactNode => {
                 {" "}
             </div>
 
-            <div style={contentStyle}>
+            <Flex align="center" justify="center" wrap="wrap" style={{ width : "100%" }}>
                 {chosen.length < steps.length && (
                     memoOptions?.map((item, index: number) => (
                         <div key={`button_${index}`}>
@@ -224,7 +215,7 @@ const Page = (): React.ReactNode => {
                         </div>
                     ))
                 )}
-            </div>
+            </Flex>
             
             <div style={{ marginTop: 24 }}>
                 {current === steps.length - 1 && (

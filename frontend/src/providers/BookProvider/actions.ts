@@ -19,6 +19,10 @@ export const BookActionEnums = {
     PostBookSuccess: "POST_BOOK_SUCCESS",
     PostBookError: "POST_BOOK_ERROR",
 
+    PostPreferenceRequest: "POST_PREFERENCE_REQUEST",
+    PostPreferenceSuccess: "POST_PREFERENCE_SUCCESS",
+    PostPreferenceError: "POST_PREFERENCE_ERROR",
+
     SetSearchTerm: "SET_SEARCH_TERM"
 }
 
@@ -131,4 +135,30 @@ export const postBookSuccessAction = createAction(
 export const postBookErrorAction = createAction(
     BookActionEnums.PostBookError,
     () => ({ isSuccess: false, isPending: false, isError: true, book: undefined })
+);
+
+/**
+ * Sets the isPending to true
+ * The results array is not there yet
+ */
+export const postPreferenceRequestAction = createAction(
+    BookActionEnums.PostPreferenceRequest,
+    () => ({ isSuccess: false, isPending: true, isError: false })
+);
+
+/**
+ * Sets the isSuccess to true but then all else to false
+ * after the book has been posted and saved to the database
+ */
+export const postPreferenceSuccessAction = createAction(
+    BookActionEnums.PostPreferenceSuccess,
+    () => ({ isSuccess: true, isPending: false, isError: false })
+);
+
+/**
+ * Sets the isError to true but then all else to false
+ */
+export const postPreferenceErrorAction = createAction(
+    BookActionEnums.PostPreferenceError,
+    () => ({ isSuccess: false, isPending: false, isError: true })
 );

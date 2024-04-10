@@ -17,9 +17,9 @@ const { Option } = Select;
 const Page = (): React.ReactNode => {
     const { userObj } = useContext(AuthContext);
     const { books, getAll: getAllBooks , searchTerm} = useContext(BookContext);
-    const { inventoryItems, getAll, getInventory } = useContext(InventoryContext);
-    const { categories, getCategory, getAllCategories } = useContext(CategoryContext);
-    const { getAuthorById, getAuthors } = useContext(AuthorsContext);
+    const { getAll } = useContext(InventoryContext);
+    const { categories, getAllCategories } = useContext(CategoryContext);
+    const { getAuthors } = useContext(AuthorsContext);
     const { styles, cx } = useStyles();
     const [isLoading, setIsLoading] = useState(true);
 
@@ -46,7 +46,10 @@ const Page = (): React.ReactNode => {
     }, [books]);
 
     const user = useMemo(() => userObj, [userObj]);
-    let memoBooks = useMemo(() => { 
+    let memoBooks = useMemo(() => {
+        if (currentBooks && currentBooks.length > 0) {
+            setIsLoading(false);
+        }
         return currentBooks;
     }, [currentBooks]);
 
@@ -106,7 +109,7 @@ const Page = (): React.ReactNode => {
                     </Select>    
                 </div>        
             </Flex>
-            {isLoading && <Image src={"/assets/images/book-op.gif"} alt="book" width={350} height={350} />}
+            {isLoading && <Image src={"/assets/images/book-op.gif"} alt="book" width={350} height={350} style={{margin: "0 auto"}} />}
             {memoBooks && <SearchResults books={memoBooks} searchTerm={searchTerm} /> }
         </Content>
     );

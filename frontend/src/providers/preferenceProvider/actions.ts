@@ -1,19 +1,19 @@
 "use client";
 import { createAction } from "redux-actions";
-import { Preference_CONTEXT_STATE_TYPE, PreferenceType } from "./context";
+import { PreferenceContextStateType, PreferenceType } from "./context";
 
 export const PreferenceActionEnums = {
-    GetPreferenceRequest: "GET_Preference_REQUEST",
-    GetPreferenceSuccess: "GET_Preference_SUCCESS",
-    GetPreferenceError: "GET_Preference_ERROR",
+    GetPreferenceRequest: "GET_PREFERENCE_REQUEST",
+    GetPreferenceSuccess: "GET_PREFERENCE_SUCCESS",
+    GetPreferenceError: "GET_PREFERENCE_ERROR",
 
-    GetPreferenceDataRequest: "GET_Preference_DATA_REQUEST",
-    GetPreferenceDataSuccess: "GET_Preference_DATA_SUCCESS",
-    GetPreferenceDataError: "GET_Preference_DATA_ERROR",
+    GetPreferenceDataRequest: "GET_PREFERENCE_DATA_REQUEST",
+    GetPreferenceDataSuccess: "GET_PREFERENCE_DATA_SUCCESS",
+    GetPreferenceDataError: "GET_PREFERENCE_DATA_ERROR",
 
-    PostPreferenceRequest: "POST_Preference_REQUEST",
-    PostPreferenceSuccess: "POST_Preference_SUCCESS",
-    PostPreferenceError: "POST_Preference_ERROR",
+    PostPreferenceRequest: "POST_PREFERENCE_REQUEST",
+    PostPreferenceSuccess: "POST_PREFERENCE_SUCCESS",
+    PostPreferenceError: "POST_PREFERENCE_ERROR",
 }
 
 /**
@@ -22,7 +22,7 @@ export const PreferenceActionEnums = {
  */
 export const getPreferenceRequestAction = createAction(
     PreferenceActionEnums.GetPreferenceRequest,
-    () => ({ isSuccess: false, isInProgress: true, isError: false, preference: undefined, preferenceData: undefined})
+    () => ({ isSuccess: false, isInProgress: true, isError: false, preference: undefined })
 )
 
 /**
@@ -30,7 +30,7 @@ export const getPreferenceRequestAction = createAction(
  */
 export const getPreferenceSuccessAction = createAction(
     PreferenceActionEnums.GetPreferenceSuccess,
-    (preference: PreferenceType): any => ({ isSuccess: true, isInProgress: false, isError: false, preference, preferenceData: undefined })
+    (preference: PreferenceType) => ({ isSuccess: true, isInProgress: false, isError: false, preference })
 );
 
 /**
@@ -38,16 +38,16 @@ export const getPreferenceSuccessAction = createAction(
  */
 export const getPreferenceErrorAction = createAction(
     PreferenceActionEnums.GetPreferenceError,
-    () => ({ isSuccess: false, isInProgress: false, isError: true, preference: undefined, preferenceData: undefined})
+    () => ({ isSuccess: false, isInProgress: false, isError: true, preference: undefined })
 );
 
 /**
  * Sets the isInProgress to true
  * The results array is not there yet
  */
-export const getPreferenceDataRequestAction = createAction(
+export const getPreferenceDataRequestAction = createAction<PreferenceContextStateType>(
     PreferenceActionEnums.GetPreferenceDataRequest,
-    () => ({ isSuccess: false, isInProgress: true, isError: false, preference: undefined, preferenceData: undefined})
+    () => ({ isSuccess: false, isInProgress: true, isError: false, preferenceData: undefined})
 )
 
 /**
@@ -55,7 +55,7 @@ export const getPreferenceDataRequestAction = createAction(
  */
 export const getPreferenceDataSuccessAction = createAction(
     PreferenceActionEnums.GetPreferenceDataSuccess,
-    (preferenceData: PreferenceType[]): any => ({ isSuccess: true, isInProgress: false, isError: false, preference: undefined, preferenceData })
+    (preferenceData: PreferenceType[]) => ({ isSuccess: true, isInProgress: false, isError: false, preferenceData })
 );
 
 /**
@@ -63,7 +63,7 @@ export const getPreferenceDataSuccessAction = createAction(
  */
 export const getPreferenceDataErrorAction = createAction(
     PreferenceActionEnums.GetPreferenceDataError,
-    () => ({ isSuccess: false, isInProgress: false, isError: true, preference: undefined, preferenceData: undefined})
+    () => ({ isSuccess: false, isInProgress: false, isError: true, preferenceData: undefined})
 );
 
 /**
@@ -72,7 +72,7 @@ export const getPreferenceDataErrorAction = createAction(
  */
 export const postPreferenceRequestAction = createAction(
     PreferenceActionEnums.PostPreferenceRequest,
-    () => ({ isSuccess: false, isInProgress: true, isError: false, preference: undefined, preferenceData: undefined})
+    () => ({ isSuccess: false, isInProgress: true, isError: false, preference: undefined })
 );
 
 /**
@@ -80,7 +80,7 @@ export const postPreferenceRequestAction = createAction(
  */
 export const postPreferenceSuccessAction = createAction(
     PreferenceActionEnums.PostPreferenceSuccess,
-    (preference: PreferenceType): any => ({ isSuccess: true, isInProgress: false, isError: false, preference, preferenceData: undefined })
+    (preference: PreferenceType) => ({ isSuccess: true, isInProgress: false, isError: false, preference  })
 );
 
 /**
@@ -88,5 +88,5 @@ export const postPreferenceSuccessAction = createAction(
  */
 export const postPreferenceErrorAction = createAction(
     PreferenceActionEnums.PostPreferenceError,
-    () => ({ isSuccess: false, isInProgress: false, isError: true, preference: undefined, preferenceData: undefined})
+    () => ({ isSuccess: false, isInProgress: false, isError: true, preference: undefined })
 );

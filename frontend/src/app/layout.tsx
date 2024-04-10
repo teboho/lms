@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 // import styles from './page.module.css';
-import { Layout, Flex, ConfigProvider } from "antd";
+import { App, Layout, Flex, ConfigProvider } from "antd";
 import { Header, Content, Footer } from "antd/lib/layout/layout";
 import AuthProvider from "@/providers/authProvider";
 import CategoryProvider from "@/providers/categoryProvider";
@@ -28,6 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en">
     <body>
+      <App>
       <ConfigProvider direction="ltr"
         theme={{
           token: {
@@ -43,7 +44,7 @@ export default function RootLayout({
                   <Header style={{position: "sticky", width: "100%" , top: 0, zIndex: 1000, background: "#d0e1e1"}}>
                     <NavBar />
                   </Header>
-                  <Layout>
+                  <Layout style={{height: "100%"}}>
                     <Flex>
                         <CommunicationProvider>
                           <InventoryProvider>
@@ -66,6 +67,7 @@ export default function RootLayout({
           </CategoryProvider>
         </AuthProvider>
       </ConfigProvider>
+      </App>
     </body>
     </html>
   );

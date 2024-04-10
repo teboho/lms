@@ -67,7 +67,6 @@ export interface BookContextType {
      * @param term search term
      */
     search: (term: string) => void;
-    savePreferences: (prefs: Preferences) => void;
     getBook: (bookId: string) => void;
     getLocalBook: (bookId: string) => BookDataType;
     getAll: () => void;
@@ -111,7 +110,6 @@ const BookContext = createContext<BookContextType>({
     books: [],
     searchBooks: SearchBookInitState,
     search: function (term: string) {}, 
-    savePreferences: (prefs: Preferences) => {}, 
     getBook: (bookId: string) => {}, 
     getLocalBook: (bookId: string) => BOOK_INIT,
     getAll: () => {},

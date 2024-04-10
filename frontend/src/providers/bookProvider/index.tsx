@@ -3,7 +3,7 @@ import { useContext, useEffect, useReducer, useState } from "react";
 import { bookReducer } from "./reducer";
 import BookContext, { BookContextStateInit } from "./context";
 import axios from "axios";
-import { baseURL } from "../authProvider";
+import { baseURL, makeAxiosInstance } from "../authProvider";
 import { getBooksErrorAction, getBooksRequestAction, getBooksSuccessAction,
     getBookErrorAction, getBookRequestAction, getBookSuccessAction, 
     setSearchTermAction,
@@ -15,7 +15,6 @@ import { getBooksErrorAction, getBooksRequestAction, getBooksSuccessAction,
     postBookErrorAction
 } from "./actions";
 import AuthContext from "../authProvider/context";
-import { Preferences } from "@/app/(authorized)/patron/preferences-survey/page";
 import { CreateBookType } from "./types";
 import { message } from "antd";
 
@@ -29,21 +28,13 @@ export default function BookProvider({ children }: { children: React.ReactNode }
     const accessToken = localStorage.getItem("accessToken");
 
     useEffect(() => {
-        // check the AuthProvider for the accesToken
         if (accessToken) {
             getAll();
         }
         console.log("Book Provider is mounted for first time.")
     }, []);
 
-    // Axios instance
-    const instance = axios.create({
-        baseURL: baseURL,
-        headers: {
-            "Authorization": `Bearer ${accessToken}`,
-            "Content-Type": "application/json"
-        }
-    });
+    const instance = makeAxiosInstance(accessToken);
 
     /**
      * Searching the Google API
@@ -128,24 +119,6 @@ export default function BookProvider({ children }: { children: React.ReactNode }
             .catch(err =>  dispatch(getBookErrorAction()));
     }
 
-    function savePreferences(prefs: Preferences): void {
-        const endpoint = "/api/services/app/Preference/Create";
-        dispatch(getBooksRequestAction());
-        instance.post(`${endpoint}`, prefs)
-            .then(res => {
-                if (res.data.success) {
-                    if (res.data.result !== null)
-                    {
-                        dispatch(getBooksSuccessAction(res.data.result))
-                    }
-                } else {
-                    dispatch(getBooksErrorAction());
-                }
-                    dispatch(getBooksErrorAction());
-            })
-            .catch(err =>  dispatch(getBooksErrorAction()));
-    }
-
     /**
      * Send a new book to the backend
      * @param book book object
@@ -168,8 +141,12 @@ export default function BookProvider({ children }: { children: React.ReactNode }
             .catch(err =>  dispatch(postBookErrorAction()));
     }
 
-    const success = () => {
-        messageApi.success('Book added successfully!');
+    const success = (message?: string) => {
+        messageApi.success(message ? message : 'Book added successfully!');
+    }
+
+    const fail = (message?: string) => {
+        messageApi.error(message ? message : 'Book add unsuccessful!');
     }
 
     const error = () => {
@@ -186,7 +163,7 @@ export default function BookProvider({ children }: { children: React.ReactNode }
             books: bookState.books,
             book: bookState.book, 
             searchTerm: bookState.searchTerm, 
-            search, savePreferences, getBook, getAll, searchDB, sendBook, getLocalBook,
+            search, getBook, getAll, searchDB, sendBook, getLocalBook,
             searchBooks: bookState.searchBooks,
             loading: loading
         }}>

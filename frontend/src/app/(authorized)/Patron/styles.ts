@@ -6,12 +6,10 @@ export const useStyles = createStyles(({css, cx}) => ({
     `,
     content: css`
         width: 100%;
-        /*border: 1px solid grey;*/
     `,
     right: css`
         width: 100%;
-        /*border-right: 1px solid grey;
-        background: grey;*/
+        height: 100vh;
     `,
     left: css`
         height: 100;
@@ -36,5 +34,8 @@ export const useStyles = createStyles(({css, cx}) => ({
     `, 
     layout: css`
         height: 100%;
-    `
+    `,
+    height: css`
+        height: 100%;
+    `,
 }));
