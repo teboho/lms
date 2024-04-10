@@ -1,5 +1,3 @@
-// actions.ts
-
 import { createAction } from "redux-actions";
 
 export const CommunicationActionEnums = {

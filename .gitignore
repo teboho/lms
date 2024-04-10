@@ -11,3 +11,5 @@ backend/src/Boxfusion.LMS_Backend.Web.Host/App_Data/Logs/Logs.txt.1
 /backend/src/Boxfusion.LMS_Backend.Web.Host/App_Data/Logs/Logs.txt.2
 /backend/src/Boxfusion.LMS_Backend.Web.Host/App_Data/Logs/Logs.txt.10
 /backend/src/Boxfusion.LMS_Backend.Web.Host/App_Data/Logs/Logs.txt.3
+
+.fake

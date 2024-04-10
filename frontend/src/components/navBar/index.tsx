@@ -59,8 +59,6 @@ const NavBar: React.FC = () => {
 
     const accessToken = localStorage.getItem("accessToken");
     const onSearch: SearchProps["onSearch"] = (value, _e, info) => {
-        console.log(searchTerm);
-
         searchDB(searchTerm);
     }
 
@@ -74,7 +72,7 @@ const NavBar: React.FC = () => {
         ];
 
         return (
-            <Flex style={{ background: "#d0e1e1", marginLeft: 0, paddingLeft: 20, paddingRight: 20, width: "96vw", height: 60 }} className={cx(styles.flex, styles.sticky)} justify="space-between" align="center">
+            <Flex style={{ background: "#d0e1e1", marginLeft: 0, paddingLeft: 20, paddingRight: 20, width: "95vw", height: 60 }} className={cx(styles.flex, styles.sticky)} justify="space-between" align="center">
                 <div style={{paddingTop: 20}}><Link href={"/"}><Image src={"/assets/images/LMS-hq.png"} width={50} height={50} alt="logo"/></Link></div>
                 <Search 
                     className={cx(styles.search)} 

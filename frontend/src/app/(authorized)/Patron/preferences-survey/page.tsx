@@ -55,7 +55,6 @@ const Page = (): React.ReactNode => {
         if (userId) {
             const prefs = getPreferenceByPatron(userId);
             
-            console.log("This user's preferences: ", prefs);
             if (prefs) {
                 setChosen(prev => ([
                     getCategory(prefs.primaryCategoryId),
@@ -73,32 +72,24 @@ const Page = (): React.ReactNode => {
     }, [])
 
     useEffect(() => {
-        if (preferenceData) {
-            console.log("preferenceData", preferenceData);
-        }
         const accessToken = Utils.getAccessToken();
         if (accessToken) {
             const decoded = jwtDecode(accessToken);
             const userId = decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
-            console.log(decoded);
             const patronId = Number.parseInt(userId)
 
             const prefs = getPreferenceByPatron(patronId);
-            console.log("This user's preferences: ", prefs);
             if (prefs) {
                 setChosen(prev => ([
                     getCategory(prefs.primaryCategoryId),
                     getCategory(prefs.secondaryCategoryId),
                     getCategory(prefs.tertiaryCategoryId)
                 ]));
-                // also set the current step to the last one
-                // setCurrent(2);
             } 
         }       
     }, [preferenceData]);
 
     useEffect(() => {
-        console.log("categories", categoryContextValue.categories);
         setOptions(categoryContextValue.categories);
     }, [categoryContextValue.categories])
 
@@ -122,7 +113,6 @@ const Page = (): React.ReactNode => {
     }
 
     const savePreferences = (): void => {
-        console.log(chosen);
         var prefs: Preferences = {
             patronId: user?.id,
             primaryCategoryId: chosen[0].id,
@@ -135,9 +125,7 @@ const Page = (): React.ReactNode => {
     }
 
     const getCategory = (id: string) => {
-        console.log("Getting category with id: ", id);
         const category = categoryContextValue.categories?.find(c => c.id === id);
-        console.log("Category: ", category);
         return category;
     }
 
@@ -151,9 +139,7 @@ const Page = (): React.ReactNode => {
         setChosen(prev => ([
             ...stateCopy,          
         ]));
-        
-        console.log("what to bring back to the content", spliced);
-        console.log("current", current);
+
         spliced.forEach((cat, i) => {
             cats.push(cat);
         })
@@ -199,9 +185,7 @@ const Page = (): React.ReactNode => {
     ));
 
     const onSearch = (value: string) => {
-        console.log(value);
         const results = memoOptions.filter((item) => item?.name?.toLowerCase().includes(value));
-        console.log(results);
         setOptions(results);
     }
            
@@ -216,36 +200,28 @@ const Page = (): React.ReactNode => {
                     style={{ width: 400 }}
                 />
                 {" "}
-                {/* <Button type="primary" onClick={() => setOptions(categoryContextValue.categories)}>
-                    Reset
-                </Button> */}
             </div>
 
-            {/* <Steps current={current} items={items} /> */}
-
-            {/* the choices */}
             <div style={contentStyle}>
-                {/* <div className={cx(styles.center)}>{current >= 0 && steps[current].content}</div> */}
-                
                 {chosen.length < steps.length && (
                     memoOptions?.map((item, index: number) => (
-                        <>
-                        <ConfigProvider 
-                            theme={{
-                                token: {
-                                    colorPrimary: "#00BF63",
-                                }                        
-                            }}>
-                                <Button key={`choice_${item.id}`}
-                                    onClick={() => {
-                                        savePref(index, item)
-                                        if (current < steps.length - 1) next();
-                                    }}>
-                                    {item.name}
-                                </Button>
-                            </ConfigProvider>                        
-                        {" "}
-                        </>
+                        <div key={`button_${index}`}>
+                            <ConfigProvider 
+                                theme={{
+                                    token: {
+                                        colorPrimary: "#00BF63",
+                                    }                        
+                                }}>
+                                    <Button key={`choice_${item.id}`}
+                                        onClick={() => {
+                                            savePref(index, item)
+                                            if (current < steps.length - 1) next();
+                                        }}>
+                                        {item.name}
+                                    </Button>
+                                </ConfigProvider>                        
+                            {" "}
+                        </div>
                     ))
                 )}
             </div>
@@ -274,7 +250,7 @@ const Page = (): React.ReactNode => {
                 dataSource={chosen}
                 style={{ alignContent: 'center' }}
                 renderItem={(item, index) => (
-                    <List.Item>
+                    <List.Item key={`list_item_${index}`}>
                         {`${item.name}`}
                     </List.Item>
                 )}

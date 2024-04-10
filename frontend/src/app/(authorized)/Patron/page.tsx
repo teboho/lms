@@ -1,5 +1,5 @@
 "use client";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { Suspense, useContext, useEffect, useMemo, useState } from "react";
 import withAuth from "@/hocs/withAuth";
 import { Button, Flex, Layout, Select, Space, Typography } from "antd";
 import BookContext from "@/providers/bookProvider/context";
@@ -9,6 +9,7 @@ import SearchResults from "@/components/searchResults";
 import CategoryContext from "@/providers/categoryProvider/context";
 import InventoryContext from "@/providers/inventoryProvider/context";
 import AuthorsContext from "@/providers/authorsProvider/context";
+import Image from "next/image";
 
 const { Content } = Layout;
 const { Option } = Select;
@@ -20,6 +21,7 @@ const Page = (): React.ReactNode => {
     const { categories, getCategory, getAllCategories } = useContext(CategoryContext);
     const { getAuthorById, getAuthors } = useContext(AuthorsContext);
     const { styles, cx } = useStyles();
+    const [isLoading, setIsLoading] = useState(true);
 
     const [currentBooks, setCurrentBooks] = useState([]);
     const memoCategories = useMemo(() => categories, [categories]);
@@ -30,24 +32,24 @@ const Page = (): React.ReactNode => {
         getAuthors();
         getAllCategories();
         setCurrentBooks(books);
+        setIsLoading(true);
     }, []);
 
-    useEffect(() => {
-        console.log("Home useEffect", userObj);
-        
+    useEffect(() => {        
         if (!books) {
-            console.log("Fetching books");
             getAll();
         }
     }, [userObj]);
     
     useEffect(() => {
-        console.log("Books", books);
         setCurrentBooks(books);
     }, [books]);
 
     const user = useMemo(() => userObj, [userObj]);
-    let memoBooks = useMemo(() => currentBooks, [currentBooks]);
+    let memoBooks = useMemo(() => { 
+        return currentBooks;
+    }, [currentBooks]);
+
     const chooseCategory = (
         <Select
             showSearch
@@ -58,9 +60,7 @@ const Page = (): React.ReactNode => {
                     `${option.children}`.toLowerCase().indexOf(input.toLowerCase()) >= 0
             }
             onSelect={(value) => {
-                console.log(value);
                 const filteredBooks = books?.filter((book) => book.categoryId === value);
-                console.log(filteredBooks);
                 setCurrentBooks(filteredBooks);
             }}
         >
@@ -69,6 +69,7 @@ const Page = (): React.ReactNode => {
             ))}
         </Select>
     ); 
+    
     return (
         <Content className={cx(styles.content, styles.padding)}>
             <Flex justify="space-between" align="stretch">
@@ -82,8 +83,7 @@ const Page = (): React.ReactNode => {
                     {chooseCategory}
                     <Button onClick={() => {
                         setCurrentBooks(books);
-                        // clear search term
-                        // chooseCategory.
+                        console.log("clearing", books);
                     }}>
                         Clear
                     </Button>
@@ -106,8 +106,8 @@ const Page = (): React.ReactNode => {
                     </Select>    
                 </div>        
             </Flex>
-
-            <SearchResults books={memoBooks} searchTerm={searchTerm} />
+            {isLoading && <Image src={"/assets/images/book-op.gif"} alt="book" width={350} height={350} />}
+            {memoBooks && <SearchResults books={memoBooks} searchTerm={searchTerm} /> }
         </Content>
     );
 }

@@ -1,4 +1,5 @@
 "use client";
+
 import { createAction } from "redux-actions";
 import { AUTH_RESPONSE_TYPE, REGISTER_RESPONSE_TYPE, UserType, AuthValueType } from "./context";
 
@@ -24,7 +25,7 @@ export const AuthActionEnums = {
  */
 export const postAuthRequestAction = createAction(
     AuthActionEnums.PostAuthRequest,
-    (): any => ({ isSuccess: false, isPending: true, isError: false, authObj: undefined, registerObj: undefined, userObj: undefined })
+    () => ({ isSuccess: false, isPending: true, isError: false, authObj: undefined, userObj: undefined })
 );
 
 /**
@@ -32,7 +33,7 @@ export const postAuthRequestAction = createAction(
  */
 export const postAuthSuccessAction = createAction(
     AuthActionEnums.PostAuthSuccess,
-    (authObj: AUTH_RESPONSE_TYPE) => ({ isSuccess: true, isPending: false, isError: false, authObj, registerObj: undefined as REGISTER_RESPONSE_TYPE, userObj: undefined })
+    (authObj: AUTH_RESPONSE_TYPE) => ({ isSuccess: true, isPending: false, isError: false, authObj })
 );
 
 /**
@@ -48,7 +49,7 @@ export const postAuthErrorAction = createAction(
  */
 export const postRegisterRequestAction = createAction(
     AuthActionEnums.PostRegisterRequest,
-    (): any => ({ isSuccess: false, isPending: true, isError: false, registerObj: undefined, authObj: undefined, userObj: undefined })
+    (): any => ({ isSuccess: false, isPending: true, isError: false, registerObj: undefined })
 );
 
 
@@ -57,23 +58,23 @@ export const postRegisterRequestAction = createAction(
  */
 export const postRegisterSuccessAction = createAction(
     AuthActionEnums.PostRegisterSuccess,
-    (registerObj: REGISTER_RESPONSE_TYPE) => ({ isSuccess: true, isPending: false, isError: false, registerObj, authObj: undefined as AUTH_RESPONSE_TYPE, userObj: undefined })
+    (registerObj: REGISTER_RESPONSE_TYPE) => ({ isSuccess: true, isPending: false, isError: false, registerObj })
 );
 
 
 export const getUserRequestAction = createAction(
     AuthActionEnums.GetUserRequest,
-    () => ({ isSuccess: false, isPending: true, isError: false, authObj: undefined, registerObj: undefined, userObj: undefined })
+    () => ({ isSuccess: false, isPending: true, isError: false, authObj: undefined, userObj: undefined })
 );
 
 export const getUserSuccessAction = createAction(
     AuthActionEnums.GetUserSuccess,
-    (userObj: UserType) => ({ isSuccess: true, isPending: false, isError: false, authObj: undefined as AUTH_RESPONSE_TYPE, registerObj: undefined as REGISTER_RESPONSE_TYPE, userObj })
+    (userObj: UserType) => ({ isSuccess: true, isPending: false, isError: false, userObj })
 );  
 
 export const getUserErrorAction = createAction(
     AuthActionEnums.GetUserError,
-    () => ({ isSuccess: false, isPending: false, isError: true, authObj: undefined, registerObj: undefined, userObj: undefined })
+    () => ({ isSuccess: false, isPending: false, isError: true, userObj: undefined })
 );
 
 /**

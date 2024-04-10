@@ -1,13 +1,6 @@
 "use client";
 import { createContext } from "react";
 
-// {
-    // "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    // "patronId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    // "primaryCategoryId": 0,
-    // "secondaryCategoryId": 0,
-    // "tertiaryCategoryId": 0
-//   }
 export interface PreferenceType {
     id: string;
     patronId: number;

@@ -1,9 +1,8 @@
 "use client";
-
 import { handleActions } from "redux-actions";
 import { CommunicationActionEnums } from "./actions";
 
-import { communicationInitialState, communicationStateType } from "./context";
+import { CommunicationContextStateInit, CommunicationContextStateType } from "./context";
 
 /**
  * A reducer to handle the communication
@@ -24,7 +23,7 @@ export const communicationReducer = handleActions(
         [CommunicationActionEnums.SendEmailError]: (state, action) => ({
             ...state,
             ...action.payload
-        })
+        }),
     },
-    communicationInitialState
+    CommunicationContextStateInit
 );

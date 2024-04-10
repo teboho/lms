@@ -26,12 +26,11 @@ const Page = (): React.ReactNode => {
 
     useEffect(() => {
         const patronId = Utils.getPatronId();
-        console.log("Patron ID", patronId);
         setLoans(getLoansByPatron(patronId));   
     }, [providerLoans]);
 
     return (
-        <div className={cx(styles.padding, styles.cardSize)}>   
+        <div className={cx(styles.content, styles.padding, styles.cardSize)}>   
             <Typography.Title level={1} className={cx(styles.center)}>My Loans</Typography.Title >
             <Row gutter={16}>
                 {loans?.map((item) => (

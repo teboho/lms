@@ -27,7 +27,6 @@ const SearchBook: React.FC<BookProps> = ({ bookStuff }) => {
     const { styles, cx } = useStyles();
 
     const onNumberChange = (value: number) => {
-        console.log("number change", value);
         setCount(value);
     }
 

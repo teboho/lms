@@ -1,4 +1,3 @@
-// Usage: import Utils from 'utils';
 'use client';
 import { makeAxiosInstance } from "@/providers/authProvider";
 

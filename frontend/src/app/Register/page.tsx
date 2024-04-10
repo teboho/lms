@@ -64,10 +64,6 @@ export default function Register(): React.ReactNode {
     const { styles, cx, theme } = useMainStyles();
     const { register } = useContext(AuthContext);
 
-    const onFinish = (values: object): void => {
-        console.log(values);
-    }
-
     /**
      * Get the data from the form and send it to the backend
      * @param e event

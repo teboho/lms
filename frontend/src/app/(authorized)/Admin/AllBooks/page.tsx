@@ -18,7 +18,6 @@ const AllBooks = (): React.ReactNode => {
     const accessToken = Utils.getAccessToken(); // localStorage.getItem("accessToken");
 
     useEffect(() => {
-        console.log("AllBooks useEffect");
         if (accessToken) { 
             getAll();
         }

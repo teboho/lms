@@ -3,13 +3,12 @@ import { useContext, useEffect, useReducer } from "react";
 import { categoryReducer } from "./reducer";
 import { getCategoriesErrorAction, getCategoriesRequestAction, getCategoriesSuccessAction } from "./actions";
 import { makeAxiosInstance } from "../authProvider";
-import CategoryContext, { CATEGORY_CONTEXT_INITIAL_STATE, CategoryType } from "./context";
+import CategoryContext, { CategoryContextStateInit, CategoryType } from "./context";
 import Utils from "@/utils";
 import AuthContext from "../authProvider/context";
 
 export default function CategoryProvider({ children }: { children: React.ReactNode }) {
-    // we will make the state with the reduce3rs
-    const [categoryState, dispatch] = useReducer(categoryReducer, CATEGORY_CONTEXT_INITIAL_STATE);
+    const [categoryState, dispatch] = useReducer(categoryReducer, CategoryContextStateInit);
     const { authObj } = useContext(AuthContext);
 
     const accessToken = Utils.getAccessToken(); // localStorage.getItem("accessToken");
@@ -19,39 +18,31 @@ export default function CategoryProvider({ children }: { children: React.ReactNo
         console.log("Category Provider is mounted for first time.")
     }, []);
 
-    useEffect(() => {
-        // get the categories
-        // if (accessToken) {
-        //     getAllCategories();
-        // }
-        console.log("auth object has changed...", authObj);
-    }, [authObj]);
-
-    // get the categories
+    /**
+     * Get all the categories
+     */
     function getAllCategories() {
-        // before we make the http request, we set pending to true via dispatch
         dispatch(getCategoriesRequestAction());
-        // the we make the call
         instance.get(`/api/services/app/Category/GetAll?skipCount=0&maxResultCount=1000`)
             .then(res => {
-                console.log("results", res.data.result.items)
                 if (res.data.success) {
-                    // disptach for success
                     if (res.data.result)
                     {
                         dispatch(getCategoriesSuccessAction(res.data.result.items))
                     } else{
-                        // dispatch for error
                         dispatch(getCategoriesErrorAction());
                     }
                 } else {
-                    // dispatch for erroe
                     dispatch(getCategoriesErrorAction());
                 }
             });
     }
 
-    // get the category by id
+    /**
+     * 
+     * @param id the id of the category
+     * @returns the category
+     */
     function getCategory(id: string): CategoryType | undefined {
         const category = categoryState.categories?.filter((category: CategoryType) => category.id === id)[0];
         return category;

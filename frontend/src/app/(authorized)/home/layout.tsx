@@ -21,13 +21,7 @@ const Layout = ({ children }: {
 
     return (        
         <AntdLayout>
-            <Sider width={"25%"} className={cx(styles.border, styles.bgwhite)}>
-                {/* vertical ant ANtd menu with options ...*/}
-                <Menu 
-                    items={adminMenu()}
-                />
-            </Sider>
-            <Sider style={{background: "white"}} className={cx(styles.right)} width={"75%"}>
+            <Sider style={{background: "white"}} className={cx(styles.right)} width={"100%"}>
                 <Content className={cx(styles.content)}>
                     {children}  
                 </Content>

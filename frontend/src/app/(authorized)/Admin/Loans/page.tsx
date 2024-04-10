@@ -23,7 +23,6 @@ const Page = (): React.ReactNode => {
     const { styles, cx } = useStyles();
 
     useEffect(() => {
-        console.log("Loan useEffect", loans);
         if (loans?.length === 0 || !loans) {
             getLoans();
         }
@@ -32,7 +31,6 @@ const Page = (): React.ReactNode => {
 
     let _memoLoans = useMemo(() => {
         const bookId = params.get("bookId");
-        console.log("memoLoans book id", bookId);
         let result = loans;
         if (bookId) {
             result = loans?.filter((loan) => loan.bookId === bookId);
@@ -84,7 +82,6 @@ const Page = (): React.ReactNode => {
     }
 
     const cellRender = (current: any, info: any) => {
-        // console.log("cellRender", current, info);
         if (!current || !info) {
             return (
                 <div>
@@ -140,10 +137,7 @@ const Page = (): React.ReactNode => {
     ];
 
     const confirmLoan = (id: string) => {
-        console.log("confirming loan...");
-        console.log(id);
         const _loan = loans.find(l => l.id === id);
-        // alert(`${id} | ${_loan?.id}`)
         _loan.confirmed = true;
         putLoan(_loan);
     }
@@ -178,7 +172,6 @@ const Page = (): React.ReactNode => {
                 (<>
                     <Tag color="orange">No</Tag>
                     <Checkbox onChange={e => {
-                        console.log("checked----", e.target.checked);
                         if (e.target.checked) {
                             confirmLoan(loan?.id);
                         }
@@ -196,7 +189,6 @@ const Page = (): React.ReactNode => {
     ];
 
     const onSegmentOptionChange = (value: any) => {
-        console.log("Chosen",  value);
         let result = loans;
         switch (value) {
             case options[1]:

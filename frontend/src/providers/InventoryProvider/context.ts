@@ -13,25 +13,25 @@ export const INVENTORY_INIT: InventoryType = {
     "count" : 0,
 }
 
-export interface INVENTORY_STATE_TYPE {
-    isPending: boolean;
-    isSuccess: boolean;
-    isError: boolean;
-    inventoryItems: InventoryType[] | undefined;
-    inventory: InventoryType | undefined; // this is for the single inventory item
-    searchTerm: string; // this is for the search term is actually going to be the book id guid
+export interface InventoryContextStateType {
+    isPending?: boolean;
+    isSuccess?: boolean;
+    isError?: boolean;
+    inventoryItems?: InventoryType[];
+    inventory?: InventoryType; // this is for the single inventory item
+    searchTerm?: string; // this is for the search term is actually going to be the book id guid
 }
 
-export const INVENTORY_CONTEXT_INITIAL_STATE: INVENTORY_STATE_TYPE = {
+export const InventoryContextStateInit: InventoryContextStateType = {
     isPending: false,
     isError: false,
     isSuccess: false,
     inventoryItems: [] as InventoryType[],
     inventory: INVENTORY_INIT,
-    searchTerm: ""
+    searchTerm: undefined
 }
 
-export interface InventoryContextType {
+export interface InventoryContextValueType {
     inventory: InventoryType;
     inventoryItems: InventoryType[];
     getInventory: (inventoryId: string) => void;
@@ -42,7 +42,7 @@ export interface InventoryContextType {
 /**
  * Default value that the provider will pass is an empty object
  */
-const InventoryContext = createContext<InventoryContextType>({ 
+const InventoryContext = createContext<InventoryContextValueType>({ 
     inventory: INVENTORY_INIT,
     inventoryItems: [],
     getInventory: (inventoryId: string) => {}, 

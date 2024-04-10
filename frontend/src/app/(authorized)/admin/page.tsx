@@ -42,7 +42,6 @@ const Page = (): React.ReactNode => {
         return categories;
     }, [categories]);
 
-    // filter the inventory items by book id
     function filterInventoryItems(bookId: string) {
         return memoInventoryItems?.filter((item) => item.bookId === bookId)[0];
     }
@@ -58,7 +57,6 @@ const Page = (): React.ReactNode => {
                 </Paragraph>
             </div>
 
-            {/* antd dropdown filter by category */}
             <Select
                 showSearch
                 style={{ width: 200 }}
@@ -68,11 +66,7 @@ const Page = (): React.ReactNode => {
                         `${option.children}`.toLowerCase().indexOf(input.toLowerCase()) >= 0
                     }
                 onSelect={(value) => {
-                    console.log(value);
-                    // document.getElementById("inventory-list")?.scrollIntoView();
-                    // show only the books that match the category id
                     const filteredBooks = books?.filter((book) => book.categoryId === value);
-                    // console.log(filteredBooks);
 
                     memoBooks = filteredBooks;
                     setCurrentBooks(filteredBooks);

@@ -18,7 +18,7 @@ export const CategoryActionEnums = {
  */
 export const getCategoryRequestAction = createAction(
     CategoryActionEnums.GetCategoryRequest,
-    ():any => ({ isSuccess: false, isPending: true, isError: false, categories: undefined, category: undefined })
+    () => ({ isSuccess: false, isPending: true, isError: false, categories: undefined, category: undefined })
 )
 
 /**
@@ -26,7 +26,7 @@ export const getCategoryRequestAction = createAction(
  */
 export const getCategorySuccessAction = createAction(
     CategoryActionEnums.GetCategorySuccess,
-    (category: CategoryType) => ({ isSuccess: true, isPending: false, isError: false, categories: undefined, category })
+    (category: CategoryType) => ({ isSuccess: true, isPending: false, isError: false, category })
 );
 
 /**
@@ -34,7 +34,7 @@ export const getCategorySuccessAction = createAction(
  */
 export const getCategoryErrorAction = createAction(
     CategoryActionEnums.GetCategoryError,
-    () => ({ isSuccess: false, isPending: false, isError: true, categories: undefined, category: undefined})
+    () => ({ isSuccess: false, isPending: false, isError: true, category: undefined})
 );
 
 /**
@@ -43,7 +43,7 @@ export const getCategoryErrorAction = createAction(
  */
 export const getCategoriesRequestAction = createAction(
     CategoryActionEnums.GetCategoriesRequest,
-    () => ({ isSuccess: false, isPending: true, isError: false, categories: undefined, category: undefined })
+    () => ({ isSuccess: false, isPending: true, isError: false, categories: undefined })
 );
 
 /**
@@ -51,7 +51,7 @@ export const getCategoriesRequestAction = createAction(
  */
 export const getCategoriesSuccessAction = createAction(
     CategoryActionEnums.GetCategoriesSuccess,
-    (categories: CategoryType[]) => ({ isSuccess: true, isPending: false, isError: false, category: undefined, categories })
+    (categories: CategoryType[]) => ({ isSuccess: true, isPending: false, isError: false, categories })
 );
 
 /**
@@ -59,5 +59,5 @@ export const getCategoriesSuccessAction = createAction(
  */
 export const getCategoriesErrorAction = createAction(
     CategoryActionEnums.GetCategoriesError,
-    () => ({ isSuccess: false, isPending: false, isError: true, categories: undefined, category: undefined})
+    () => ({ isSuccess: false, isPending: false, isError: true, categories: undefined })
 );

@@ -1,25 +1,25 @@
 import { handleActions } from "redux-actions";
 import { BookActionEnums } from "./actions";
-import { BOOK_CONTEXT_INITIAL_STATE } from "./context";
+import { BookContextStateInit, BookContextStateType } from "./context";
 
 /**
  * A reducer t
  */
-export const bookReducer = handleActions(
+export const bookReducer = handleActions<BookContextStateType>(
     {
-        // this handler will change the value of the isPending in the state
         [BookActionEnums.GetBooksRequest]: (state, action) => ({
             ...state,
             ...action.payload
-        }),  // this handler will change the value of the isSuccess in the state
+        }),
         [BookActionEnums.GetBooksSuccess]: (state, action) => ({
             ...state,
             ...action.payload
-        }), // this handler will change the value of the isError in the state
+        }), 
         [BookActionEnums.GetBooksError]: (state, action) => ({
             ...state,
             ...action.payload
         }),
+
         [BookActionEnums.GetBookRequest]: (state, action) => ({
             ...state,
             ...action.payload
@@ -32,10 +32,12 @@ export const bookReducer = handleActions(
             ...state,
             ...action.payload
         }),
+
         [BookActionEnums.SetSearchTerm]: (state, action) => ({
             ...state,
             ...action.payload
         }),
+        
         [BookActionEnums.GetSearchBooksRequest]: (state, action) => ({
             ...state,
             ...action.payload
@@ -49,5 +51,5 @@ export const bookReducer = handleActions(
             ...action.payload
         })
     },
-    BOOK_CONTEXT_INITIAL_STATE
+    BookContextStateInit
 )

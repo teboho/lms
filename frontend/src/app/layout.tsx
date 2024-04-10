@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-// import "./globals.css";
+import "./globals.css";
 // import styles from './page.module.css';
 import { Layout, Flex, ConfigProvider } from "antd";
 import { Header, Content, Footer } from "antd/lib/layout/layout";
@@ -40,7 +40,7 @@ export default function RootLayout({
             <BookProvider>
               <AuthorsProvider>
                 <Layout>
-                  <Header style={{position: "sticky", width: "100vw" , top: 0, zIndex: 1000, background: "#d0e1e1"}}>
+                  <Header style={{position: "sticky", width: "100%" , top: 0, zIndex: 1000, background: "#d0e1e1"}}>
                     <NavBar />
                   </Header>
                   <Layout>

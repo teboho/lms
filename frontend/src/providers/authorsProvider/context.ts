@@ -14,15 +14,15 @@ export const AuthorInitialData: AuthorDataType = {
     id: ""
 };
 
-export interface AuthorsContextType {
-    author: AuthorDataType;
-    authors: AuthorDataType[];
+export interface AuthorsContextStateType {
+    author?: AuthorDataType;
+    authors?: AuthorDataType[];
     isPending: boolean;
     isSuccess: boolean;
     isError: boolean;
 };
 
-export const AuthorsContextInit: AuthorsContextType = {
+export const AuthorsContextStateInit: AuthorsContextStateType = {
     author: AuthorInitialData,
     authors: [AuthorInitialData],
     isPending: false,
@@ -34,7 +34,7 @@ export const AuthorsContextDefaultValue = {
     setAuthors: (authors: AuthorDataType[]) => {},
     getAuthors: () => {},
     getAuthor: (authorsId: string) => {},
-    authorsState: AuthorsContextInit,
+    authorsState: AuthorsContextStateInit,
     getAuthorById: (id: string) => AuthorInitialData,
     _getAuthor: (id: string) => AuthorInitialData,
 };
@@ -43,7 +43,7 @@ export interface AuthorsContextValueType {
     setAuthors: (authors: AuthorDataType[]) => void;
     getAuthors: () => void;
     getAuthor: (authorsId: string) => void;
-    authorsState: AuthorsContextType;
+    authorsState: AuthorsContextStateType;
     getAuthorById: (id: string) => AuthorDataType | undefined;
     _getAuthor: (id: string) => AuthorDataType;
 }

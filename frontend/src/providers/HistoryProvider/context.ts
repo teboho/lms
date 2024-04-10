@@ -19,8 +19,8 @@ export interface History_CONTEXT_STATE_TYPE {
     isInProgress: boolean;
     isSuccess: boolean;
     isError: boolean;
-    history: HistoryType | undefined;
-    historyData: HistoryType[] | undefined;
+    history?: HistoryType;
+    historyData?: HistoryType[];
 }
 
 export const HISTORY_CONTEXT_INITIAL_STATE = {

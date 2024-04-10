@@ -22,6 +22,9 @@ export const LoanActionEnums = {
     ClearLoan: "CLEAR_LOAN"
 }
 
+// Actions for the loan context
+// Each action should only change the specific values in the state that it is supposed to change not the whole state!!
+
 /**
  * Sets the isPending to true
  * The results array is not there yet
@@ -69,7 +72,7 @@ export const getLoanSuccessAction = createAction(
  */
 export const getLoanErrorAction = createAction(
     LoanActionEnums.GetLoanError,
-    () => ({ isSuccess: false, isPending: false, isError: true, loan: undefined, loans: undefined })
+    () => ({ isSuccess: false, isPending: false, isError: true, loan: undefined })
 );
 
 /**
@@ -78,7 +81,7 @@ export const getLoanErrorAction = createAction(
  */
 export const getLoansRequestAction = createAction(
     LoanActionEnums.GetLoansRequest,
-    () => ({ isSuccess: false, isPending: true, isError: false, loan: undefined, loans: undefined })
+    () => ({ isSuccess: false, isPending: true, isError: false, loans: undefined })
 );
 
 /**
@@ -87,8 +90,7 @@ export const getLoansRequestAction = createAction(
 export const getLoansSuccessAction = createAction(
     LoanActionEnums.GetLoansSuccess,
     (loans: LoanType[]) => {
-        console.log("saving these loans...", loans);
-        return ({ isSuccess: true, isPending: false, isError: false, loan: undefined as LoanType, loans })
+        return ({ isSuccess: true, isPending: false, isError: false, loans })
     }
 );
 
@@ -106,7 +108,7 @@ export const getLoansErrorAction = createAction(
  */
 export const putLoanRequestAction = createAction(
     LoanActionEnums.PutLoanRequest,
-    () => ({ isSuccess: false, isPending: true, isError: false, loan: undefined, loans: undefined })
+    () => ({ isSuccess: false, isPending: true, isError: false, loan: undefined })
 );
 
 /**

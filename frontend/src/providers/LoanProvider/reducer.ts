@@ -1,47 +1,46 @@
 import { handleActions } from "redux-actions";
-import { LOAN_CONTEXT_INITIAL_STATE } from "./context";
+import { LoanContextStateInit, LoanContextStateType } from "./context";
 import { LoanActionEnums } from "./actions";
 
 /**
- * A reducer t
+ * A reducer for the loan context
  */
-export const loanReducer = handleActions(
+export const loanReducer = handleActions<LoanContextStateType>(
     {
-        // this handler will change the value of the isPending in the state
         [LoanActionEnums.PostLoanRequest]: (state, action) => ({
             ...state,
             ...action.payload
-        }),  // this handler will change the value of the isSuccess in the state
+        }),  
         [LoanActionEnums.PostLoanSuccess]: (state, action) => ({
             ...state,
             ...action.payload
-        }), // this handler will change the value of the isError in the state
+        }), 
         [LoanActionEnums.PostLoanError]: (state, action) => ({
             ...state,
             ...action.payload
         }),
-        // this handler will change the value of the isPending in the state
+        
         [LoanActionEnums.GetLoanRequest]: (state, action) => ({
             ...state,
             ...action.payload
-        }),  // this handler will change the value of the isSuccess in the state
+        }), 
         [LoanActionEnums.GetLoanSuccess]: (state, action) => ({
             ...state,
             ...action.payload
-        }), // this handler will change the value of the isError in the state
+        }), 
         [LoanActionEnums.GetLoanError]: (state, action) => ({
             ...state,
             ...action.payload
         }),
-        // this handler will change the value of the isPending in the state
+
         [LoanActionEnums.GetLoansRequest]: (state, action) => ({
             ...state,
             ...action.payload
-        }),  // this handler will change the value of the isSuccess in the state
+        }),  
         [LoanActionEnums.GetLoansSuccess]: (state, action) => ({
             ...state,
             ...action.payload
-        }), // this handler will change the value of the isError in the state
+        }), 
         [LoanActionEnums.GetLoansError]: (state, action) => ({
             ...state,
             ...action.payload
@@ -59,10 +58,11 @@ export const loanReducer = handleActions(
             ...state,
             ...action.payload
         }),
+
         [LoanActionEnums.ClearLoan]: (state, action) => ({
             ...state,
             ...action.payload
         })
     },
-    LOAN_CONTEXT_INITIAL_STATE
+    LoanContextStateInit
 )

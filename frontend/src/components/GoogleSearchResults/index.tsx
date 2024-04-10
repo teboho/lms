@@ -11,11 +11,6 @@ const { Title, Paragraph } = Typography;
 const GoogleSearchResults: React.FC = () => {
     const { searchBooks, searchTerm, loading } = useContext(BookContext);
 
-    useEffect(() => {
-        console.log("GoogleSearchResults useEffect");
-        console.log(searchBooks);
-    }, [searchBooks]);
-
     const bookElems = useMemo(() => searchBooks?.result?.map((bookStuff, index) => (
         <div key={`search_book_col_${index}`}>
             <SearchBook bookStuff={bookStuff} />

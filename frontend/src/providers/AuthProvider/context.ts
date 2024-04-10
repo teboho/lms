@@ -31,14 +31,6 @@ export interface UserType {
     fullName?: string
 }
 
-export interface AUTH_STATE_TYPE {
-    isPending: boolean;
-    isSuccess: boolean;
-    isError: boolean;
-    authObj: AUTH_RESPONSE_TYPE | undefined;
-    registerObj?: REGISTER_RESPONSE_TYPE | undefined;
-    userObj: UserType;
-}
 
 export interface AUTH_REQUEST_TYPE {
     "userNameOrEmailAddress": string;
@@ -107,6 +99,15 @@ export const AUTH_INITIAL_STATE = {
         "id": 0
     },
     userObj: User_Init
+}
+
+export interface AuthContextStateType {
+    isPending: boolean;
+    isSuccess: boolean;
+    isError: boolean;
+    authObj?: AUTH_RESPONSE_TYPE;
+    registerObj?: REGISTER_RESPONSE_TYPE;
+    userObj?: UserType;
 }
 
 // auth value type

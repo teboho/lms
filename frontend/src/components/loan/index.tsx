@@ -25,9 +25,7 @@ const Loan = ({ item }: { item: LoanType }): React.ReactNode => {
     const isOverdue = new Date(item.dateDue) < new Date();
 
     const onLoanReturn = (id: string) => {
-        // alert(id);
         const loan = item;
-        console.log(item.id);
         getReturnLoan(id);
     }
 
@@ -94,7 +92,6 @@ const Loan = ({ item }: { item: LoanType }): React.ReactNode => {
                 </Paragraph>
                 {!item.isReturned && item.confirmed && (<Paragraph>
                     <Button onClick={e => {
-                        console.log(e);
                         onLoanReturn(item.id);
                     }}>Return</Button>
                 </Paragraph>)}

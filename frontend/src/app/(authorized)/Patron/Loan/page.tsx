@@ -29,7 +29,6 @@ const Loan = (): React.ReactNode => {
 
     useEffect(() => {
         clearLoan();
-        console.log("Loan useEffect");
         const bookId = params.get("bookId");
 
         if (bookId) {
@@ -38,7 +37,6 @@ const Loan = (): React.ReactNode => {
     }, []);
 
     const memoBook = useMemo(() => {
-        console.log("memoBook", book);
         return book;
     }, [book]);
 
@@ -69,8 +67,6 @@ const Loan = (): React.ReactNode => {
             isReturned: false
 
         };
-        // _loan.dateDue.setHours(_loan.dateDue.getHours() + 2); // Add 2 hours to the due date not working
-        console.log(_loan);
         makeLoan(_loan);
     }
 

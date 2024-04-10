@@ -67,11 +67,7 @@ const Inventory = (): React.ReactNode => {
                         `${option.children}`.toLowerCase().indexOf(input.toLowerCase()) >= 0
                     }
                 onSelect={(value) => {
-                    console.log(value);
-                    // show only the books that match the category id
                     const filteredBooks = books?.filter((book) => book?.categoryId === value);
-                    // console.log(filteredBooks);
-
                     memoBooks = filteredBooks;
                     setCurrentBooks(filteredBooks);
                 }}

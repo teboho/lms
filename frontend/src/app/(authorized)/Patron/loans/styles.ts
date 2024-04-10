@@ -6,8 +6,7 @@ export const useStyles = createStyles(({css, cx}) => ({
     `,
     content: css`
         width: 100%;
-        /*border: 1px solid red;*/
-        
+        overflow-Y: auto;  
     `,
     right: css`
         width: 100%;
@@ -22,5 +21,5 @@ export const useStyles = createStyles(({css, cx}) => ({
     `,
     cardSize: css`
         height: 500px;
-    `
+    `,
 }));

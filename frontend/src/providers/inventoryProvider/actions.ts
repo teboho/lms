@@ -28,7 +28,7 @@ export const InventoryActionEnums = {
  */
 export const getInventorysRequestAction = createAction(
     InventoryActionEnums.GetInventorysRequest,
-    () => ({ isSuccess: false, isPending: true, isError: false, inventoryItems: undefined, inventory: undefined, searchTerm: "" })
+    () => ({ isSuccess: false, isPending: true, isError: false, inventoryItems: undefined, inventory: undefined, searchTerm: undefined })
 )
 
 /**
@@ -36,7 +36,7 @@ export const getInventorysRequestAction = createAction(
  */
 export const getInventorysSuccessAction = createAction(
     InventoryActionEnums.GetInventorysSuccess,
-    (inventoryItems: InventoryType[]) => ({ isSuccess: true, isPending: false, isError: false, inventoryItems, searchTerm: "", inventory: undefined })
+    (inventoryItems: InventoryType[]) => ({ isSuccess: true, isPending: false, isError: false, inventoryItems })
 );
 
 /**
@@ -44,7 +44,7 @@ export const getInventorysSuccessAction = createAction(
  */
 export const getInventorysErrorAction = createAction(
     InventoryActionEnums.GetInventorysError,
-    () => ({ isSuccess: false, isPending: false, isError: true, inventory: undefined, inventoryItems: undefined, searchTerm: "" })
+    () => ({ isSuccess: false, isPending: false, isError: true,inventoryItems: undefined })
 );
 
 /**
@@ -53,7 +53,7 @@ export const getInventorysErrorAction = createAction(
  */
 export const getInventoryRequestAction = createAction(
     InventoryActionEnums.GetInventoryRequest,
-    () => ({ isSuccess: false, isPending: true, isError: false, inventory: undefined, inventoryItems: undefined, searchTerm: "" })
+    () => ({ isSuccess: false, isPending: true, isError: false, inventory: undefined })
 )
 
 /**
@@ -61,7 +61,7 @@ export const getInventoryRequestAction = createAction(
  */
 export const getInventorySuccessAction = createAction(
     InventoryActionEnums.GetInventorySuccess,
-    (inventory: InventoryType):any => ({ isSuccess: true, isPending: false, isError: false, inventory, inventoryItems: undefined, searchTerm: "" })
+    (inventory: InventoryType):any => ({ isSuccess: true, isPending: false, isError: false, inventory })
 );
 
 
@@ -71,7 +71,7 @@ export const getInventorySuccessAction = createAction(
  */
 export const getInventoryErrorAction = createAction(
     InventoryActionEnums.GetInventoryError,
-    () => ({ isSuccess: false, isPending: false, isError: true, inventory: undefined, inventoryItems: undefined, searchTerm: "" })
+    () => ({ isSuccess: false, isPending: false, isError: true, inventory: undefined })
 );
 
 /**
@@ -79,7 +79,7 @@ export const getInventoryErrorAction = createAction(
  */
 export const setSearchTermAction = createAction(
     InventoryActionEnums.SetSearchTerm,
-    (searchTerm: string): any => ({ searchTerm })
+    (searchTerm: string) => ({ searchTerm })
 );
 
 /**
@@ -88,7 +88,7 @@ export const setSearchTermAction = createAction(
  */
 export const postInventoryRequestAction = createAction(
     InventoryActionEnums.PostInventoryRequest,
-    () => ({ isSuccess: false, isPending: true, isError: false, inventory: undefined, inventoryItems: undefined, searchTerm: "" })
+    () => ({ isSuccess: false, isPending: true, isError: false, inventory: undefined })
 );
 
 /**
@@ -96,7 +96,7 @@ export const postInventoryRequestAction = createAction(
  */
 export const postInventorySuccessAction = createAction(
     InventoryActionEnums.PostInventorySuccess,
-    (inventory: InventoryType) => ({ isSuccess: true, isPending: false, isError: false, inventory, searchTerm: "", inventoryItems: undefined as InventoryType[] })
+    (inventory: InventoryType) => ({ isSuccess: true, isPending: false, isError: false, inventory })
 );
 
 /**
@@ -104,7 +104,7 @@ export const postInventorySuccessAction = createAction(
  */
 export const postInventoryErrorAction = createAction(
     InventoryActionEnums.PostInventoryError,
-    () => ({ isSuccess: false, isPending: false, isError: true, inventory: undefined, inventoryItems: undefined, searchTerm: "" })
+    () => ({ isSuccess: false, isPending: false, isError: true, inventory: undefined })
 );
 
 /**
@@ -113,7 +113,7 @@ export const postInventoryErrorAction = createAction(
  */
 export const updateInventoryRequestAction = createAction(
     InventoryActionEnums.UpdateInventoryRequest,
-    () => ({ isSuccess: false, isPending: true, isError: false, inventory: undefined, inventoryItems: undefined, searchTerm: "" })
+    () => ({ isSuccess: false, isPending: true, isError: false, inventory: undefined })
 );
 
 /**
@@ -121,7 +121,7 @@ export const updateInventoryRequestAction = createAction(
  */
 export const updateInventorySuccessAction = createAction(
     InventoryActionEnums.UpdateInventorySuccess,
-    (inventory: InventoryType): any => ({ isSuccess: true, isPending: false, isError: false, inventory, inventoryItems: undefined, searchTerm: "" })
+    (inventory: InventoryType): any => ({ isSuccess: true, isPending: false, isError: false, inventory })
 );
 
 /**
@@ -129,5 +129,5 @@ export const updateInventorySuccessAction = createAction(
  */
 export const updateInventoryErrorAction = createAction(
     InventoryActionEnums.UpdateInventoryError,
-    () => ({ isSuccess: false, isPending: false, isError: true, inventory: undefined, inventoryItems: undefined, searchTerm: "" })
+    () => ({ isSuccess: false, isPending: false, isError: true, inventory: undefined })
 );

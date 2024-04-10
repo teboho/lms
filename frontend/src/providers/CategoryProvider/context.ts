@@ -14,15 +14,15 @@ export const CATEGORY_INIT: CategoryType = {
     description: ""
 }
 
-export interface CATEGORY_STATE_TYPE {
+export interface CategoryContextStateType {
     isPending: boolean;
     isSuccess: boolean;
     isError: boolean;
-    categories: CategoryType[] | undefined;
-    category: CategoryType | undefined;
+    categories?: CategoryType[];
+    category?: CategoryType;
 }
 
-export const CATEGORY_CONTEXT_INITIAL_STATE: CATEGORY_STATE_TYPE = {
+export const CategoryContextStateInit: CategoryContextStateType = {
     isPending: false,
     isError: false,
     isSuccess: false,
@@ -30,17 +30,14 @@ export const CATEGORY_CONTEXT_INITIAL_STATE: CATEGORY_STATE_TYPE = {
     category: CATEGORY_INIT
 }
 
-export interface CategoryContextType {
+export interface CategoryContextValueType {
     category: CategoryType | undefined;
     categories: CategoryType[] | undefined;
     getCategory: (categoryId: string) => CategoryType | undefined;
     getAllCategories: () => void;
 }
 
-/**
- * Default value that the provider will pass is an empty object
- */
-const CategoryContext = createContext<CategoryContextType>({
+const CategoryContext = createContext<CategoryContextValueType>({
     category: CATEGORY_INIT,
     categories: [] as CategoryType[],
     getCategory: (categoryId: string) => CATEGORY_INIT,
