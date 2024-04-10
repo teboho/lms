@@ -8,7 +8,6 @@ export const useStyles = createStyles(({css, cx}) => ({
         width: 100%;
         padding-right: 20px;
         padding-left: 20px;
-        background: ;
     `,
     right: css`
         width: 100%;

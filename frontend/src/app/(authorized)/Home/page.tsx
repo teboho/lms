@@ -11,6 +11,7 @@ import History from "@/components/history";
 import SearchResults from "@/components/searchResults";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Utils, { TokenProperies } from "@/utils";
 
 const { Title } = Typography;
 
@@ -21,30 +22,28 @@ const Page = (): React.ReactNode => {
     const { searchTerm } = useContext(BookContext);
     const { push } = useRouter();
 
-    useEffect(() => {
-        if (searchTerm) {
-            push("/");
-        }
-    }, [userObj]);
-
     const user = useMemo(() => userObj, [userObj]);
-    
-    if (user?.roleNames?.includes("ADMIN")) {
-        push("/admin");
-    }   
-    else if (user?.roleNames?.includes("PATRON")) {
-        push("/patron");
-    } 
-    else {
-        return (
-            <>
+
+    useEffect(() => {
+        const decodedToken = Utils.decodedToken();
+        const roleKey = `${TokenProperies.role}`;
+        const isPatron = decodedToken[roleKey] === "Patron";
+        if (isPatron) {
+            push(`/patron`);
+        } else {
+            push(`/admin`);
+        }
+    }, []);
+
+    return (
+        <>
+            <Flex align="center" justify="center" vertical style={{background: "#d0e1e1"}}>
                 <Title level={2}>savvyshelf</Title>
-                <Flex align="center" justify="center" style={{background: "#d0e1e1"}}>
-                    <Image src={"/assets/images/book-op.gif"} alt="book" width={350} height={350} />
-                </Flex>
-            </>
-        );
-    }
+                <Image src={"/assets/images/book-op.gif"} alt="book" width={350} height={350} />
+            </Flex>
+        </>
+    );
+    
 }
 
 export default withAuth(Page);

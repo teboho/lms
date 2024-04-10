@@ -14,15 +14,16 @@ const { Title, Paragraph } = Typography;
 const Page = (): React.ReactNode => {
     const { token } = theme.useToken();
     const { getLoans, loan, loans, getLoan, putLoan } = useContext(LoanContext);
-    const { books } = useContext(BookContext);
+    const { books, searchTerm, getAll } = useContext(BookContext);
     const searchParams = useSearchParams();
     const params = new URLSearchParams(searchParams);
     const [current, setCurrent] = useState([]);
     const [memoLoans, setMemoLoans] = useState([]);
 
     const { styles, cx } = useStyles();
-
+{}
     useEffect(() => {
+        getAll();
         if (loans?.length === 0 || !loans) {
             getLoans();
         }
@@ -152,7 +153,6 @@ const Page = (): React.ReactNode => {
 
     const data = memoLoans?.map((loan) => {
         const book = getBookById(loan?.bookId);
-        // const patron = Utils.getPatronUserInfo(loan?.patronId);
         const content = <ViewPatron id={loan.patronId} />;
         return {
             key: loan.id,

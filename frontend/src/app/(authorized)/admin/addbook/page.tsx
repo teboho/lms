@@ -6,23 +6,67 @@ const { Content, Sider } = Layout;
 const { Search } = Input;
 import {useStyles} from "./styles";
 import withAuth from "@/hocs/withAuth";
-import BookContext from "@/providers/bookProvider/context";
+import BookContext, { BookDataType } from "@/providers/bookProvider/context";
 import SearchResults from "@/components/searchResults";
 import GoogleSearchResults from "@/components/googleSearchResults";
-import Utils from "@/utils";
+import Utils, { TokenProperies } from "@/utils";
+import { PreferenceContext, PreferenceType } from "@/providers/preferenceProvider/context";
+import CategoryContext from "@/providers/categoryProvider/context";
+import { HistoryContext, HistoryType } from "@/providers/historyProvider/context";
 
 const Page = (): React.ReactNode => {
-    const { getAll, search } = useContext(BookContext);
+    const { getAll, search, getLocalBook } = useContext(BookContext);
+    const { getPreferenceByPatron } = useContext(PreferenceContext);
+    const { getCategory, getAllCategories } = useContext(CategoryContext);
+    const { historyData, getHistoryData } =  useContext(HistoryContext);
+    const [categories, setCategories] = useState([]);
+    const [books, setBooks] = useState([]);
+    const [googleResults, setGoogleResults] = useState([]);
+    
     const { styles, cx } = useStyles();
-
     const accessToken = Utils.getAccessToken(); // localStorage.getItem("accessToken");
 
     useEffect(() => {
-        console.log("AllBooks useEffect");
+        console.log("AllBooks useEffect");     
+
         if (accessToken) { 
+            getHistoryData();
+            getAllCategories();
             getAll();
         }
     }, []);
+
+    useEffect(() => {
+        console.log("Addbook useEffect historyData");
+        console.log(historyData);
+        historyData?.forEach((historyItem: HistoryType) => {
+            const book = getLocalBook(historyItem.bookId);
+            if (books.findIndex((b: BookDataType) => b?.id === book?.id) === -1) {
+                setBooks([...books, book]);
+            }
+
+            const category = getCategory(book?.categoryId);
+            if (categories.findIndex((c) => c?.id === category?.id) === -1) {
+                setCategories([...categories, category]);
+            }
+        })
+    }, [getCategory, getLocalBook, historyData]);
+
+    useEffect(() => {
+        console.log("Addbook useEffect categories");
+        console.log(categories);
+    }, [categories]);
+
+    useEffect(() => {
+        console.log("Addbook useEffect books");
+        console.log(books);
+
+        let searchQuery = "";
+        
+        books.forEach((book: BookDataType) => {
+            searchQuery +=  "subject:" + book.name + "";
+        });
+    }, [books]);
     
     const onSearch = (value: string) => {
         console.log(value);

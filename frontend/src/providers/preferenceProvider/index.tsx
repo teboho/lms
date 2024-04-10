@@ -9,6 +9,7 @@ import {
     getPreferenceDataErrorAction, 
     getPreferenceDataRequestAction, 
     getPreferenceDataSuccessAction, 
+    getPreferenceSuccessAction, 
     postPreferenceErrorAction, 
     postPreferenceRequestAction, 
     postPreferenceSuccessAction 
@@ -74,6 +75,7 @@ export default function PreferenceProvider({ children }: { children: React.React
 
     function getPreferenceByPatron(patronId: number): PreferenceType {
         const preference = state.preferenceData?.find((item) => item.patronId === patronId);
+        dispatch(getPreferenceSuccessAction(preference));
         return preference;
     }
 

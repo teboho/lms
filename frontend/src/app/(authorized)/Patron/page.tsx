@@ -1,5 +1,5 @@
 "use client";
-import { Suspense, useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import withAuth from "@/hocs/withAuth";
 import { Button, Flex, Layout, Select, Space, Typography } from "antd";
 import BookContext from "@/providers/bookProvider/context";
@@ -10,25 +10,36 @@ import CategoryContext from "@/providers/categoryProvider/context";
 import InventoryContext from "@/providers/inventoryProvider/context";
 import AuthorsContext from "@/providers/authorsProvider/context";
 import Image from "next/image";
+import { useSearchParams, usePathname } from "next/navigation";
 
 const { Content } = Layout;
 const { Option } = Select;
 
 const Page = (): React.ReactNode => {
     const { userObj } = useContext(AuthContext);
-    const { books, getAll: getAllBooks , searchTerm} = useContext(BookContext);
+    const { books, getAll: getAllBooks , searchTerm, searchDB } = useContext(BookContext);
     const { getAll } = useContext(InventoryContext);
     const { categories, getAllCategories } = useContext(CategoryContext);
     const { getAuthors } = useContext(AuthorsContext);
     const { styles, cx } = useStyles();
     const [isLoading, setIsLoading] = useState(true);
-
     const [currentBooks, setCurrentBooks] = useState([]);
     const memoCategories = useMemo(() => categories, [categories]);
+    const searchParams = useSearchParams();
+    const pathname = usePathname();
 
     useEffect(() => {
         getAll();
-        getAllBooks();
+        console.log("pathname", pathname);
+        
+        const search = searchParams.get("search");
+        if (search) {
+            console.log("searching for...", search);
+            searchDB(search);
+        } else {
+            getAllBooks();
+        }
+
         getAuthors();
         getAllCategories();
         setCurrentBooks(books);

@@ -44,7 +44,7 @@ export default function RootLayout({
                   <Header style={{position: "sticky", width: "100%" , top: 0, zIndex: 1000, background: "#d0e1e1"}}>
                     <NavBar />
                   </Header>
-                  <Layout style={{height: "100%"}}>
+                  <Layout>
                     <Flex>
                         <CommunicationProvider>
                           <InventoryProvider>

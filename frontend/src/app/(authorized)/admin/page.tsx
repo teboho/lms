@@ -1,12 +1,11 @@
 "use client";
-import { ReactNode, useState, useEffect, useMemo, useContext, use } from "react";
-import { useSearchParams } from "next/navigation";
+import { useState, useEffect, useMemo, useContext, use } from "react";
+import { useSearchParams, usePathname } from "next/navigation";
 import Link from "next/link";
 
 import withAuth from "@/hocs/withAuth";
-import { Card, Typography, Image, Button , List, message, Steps, theme, Select, Space } from 'antd';
+import { Typography, Image, Button , List, message, Steps, theme, Select, Space } from 'antd';
 import BookContext, { BookDataType, BookType } from "@/providers/bookProvider/context";
-
 import InventoryContext from "@/providers/inventoryProvider/context";
 import CategoryContext, { CategoryType } from "@/providers/categoryProvider/context";
 import AuthorsContext from "@/providers/authorsProvider/context";
@@ -16,17 +15,28 @@ const { Title, Paragraph } = Typography;
 const Page = (): React.ReactNode => {
     const { token } = theme.useToken();
     const searchParams = useSearchParams();
-    const { books, getAll: getAllBooks } = useContext(BookContext);
+    const { books, getAll: getAllBooks, searchDB } = useContext(BookContext);
     const { inventoryItems, getAll, getInventory } = useContext(InventoryContext);
     const { categories, getCategory, getAllCategories } = useContext(CategoryContext);
     const { getAuthorById, getAuthors } = useContext(AuthorsContext);
     const [currentBooks, setCurrentBooks] = useState([]);
+    const pathname = usePathname();
 
     useEffect(() => {
             getAll();
-            getAllBooks();
+            console.log("pathname", pathname);
+            
+            const search = searchParams.get("search");
+            if (search) {
+                console.log("searching for...", search);
+                searchDB(search);
+            } else {
+                getAllBooks();
+            }
+
             getAuthors();
             getAllCategories();
+
     }, []);
 
     const memoInventoryItems = useMemo(() => {
@@ -53,7 +63,7 @@ const Page = (): React.ReactNode => {
             <div>
                 <Title level={1}>Inventory</Title>
                 <Paragraph>
-                    This is the inventory page
+                    This is the inventory
                 </Paragraph>
             </div>
 

@@ -65,6 +65,7 @@ export default function BookProvider({ children }: { children: React.ReactNode }
     }
 
    function searchDB(term: string): void {
+        console.log("searching for...", term);
         const endpoint = "api/services/app/Book/GetSearchBooks";
         dispatch(getBooksRequestAction());
         instance.get(`${endpoint}?name=${term}`)

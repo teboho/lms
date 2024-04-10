@@ -2,7 +2,6 @@
 import React, { useContext, useMemo, useState } from "react";
 import { Flex, Input, Button, Drawer, Avatar } from "antd";
 import type { DrawerProps, MenuProps } from "antd";
-import Menu from "antd/lib/menu/menu";
 import  { useStyles } from "./styles";
 import { SearchProps } from "antd/es/input";
 import Link from "next/link";
@@ -11,7 +10,9 @@ import AuthContext from "@/providers/authProvider/context";
 import BookContext from "@/providers/bookProvider/context";
 import { UserOutlined } from "@ant-design/icons";
 import 'remixicon/fonts/remixicon.css'
-import logo from '@/assets/LMS-logo1-transparent.png';
+import Utils, { TokenProperies } from "@/utils";
+import { useRouter, usePathname } from "next/navigation";
+
 
 const outItems: MenuProps['items'] = [
     {
@@ -35,11 +36,11 @@ const NavBar: React.FC = () => {
     const { logout, userObj } = useContext(AuthContext);
     const { styles, cx } = useStyles();
     const [searchTerm, setSearchTerm] = useState("");
-    
     const user = useMemo(() => userObj, [userObj]);
     const { searchDB } = useContext(BookContext);
-
     const [open, setOpen] = useState(false);
+    const pathname = usePathname();
+    const { push } = useRouter();
   
     const showDrawer = () => {
       setOpen(true);
@@ -58,8 +59,21 @@ const NavBar: React.FC = () => {
     }
 
     const accessToken = localStorage.getItem("accessToken");
-    const onSearch: SearchProps["onSearch"] = (value, _e, info) => {
-        searchDB(searchTerm);
+    const onSearch: SearchProps["onSearch"] = (value, _e, info) => {       
+        const decodedToken = Utils.decodedToken();
+        const roleKey = `${TokenProperies.role}`;
+        const isPatron = decodedToken[roleKey] === "Patron";
+
+        if (pathname === "/patron" || pathname === "/admin") {
+            console.log("searching for...", value, "in", pathname);
+            searchDB(value);
+        } else{
+            if (isPatron) {
+                push(`/patron?search=${searchTerm}`);
+            } else {
+                push(`/admin?search=${searchTerm}`);
+            }
+        }
     }
 
     if (accessToken) {
