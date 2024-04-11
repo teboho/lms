@@ -2,13 +2,15 @@
 import { useState, useEffect, useMemo, useContext, use } from "react";
 import { useSearchParams, usePathname } from "next/navigation";
 import Link from "next/link";
-
+import styles from "./admin.module.css";
 import withAuth from "@/hocs/withAuth";
 import { Typography, Image, Button , List, message, Steps, theme, Select, Space } from 'antd';
 import BookContext, { BookDataType, BookType } from "@/providers/bookProvider/context";
 import InventoryContext from "@/providers/inventoryProvider/context";
 import CategoryContext, { CategoryType } from "@/providers/categoryProvider/context";
 import AuthorsContext from "@/providers/authorsProvider/context";
+import { useStoredFileActions, useStoreFileState } from "@/providers/storedFileProvider";
+import Utils from "@/utils";
 
 const { Title, Paragraph } = Typography;
 
@@ -21,6 +23,9 @@ const Page = (): React.ReactNode => {
     const { getAuthorById, getAuthors } = useContext(AuthorsContext);
     const [currentBooks, setCurrentBooks] = useState([]);
     const pathname = usePathname();
+    
+    const { getStoredFiles, getBridgeByUser, postUserFile } = useStoredFileActions();
+    const { userFile } = useStoreFileState();
 
     useEffect(() => {
             getAll();
@@ -37,6 +42,12 @@ const Page = (): React.ReactNode => {
             getAuthors();
             getAllCategories();
 
+            getBridgeByUser(Utils.getUserId());
+
+            if (userFile) {
+                console.log("userFile...", userFile);
+                getStoredFiles();
+            }
     }, []);
 
     const memoInventoryItems = useMemo(() => {
@@ -59,7 +70,7 @@ const Page = (): React.ReactNode => {
     const { Option } = Select;
 
     return (
-        <>
+        <div className={styles.content}>
             <div>
                 <Title level={1}>Inventory</Title>
                 <Paragraph>
@@ -154,9 +165,8 @@ const Page = (): React.ReactNode => {
                         }
                     </List.Item>
                 )}
-            />
-           
-        </>
+            />           
+        </div>
     );
 }
 

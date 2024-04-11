@@ -68,7 +68,6 @@ export interface LoanStateType {
     isError: boolean;
 }
 
-
 export interface LoanContextStateType {
     loan?: LoanType;
     loans?: LoanType[];

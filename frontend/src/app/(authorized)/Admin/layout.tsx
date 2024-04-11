@@ -7,6 +7,7 @@ import { useStyles } from "./styles";
 import Link from "next/link";
 import withAuth from "@/hocs/withAuth";
 import { DatabaseOutlined } from "@ant-design/icons";
+import { MenuItemType } from "antd/es/menu/hooks/useItems";
 
 const { Content, Sider } = Layout;
 
@@ -25,7 +26,7 @@ function getItem(
       children,
       label,
       type,
-      onclick
+      onClick: () => {}
     } as MenuItem;
 }
 

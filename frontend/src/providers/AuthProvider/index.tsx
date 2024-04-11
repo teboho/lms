@@ -1,6 +1,6 @@
 "use client"
-import { useEffect, useReducer } from "react";
-import AuthContext, { AUTH_INITIAL_STATE, AUTH_REQUEST_TYPE, AUTH_RESPONSE_TYPE, REGISTER_REQUEST_TYPE, UserType } from "./context";
+import { useEffect, useMemo, useReducer } from "react";
+import AuthContext, { AuthContextStateInit, AUTH_REQUEST_TYPE, AUTH_RESPONSE_TYPE, REGISTER_REQUEST_TYPE, UserType } from "./context";
 import { authReducer } from "./reducer";
 import { clearAuthAction, getUserErrorAction, getUserRequestAction, getUserSuccessAction, postAuthErrorAction, postAuthRequestAction, postAuthSuccessAction } from "./actions";
 import { useRouter } from 'next/navigation';
@@ -13,10 +13,11 @@ export const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
 /**
  * 
- * @param accessToken access token
+ * @param accessToken? the access token
  * @returns an axios instance
  */
-export function makeAxiosInstance(accessToken:string) {
+export function makeAxiosInstance(accessToken?:string) {
+    if (!accessToken) accessToken = Utils.getAccessToken();
     return axios.create({
         baseURL: baseURL,
         headers: {
@@ -27,11 +28,11 @@ export function makeAxiosInstance(accessToken:string) {
 }
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
-    const [authState, dispatch] = useReducer(authReducer, AUTH_INITIAL_STATE);
+    const [authState, dispatch] = useReducer(authReducer, AuthContextStateInit);
     const { push } = useRouter();
     const [messageApi, contextHolder] = message.useMessage();
     
-    const accessToken = Utils.getAccessToken();
+    let accessToken = useMemo(() => Utils.getAccessToken(), []);
     const instance = makeAxiosInstance(accessToken);
 
     useEffect(() => {
@@ -47,6 +48,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
             getUserInfo(userId);
             
             console.log("AuthProvider mounts for the first time.");
+            accessToken = Utils.getAccessToken();
         }
     }, []);
 
@@ -131,7 +133,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
                 getUserInfo(res.userId);
 
-                window.location.href = "/";
+                push("/");
             } else {
                 fail();
                 throw new Error();
@@ -188,6 +190,8 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         })
 
         dispatch(clearAuthAction());
+        // clear the entire application state
+                
     }
 
     function refreshToken() {
@@ -221,6 +225,10 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         }
     }
 
+    function getProfilePic() {
+        return authState?.profilePic;
+    }
+
     return (
         <AuthContext.Provider 
             value={{
@@ -235,7 +243,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
                 isLoggedIn, 
                 getUserId,
                 getUserInfo,
-                getPatronInfo
+                getPatronInfo, getProfilePic
         }}>
             {contextHolder}
             {children}

@@ -1,6 +1,6 @@
 'use client';
-import React, { useContext, useMemo, useState } from "react";
-import { Flex, Input, Button, Drawer, Avatar } from "antd";
+import React, { useContext, useEffect, useState } from "react";
+import { Flex, Input, Button, Drawer, Avatar, App, Form, Upload } from "antd";
 import type { DrawerProps, MenuProps } from "antd";
 import  { useStyles } from "./styles";
 import { SearchProps } from "antd/es/input";
@@ -8,11 +8,13 @@ import Link from "next/link";
 import Image from "next/image";
 import AuthContext from "@/providers/authProvider/context";
 import BookContext from "@/providers/bookProvider/context";
-import { UserOutlined } from "@ant-design/icons";
+import { UploadOutlined, UserOutlined } from "@ant-design/icons";
 import 'remixicon/fonts/remixicon.css'
 import Utils, { TokenProperies } from "@/utils";
 import { useRouter, usePathname } from "next/navigation";
-
+import { makeAxiosInstance } from "@/providers/authProvider";
+import { useStoredFileActions, useStoreFileState } from "@/providers/storedFileProvider";
+import { URL } from "url";
 
 const outItems: MenuProps['items'] = [
     {
@@ -32,16 +34,45 @@ const outItems: MenuProps['items'] = [
 
 const { Search } = Input;
 
-const NavBar: React.FC = () => {
-    const { logout, userObj } = useContext(AuthContext);
+const NavBar = (): React.ReactNode => {
+    const { logout, userObj, authObj } = useContext(AuthContext);
+    const { getStoredFiles, getBridgeByUser, postUserFile } = useStoredFileActions();
+    const { userFile } = useStoreFileState();
     const { styles, cx } = useStyles();
     const [searchTerm, setSearchTerm] = useState("");
-    const user = useMemo(() => userObj, [userObj]);
     const { searchDB } = useContext(BookContext);
     const [open, setOpen] = useState(false);
     const pathname = usePathname();
     const { push } = useRouter();
+    const {modal} = App.useApp();
+    const [fileList, setFileList] = useState([]);
+    const [uploading, setUploading] = useState(false);
+
+    const instance = makeAxiosInstance();
   
+
+    useEffect(() => {
+        if (userFile) {
+            console.log("userFile...", userFile);
+            getStoredFiles();
+        }
+    }, []);
+
+    useEffect(() => {
+        console.log("user is", authObj);
+
+        if (authObj && authObj.userId) {
+            getBridgeByUser(authObj.userId);
+        }
+    }, [authObj]);
+
+    useEffect(() => {
+        if (userFile) {
+            console.log("userFile...", userFile);
+            getStoredFiles();
+        }
+    }, [userFile]);
+
     const showDrawer = () => {
       setOpen(true);
     };
@@ -54,8 +85,98 @@ const NavBar: React.FC = () => {
         setSearchTerm(prev => term);
     }
 
-    function isPatron() {
-        return user?.roleNames?.includes("PATRON");
+    function showModal() {
+        const props = {
+            onRemove: file => {
+                const index = fileList.indexOf(file);
+                const newFileList = fileList.slice();
+                newFileList.splice(index, 1);
+                setFileList(newFileList);
+            },
+            beforeUpload: file => {
+                setFileList([...fileList, file]);
+                return false;
+            },
+            fileList
+        }
+
+        const handleUpload = () => {
+            const formData = new FormData();
+            fileList.forEach(file => {
+                formData.append('file', file);
+            });
+            setUploading(true);
+            // axios formData upload
+            instance.post("/Upload", formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }).then((response) => {
+                const { data } = response;
+                if (!data?.success) {
+                    modal.error({
+                        content: 'File upload failed',
+                    });
+                    setUploading(false);
+                    throw new Error("File upload failed");
+                }
+                
+                console.log("file uploaded successfully");
+                console.log(data);
+                const id = data?.result.id;
+                console.log("updating profile picture...");
+                const userFile = {
+                    fileId: id,
+                    userId: userObj?.id,
+                }                
+                modal.success({
+                    content: 'File uploaded successfully',
+                });
+                setFileList([]);
+                setUploading(false);
+                return userFile;
+            })
+            .then((userFile) => {
+                postUserFile(userFile);
+                console.log("userFile", userFile);
+            })
+            .catch(() => {
+                modal.error({
+                    content: 'File upload failed',
+                });
+                setUploading(false);
+            });
+        }
+
+        const MyUpload = () => (
+            <>
+                <Upload {...props}>
+                    <Button icon={<UploadOutlined />}>Select File</Button>
+                </Upload>
+                <Button
+                    type="primary"
+                    onClick={handleUpload}
+                    disabled={fileList.length === 0}
+                    loading={uploading}
+                    style={{
+                    marginTop: 16,
+                }}>
+                    {uploading ? 'Uploading' : 'Start Upload'}
+                </Button>
+            </>
+        );
+
+        // show modal to upload profile picture
+        modal.confirm({
+            title: "Upload profile picture",
+            content: <MyUpload />,
+            onOk() {
+                console.log("ok");
+            },
+            onCancel() {
+                console.log("cancel");
+            }
+        });
     }
 
     const accessToken = localStorage.getItem("accessToken");
@@ -107,12 +228,22 @@ const NavBar: React.FC = () => {
                             background: "#d0e1e1"
                         }}
                     >
-                        {/* Show user information */}
-                        <p>{user?.fullName}</p>
-                        <p>{user?.emailAddress}</p>
-                        <p>{user?.roleNames[0]}</p>
-                        <hr />
-                        <Button onClick={logout}>Logout</Button>
+                        <Flex vertical justify="center" align="center">
+                            <div>
+                                {
+                                userFile?.fileId ? <img src={`${encodeURI(`https://localhost:44311/GetStoredFile/${userFile.fileId}`)}`} width={64} height={64} alt="profile" />
+                                :
+                                <Avatar src={userFile?.fileId && `/GetStoredFile/${userFile.fileId}`} size={64} icon={<UserOutlined />} onClick={showModal} /> 
+                                }
+                            </div>
+                            <div>
+                                <p><i style={{width: 30, height: 30}} className="ri-profile-fill"></i> {userObj?.fullName}</p>
+                                <p><i className="ri-mail-line"></i> {userObj?.emailAddress}</p>
+                                <p><i className="ri-safe-line"></i> {userObj?.roleNames[0]}</p>
+                            </div>
+                            <hr />
+                            <Button onClick={logout}>Logout</Button>
+                        </Flex>
                     </Drawer>
                 </span>
             </Flex>
@@ -123,3 +254,7 @@ const NavBar: React.FC = () => {
 }
 
 export default NavBar;
+
+function onOk(): any {
+    throw new Error("Function not implemented.");
+}

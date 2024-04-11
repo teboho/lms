@@ -47,7 +47,7 @@ export default class Utils {
     static get userId() {
         return parseInt(localStorage.getItem("userId"));
     }
-    static getPatronId() {
+    static getUserId() {
         return parseInt(localStorage.getItem("userId"));
     }
     static decodedToken() {

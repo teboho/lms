@@ -9,11 +9,11 @@ import { redirect } from "next/navigation";
 
 const { Paragraph } = Typography;
 
-export default function Welcome() {
-  // check if the user is logged in and redirect to home if so    
-  const {isLoggedIn} = useContext(AuthContext);
+export default function Welcome() {    
+  const {isLoggedIn, getUserInfo, getUserId } = useContext(AuthContext);
 
   if (isLoggedIn()) {
+    getUserInfo(getUserId());
     redirect("/home");
   }
   

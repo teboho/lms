@@ -89,6 +89,10 @@ export default function Register(): React.ReactNode {
         console.log(user);
         register(user);
     }
+    
+    const onFinish = (values: object): void => {
+        console.log(values);
+    }
 
     return (
         <Flex className={styles.form} style={{background: "#d0e1e1"}} align="center" justify="center">

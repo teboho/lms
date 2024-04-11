@@ -16,7 +16,11 @@ export const AuthActionEnums = {
     GetUserSuccess: "GET_USER_SUCCESS",
     GetUserError: "GET_USER_ERROR",
 
-    ClearAuth: "CLEAR_AUTH"
+    ClearAuth: "CLEAR_AUTH",
+
+    GetProfilePictureRequest: "GET_PROFILE_PICTURE_REQUEST",
+    GetProfilePictureSuccess: "GET_PROFILE_PICTURE_SUCCESS",
+    GetProfilePictureError: "GET_PROFILE_PICTURE_ERROR"
 }
 
 /**
@@ -83,4 +87,19 @@ export const getUserErrorAction = createAction(
 export const clearAuthAction = createAction(
     AuthActionEnums.ClearAuth,
     () => ({ isSuccess: false, isPending: false, isError: false, authObj: undefined, registerObj: undefined, userObj: undefined })
+);
+
+export const getProfilePictureRequestAction = createAction(
+    AuthActionEnums.GetProfilePictureRequest,
+    () => ({ isSuccess: false, isPending: true, isError: false, profilePic: "" })
+);
+
+export const getProfilePictureSuccessAction = createAction(
+    AuthActionEnums.GetProfilePictureSuccess,
+    (profilePic: string) => ({ isSuccess: true, isPending: false, isError: false, profilePic })
+);
+
+export const getProfilePictureErrorAction = createAction(
+    AuthActionEnums.GetProfilePictureError,
+    () => ({ isSuccess: false, isPending: false, isError: true, profilePic: "" })
 );

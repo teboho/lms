@@ -25,7 +25,7 @@ const Page = (): React.ReactNode => {
     }, [])
 
     useEffect(() => {
-        const patronId = Utils.getPatronId();
+        const patronId = Utils.getUserId();
         setLoans(getLoansByPatron(patronId));   
     }, [providerLoans]);
 

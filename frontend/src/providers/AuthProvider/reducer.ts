@@ -1,6 +1,6 @@
 import { handleActions } from "redux-actions";
 import { AuthActionEnums } from "./actions";
-import { AUTH_INITIAL_STATE, AuthContextStateType } from "./context";
+import { AuthContextStateInit, AuthContextStateType } from "./context";
 
 /**
  * A reducer to handle the authentication
@@ -51,5 +51,5 @@ export const authReducer = handleActions<AuthContextStateType>(
             ...action.payload
         })
     },
-    AUTH_INITIAL_STATE
+    AuthContextStateInit
 )

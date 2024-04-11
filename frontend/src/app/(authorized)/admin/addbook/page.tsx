@@ -62,10 +62,10 @@ const Page = (): React.ReactNode => {
         console.log(books);
 
         let searchQuery = "";
-        
         books.forEach((book: BookDataType) => {
-            searchQuery +=  "subject:" + book.name + "";
+            searchQuery +=  "subject:" + book?.name + "";
         });
+        search(searchQuery);
     }, [books]);
     
     const onSearch = (value: string) => {
