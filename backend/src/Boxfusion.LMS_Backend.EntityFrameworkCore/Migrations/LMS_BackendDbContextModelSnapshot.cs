@@ -1790,6 +1790,44 @@ namespace Boxfusion.LMS_Backend.Migrations
                     b.ToTable("Preferences");
                 });
 
+            modelBuilder.Entity("Boxfusion.LMS_Backend.Domain.StoredFile", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("FileName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FileType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FileStore");
+                });
+
+            modelBuilder.Entity("Boxfusion.LMS_Backend.Domain.UserStoredFile", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("FileId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FileId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserFileStore");
+                });
+
             modelBuilder.Entity("Boxfusion.LMS_Backend.MultiTenancy.Tenant", b =>
                 {
                     b.Property<int>("Id")
@@ -2182,6 +2220,25 @@ namespace Boxfusion.LMS_Backend.Migrations
                     b.Navigation("SecondaryCategory");
 
                     b.Navigation("TertiaryCategory");
+
+                    b.Navigation("UserModel");
+                });
+
+            modelBuilder.Entity("Boxfusion.LMS_Backend.Domain.UserStoredFile", b =>
+                {
+                    b.HasOne("Boxfusion.LMS_Backend.Domain.StoredFile", "StoredFileModel")
+                        .WithMany()
+                        .HasForeignKey("FileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Boxfusion.LMS_Backend.Authorization.Users.User", "UserModel")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("StoredFileModel");
 
                     b.Navigation("UserModel");
                 });

@@ -21,7 +21,7 @@ using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using static System.Reflection.Metadata.BlobBuilder;
 
-namespace Boxfusion.LMS_Backend.Services.AskGoogle
+namespace Boxfusion.LMS_Backend.Services.Recommendations
 {
 
     public class RecommendationsAppService : LMS_BackendAppServiceBase, IRecommendationsAppService
@@ -53,7 +53,7 @@ namespace Boxfusion.LMS_Backend.Services.AskGoogle
         public async Task<List<object>> RecommendBooks(int _userId)
         {
             var userId = _userId;
-            
+
             // get the user's data
             var userHistory = await _historyRepo.GetAllListAsync(x => x.PatronId == userId);
             var userPreferences = await _prefRepository.FirstOrDefaultAsync(x => x.PatronId == userId);
@@ -69,7 +69,7 @@ namespace Boxfusion.LMS_Backend.Services.AskGoogle
 
             // calculate the percentage of each category in the user's history
             var totalCategories = categories.Count();
-            var categoryPercentages = prevalentCategories.Select(x => new { Category = x.Key, Percentage = (x.Count() / totalCategories) * 100 });
+            var categoryPercentages = prevalentCategories.Select(x => new { Category = x.Key, Percentage = x.Count() / totalCategories * 100 });
 
             //// get 10 books based on the category percentages
             //var result = new List<Book>();
@@ -82,6 +82,6 @@ namespace Boxfusion.LMS_Backend.Services.AskGoogle
 
             return categoryPercentages.ToList<object>();
         }
-         
+
     }
 }

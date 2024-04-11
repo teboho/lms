@@ -140,6 +140,11 @@ namespace Boxfusion.LMS_Backend.Services
             return booksByAuthor.ToList();
         }
 
+        private bool IsISBNSearch(string term)
+        {
+            return (term.Length == 13 && term.All(char.IsDigit)) || (term.Length == 10 && term.All(char.IsDigit)) || (term.Length == 10 && term.ElementAt(9) == 'X');
+        }
+
         public async Task<List<Book>> GetSearchBooks(string name)
         {
             if (IsISBNSearch(name))
@@ -163,10 +168,6 @@ namespace Boxfusion.LMS_Backend.Services
             return searchByNameResults;
         }
 
-        private bool IsISBNSearch(string term)
-        {
-            return (term.Length == 13 && term.All(char.IsDigit)) || (term.Length == 10 && term.All(char.IsDigit)) || (term.Length == 10 && term.ElementAt(9) == 'X');
-        }
 
         public async Task<List<Book>> GetSearchGoogleBooks(string name)
         {
