@@ -27,15 +27,17 @@ const Page = (): React.ReactNode => {
     const [current, setCurrent] = useState(0);
     const [chosen, setChosen] = useState([]);  
     const [deleted, setDeleted] = useState([]);  
-    const {userObj, getUserId} = useContext(AuthContext);
+    const {userObj, getUserId, authObj} = useContext(AuthContext);
     const categoryContextValue = useContext(CategoryContext);
     const { postPreference, getPreferenceByPatron, preferenceData } = useContext(PreferenceContext);
     const [_options, setOptions] = useState(null);
     const {styles, cx} = useStyles();
 
+    let accessToken = useMemo(() => authObj?.accessToken, []);
+    accessToken = useMemo(() => authObj?.accessToken, [authObj]);
+
     useEffect(() => {
         setChosen([]);
-        const accessToken = Utils.getAccessToken();
         if (accessToken) {
             categoryContextValue.getAllCategories();
         }
@@ -63,7 +65,6 @@ const Page = (): React.ReactNode => {
     }, [])
 
     useEffect(() => {
-        const accessToken = Utils.getAccessToken();
         if (accessToken) {
             const decoded = jwtDecode(accessToken);
             const userId = decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];

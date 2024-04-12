@@ -6,22 +6,31 @@ import BookContext from "@/providers/bookProvider/context";
 const { Content, Sider } = Layout;
 import { useStyles } from "./styles";
 import SearchResults from "@/components/searchResults";
-import Utils from "@/utils";
 import Book from "@/components/book";
+import AuthContext from "@/providers/authProvider/context";
 
 const { Title } = Typography;
 
 const AllBooks = (): React.ReactNode => {
+    const { authObj } = useContext(AuthContext);
     const { books, getAll } = useContext(BookContext);
     const { styles, cx } = useStyles();
 
-    const accessToken = Utils.getAccessToken(); // localStorage.getItem("accessToken");
-
     useEffect(() => {
+    let accessToken = authObj?.accessToken;
+        accessToken = authObj?.accessToken;
         if (accessToken) { 
             getAll();
-        }
+        }        
     }, []);
+
+    useEffect(() => {
+        let accessToken = authObj?.accessToken;
+        accessToken = authObj?.accessToken;
+        if (accessToken) { 
+            getAll();
+        }      
+    }, [authObj, getAll]);
 
     return (
         <>   

@@ -178,7 +178,7 @@ const NavBar = (): React.ReactNode => {
 
 
     const onSearch: SearchProps["onSearch"] = (value, _e, info) => {       
-        const decodedToken = Utils.decodedToken();
+        const decodedToken = Utils.decodedToken(accessToken);
         const roleKey = `${TokenProperies.role}`;
         const isPatron = decodedToken[roleKey] === "Patron";
 

@@ -3,12 +3,13 @@
 import withAuth from "@/hocs/withAuth";
 import AuthorsContext from "@/providers/authorsProvider/context";
 import { makeAxiosInstance } from "@/providers/authProvider";
+import AuthContext from "@/providers/authProvider/context";
 import BookContext, { BookType } from "@/providers/bookProvider/context";
 import CategoryContext from "@/providers/categoryProvider/context";
 import { HistoryContext } from "@/providers/historyProvider/context";
 import Utils from "@/utils";
 import { Table, theme, Typography } from 'antd';
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useMemo } from "react";
  
 
 const { Title } = Typography;
@@ -19,11 +20,15 @@ const Page = (): React.ReactNode => {
     const { getLocalBook } = useContext(BookContext);
     const { getCategory } = useContext(CategoryContext);
     const { getAuthorById } = useContext(AuthorsContext);
+    const {authObj} = useContext(AuthContext);
 
-    const accessToken = Utils.getAccessToken();
-    const instance = makeAxiosInstance(accessToken);
-    const userId = Utils.userId;
-    const patronId = Utils.getPatronUserInfo(userId);
+    let accessToken = useMemo(() => authObj?.accessToken, []);
+    accessToken = useMemo(() => authObj?.accessToken, [authObj]);
+    let instance = makeAxiosInstance(accessToken);
+    let userId = useMemo(() => authObj?.userId, []);
+    userId = useMemo(() => authObj?.userId, [authObj]);
+    let patronId = useMemo(() => authObj?.userId, []);
+    patronId = useMemo(() => authObj?.userId, [authObj]);
 
     useEffect(() => {
         if (accessToken) {

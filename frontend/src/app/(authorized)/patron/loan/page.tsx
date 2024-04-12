@@ -56,7 +56,7 @@ const Loan = (): React.ReactNode => {
         
         let userId = authObj?.userId;
         if (!userId) {
-            userId = parseInt(localStorage.getItem("userId"));
+            userId = authObj?.userId;
         }
         const _loan: LoanType = {
             patronId: userId,

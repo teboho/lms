@@ -1,17 +1,20 @@
 "use client"
-import { useEffect, useReducer } from "react";
+import { useContext, useEffect, useMemo, useReducer } from "react";
 import PaymentContext, { PAYMENT_CONTEXT_INITIAL_STATE, PAYMENT_TYPE } from "./context";
 import { paymentReducer } from "./reducer";
 import { postPaymentSuccessAction, PaymentActionEnums, postPaymentErrorAction, postPaymentRequestAction, getPaymentRequestAction, getPaymentSuccessAction, getPaymentsErrorAction } from "./actions";
 import Utils from "@/utils";
 import { makeAxiosInstance } from "../authProvider";
+import AuthContext from "../authProvider/context";
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function PaymentProvider({ children }: { children: React.ReactNode }) {
     const [paymentState, dispatch] = useReducer(paymentReducer, PAYMENT_CONTEXT_INITIAL_STATE);
+    const { authObj } = useContext(AuthContext);
 
-    const accessToken = Utils.getAccessToken();
+    let accessToken = useMemo(() => authObj?.accessToken, []);
+    accessToken = useMemo(() => authObj?.accessToken, [authObj]);
     const instance = makeAxiosInstance(accessToken);
 
     useEffect(() => {

@@ -31,7 +31,7 @@ const Page = (): React.ReactNode => {
     const user = useMemo(() => userObj, [userObj]);
 
     useEffect(() => {
-        const decodedToken = Utils.decodedToken();
+        const decodedToken = Utils.decodedToken(authObj?.accessToken);
         const roleKey = `${TokenProperies.role}`;
         const isPatron = decodedToken[roleKey] === "Patron";
         if (authObj) {

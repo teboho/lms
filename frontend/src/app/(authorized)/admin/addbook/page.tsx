@@ -1,5 +1,5 @@
 "use client";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { Layout, Input, Typography } from "antd";
 const { Content } = Layout;
 const { Search } = Input;
@@ -22,8 +22,8 @@ const Page = (): React.ReactNode => {
     
     const { styles, cx } = useStyles();
 
+    let accessToken = useMemo(() => authObj?.accessToken, [authObj]);
     useEffect(() => {
-        let accessToken = Utils.getAccessToken();
 
         console.log("AllBooks useEffect");     
 

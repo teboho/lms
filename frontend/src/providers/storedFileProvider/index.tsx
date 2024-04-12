@@ -1,18 +1,21 @@
 "use client";
-import React, { useContext, useEffect, useReducer } from 'react';
+import React, { useContext, useEffect, useMemo, useReducer } from 'react';
 import storedFileReducer from './reducer';
 import { StoredFile, StoredFileActionContext, StoredFileStateContext, StoredFileStateContext_InitState, UserFileStore } from './context';
 import { makeAxiosInstance } from '../authProvider';
 import { deleteStoredFileErrorAction, deleteStoredFileSuccessAction, getBridgeByUserErrorAction, getBridgeByUserRequestAction, getBridgeByUserSuccessAction, getStoredFileErrorAction, getStoredFileRequestAction, getStoredFilesErrorAction, getStoredFilesRequestAction, getStoredFilesSuccessAction, getStoredFileSuccessAction, postUserFileErrorAction, postUserFileRequestAction, postUserFileSuccessAction, putStoredFileErrorAction, putStoredFileRequestAction, putStoredFileSuccessAction } from './actions';
 import Utils from '@/utils';
+import AuthContext from '../authProvider/context';
 
 const StoredFileProvider = ({children}: {children: React.ReactNode}): React.ReactNode => {
     const [state, dispatch] = useReducer(storedFileReducer, StoredFileStateContext_InitState);
+    const { authObj } = useContext(AuthContext);
 
-    let instance = makeAxiosInstance();
+    let accessToken = useMemo(() => authObj?.accessToken, []);
+    accessToken = useMemo(() => authObj?.accessToken, [authObj]);
+    let instance = makeAxiosInstance(accessToken);
 
     useEffect(() => {
-        const accessToken = Utils.getAccessToken();
         if (accessToken) {
             console.log("found the accesss token", accessToken);
             instance = makeAxiosInstance(accessToken);

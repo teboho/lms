@@ -11,14 +11,17 @@ import { Card, Col, Row, Table, theme, Typography } from 'antd';
 import { useContext, useEffect, useMemo, useState } from "react"; 
 import { jwtDecode } from "jwt-decode";
 import Link from "next/link";
+import AuthContext from "@/providers/authProvider/context";
 
 const Page = (): React.ReactNode => {
     const { token } = theme.useToken();
     const { categories, getAllCategories } = useContext(CategoryContext);
+    const { authObj } = useContext(AuthContext);
     const { getPreferenceData, getPreferenceByPatron, preferenceData } = useContext(PreferenceContext);
     const [preferences, setPreferences] = useState<PreferenceType>(null);
 
-    const accessToken = Utils.getAccessToken();
+    let accessToken = useMemo(() => authObj?.accessToken, [])
+    accessToken = useMemo(() => authObj?.accessToken, [authObj]);
 
     useEffect(() => {
         if (accessToken) {            

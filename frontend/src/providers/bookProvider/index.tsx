@@ -1,5 +1,5 @@
 "use client"
-import { useContext, useEffect, useReducer, useState } from "react";
+import { useContext, useEffect, useMemo, useReducer, useState } from "react";
 import { bookReducer } from "./reducer";
 import BookContext, { BookContextStateInit } from "./context";
 import { makeAxiosInstance } from "../authProvider";
@@ -25,10 +25,11 @@ export default function BookProvider({ children }: { children: React.ReactNode }
     const [messageApi, contextHolder] = message.useMessage();
     const [loading, setLoading] = useState(false);
 
-    const accessToken = Utils.getAccessToken();
+    let accessToken = useMemo(() => authObj?.accessToken, [authObj]);
 
     useEffect(() => {
         console.log("Book Provider is mounted for first time.")
+        accessToken = authObj?.accessToken;
     }, []);
 
     useEffect(() => {

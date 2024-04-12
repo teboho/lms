@@ -11,12 +11,17 @@ export default function CategoryProvider({ children }: { children: React.ReactNo
     const [categoryState, dispatch] = useReducer(categoryReducer, CategoryContextStateInit);
     const { authObj } = useContext(AuthContext);
 
-    const accessToken = Utils.getAccessToken(); // localStorage.getItem("accessToken");
+    let accessToken = authObj?.accessToken;
     const instance = makeAxiosInstance(accessToken);
 
     useEffect(() => {
         console.log("Category Provider is mounted for first time.")
+        accessToken = authObj?.accessToken;
     }, []);
+
+    useEffect(() => {
+        accessToken = authObj?.accessToken;
+    }, [authObj]);
 
     /**
      * Get all the categories

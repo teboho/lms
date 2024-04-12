@@ -1,7 +1,8 @@
 "use client";
-import React from 'react';
+import React, { use, useContext, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import Utils from '@/utils';
+import AuthContext from '@/providers/authProvider/context';
 
 /**
  * This hoc will protect pages which need the user to be logged in
@@ -10,9 +11,10 @@ import Utils from '@/utils';
 const withAuth = (WrappedComponent: (({children}: {children: React.ReactNode}) => React.ReactNode) | React.FC): React.FC | ((props: {children: React.ReactNode}) => React.ReactNode) => {
 
     const WithAuth = (props: {children: React.ReactNode}): React.ReactNode => {
-        "use client";
+        const { authObj } = useContext(AuthContext);
         const router = useRouter();
-        const token = Utils.getAccessToken(); // localStorage.getItem("accessToken");
+        let token = useMemo(() => authObj?.accessToken, []);
+        token = useMemo(() => authObj?.accessToken, [authObj]);
         
         if (token === undefined || token === null) {
             router.push("/login")

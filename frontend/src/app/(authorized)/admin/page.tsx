@@ -11,12 +11,14 @@ import CategoryContext, { CategoryType } from "@/providers/categoryProvider/cont
 import AuthorsContext from "@/providers/authorsProvider/context";
 import { useStoredFileActions, useStoreFileState } from "@/providers/storedFileProvider";
 import Utils from "@/utils";
+import AuthContext from "@/providers/authProvider/context";
 
 const { Title, Paragraph } = Typography;
 
 const Page = (): React.ReactNode => {
     const { token } = theme.useToken();
     const searchParams = useSearchParams();
+    const { authObj } = useContext(AuthContext);
     const { books, getAll: getAllBooks, searchDB } = useContext(BookContext);
     const { inventoryItems, getAll, getInventory } = useContext(InventoryContext);
     const { categories, getCategory, getAllCategories } = useContext(CategoryContext);
@@ -42,7 +44,7 @@ const Page = (): React.ReactNode => {
             getAuthors();
             getAllCategories();
 
-            getBridgeByUser(Utils.getUserId());
+            getBridgeByUser(authObj?.userId);
 
             if (userFile) {
                 console.log("userFile...", userFile);
