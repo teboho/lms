@@ -3,7 +3,6 @@ using Abp.Authorization;
 using Abp.Domain.Repositories;
 using Abp.Extensions;
 using Abp.Runtime.Session;
-using Boxfusion.LMS_Backend.Authorization.Users;
 using Boxfusion.LMS_Backend.Domain;
 using Boxfusion.LMS_Backend.Sessions;
 using Microsoft.AspNetCore.Mvc;
@@ -15,10 +14,7 @@ using System.Linq.Dynamic.Core;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Text;
 using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using static System.Reflection.Metadata.BlobBuilder;
 
 namespace Boxfusion.LMS_Backend.Services.AskGoogle
 {
@@ -238,7 +234,7 @@ namespace Boxfusion.LMS_Backend.Services.AskGoogle
         {
             var startIndex = _random.Next(0, 1000); // Adjust based on the number of available books
             HttpResponseMessage response = await client.GetAsync(
-                $"volumes?q={query}&startIndex={startIndex}&maxResults=30");
+                $"volumes?q={query}&startIndex={0}&maxResults=30"); // 
             var volumes = await response.Content.ReadFromJsonAsync<Result>();
             var books = new List<Tuple<Book, Category, Author>>();
 

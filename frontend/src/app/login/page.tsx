@@ -2,15 +2,11 @@
 import React, { MouseEvent, useContext, useEffect } from "react";
 import { useMainStyles } from "./style";
 import { Layout, Flex, Form, Input, Button, Row, Col, Tag, Typography, message } from "antd";
-import { Header, Content, Footer } from "antd/lib/layout/layout";
 import Sider from "antd/lib/layout/Sider";
-import moduleStyles from "./register.module.css";
 import AuthContext, { AUTH_REQUEST_TYPE } from "@/providers/authProvider/context";
 import { useRouter } from "next/navigation";
-import { stat } from "fs";
 import Link from "next/link";
 
-// Can contain an array of strings or array of numbers
 const MyFormItemContext = React.createContext<(string | number)[]>([]);
 
 interface MyFormItemGroupProps {
@@ -49,7 +45,7 @@ const MyFormItem = ({ name, ...props }: MyFormItemProps) => {
     const prefixPath = React.useContext(MyFormItemContext);
     const concatName = name !== undefined ? [...prefixPath, ...toArr(name)] : undefined;
 
-    return <Form.Item name={concatName} {...props} />;
+    return <Form.Item name={concatName} {...props} required />;
 }
 const { Title } = Typography;
 
@@ -88,19 +84,16 @@ export default function Login(): React.ReactNode {
     }
 
     return (
-        <Flex className={styles.form} align="center" justify="center">
-            <Sider width={"25%"} style={{background: "#004aad"}} className={cx(styles["left-sider"])}>
-                <Flex vertical>
-                    <Tag color="green"><Title level={4}>Step 1: Fill in your details</Title></Tag>
-                    <Tag color="null"><Title level={4}>Step 2: Complete login</Title></Tag>
-                </Flex>
+        <Flex className={cx(styles.form, styles.bg)} align="center" justify="center">
+            <Sider width={"25%"} style={{background: "#d0e1e1"}} className={cx(styles["left-sider"])}>
+                    <img src={"/assets/images/books.png"} alt="books" />
             </Sider>
-            <Sider theme="light" width={"75%"} >
-                <Form className={cx(styles["the-form"])} name="form_item_path" layout="vertical" form={form} onFinish={onFinish}>
+            <Sider theme="light" width={"75%"} style={{ background: "#d0e1e1" }}>
+                <Form className={cx(styles["the-form"], styles.bg)} name="form_item_path" layout="vertical" form={form} onFinish={onFinish}>
                     <Title className="">Login with your credentials</Title>
                     <MyFormItemGroup prefix={["user"]}>
                         <Row>           
-                            <Col span={24}>
+                            <Col span={12}>
                             <MyFormItemGroup prefix={["email"]}>
                                 <MyFormItem name="email" label="Email/Username" prefix={""}>
                                     <Input />
@@ -128,6 +121,6 @@ export default function Login(): React.ReactNode {
                     </MyFormItemGroup>
                 </Form>
             </Sider>
-        </Flex>
+    </Flex>
     );
 }

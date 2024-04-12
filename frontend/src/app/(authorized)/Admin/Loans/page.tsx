@@ -5,26 +5,25 @@ import { Button, Calendar, Popover, Table, Tag, theme, Typography, Segmented, Ta
 import BookContext from "@/providers/bookProvider/context";
 import { LoanContext } from "@/providers/loanProvider/context";
 import { useStyles } from "./styles";
-const { Title } = Typography;
 import { useSearchParams } from "next/navigation";  
-
 import { type Dayjs } from "dayjs";
 import ViewPatron from "@/components/viewPatron";
 
+const { Title, Paragraph } = Typography;
 
 const Page = (): React.ReactNode => {
     const { token } = theme.useToken();
     const { getLoans, loan, loans, getLoan, putLoan } = useContext(LoanContext);
-    const { books } = useContext(BookContext);
+    const { books, searchTerm, getAll } = useContext(BookContext);
     const searchParams = useSearchParams();
     const params = new URLSearchParams(searchParams);
     const [current, setCurrent] = useState([]);
     const [memoLoans, setMemoLoans] = useState([]);
 
     const { styles, cx } = useStyles();
-
+{}
     useEffect(() => {
-        console.log("Loan useEffect", loans);
+        getAll();
         if (loans?.length === 0 || !loans) {
             getLoans();
         }
@@ -33,7 +32,6 @@ const Page = (): React.ReactNode => {
 
     let _memoLoans = useMemo(() => {
         const bookId = params.get("bookId");
-        console.log("memoLoans book id", bookId);
         let result = loans;
         if (bookId) {
             result = loans?.filter((loan) => loan.bookId === bookId);
@@ -76,7 +74,7 @@ const Page = (): React.ReactNode => {
                 <li key={`loan_for_${loan?.bookId}`}>
                     <div className="events-content">
                         <Popover content={dateContent} title="Book Details">
-                            <Tag color={loan?.isReturned ? "blue" : "red"}>{book?.name}</Tag>
+                            <Tag  style={{ width: "90%", textWrap: "wrap"}} color={loan?.isReturned ? "blue" : "red"}>{book?.name}</Tag>
                         </Popover>
                     </div>
                 </li>
@@ -85,7 +83,6 @@ const Page = (): React.ReactNode => {
     }
 
     const cellRender = (current: any, info: any) => {
-        // console.log("cellRender", current, info);
         if (!current || !info) {
             return (
                 <div>
@@ -141,26 +138,30 @@ const Page = (): React.ReactNode => {
     ];
 
     const confirmLoan = (id: string) => {
-        console.log("confirming loan...");
-        console.log(id);
         const _loan = loans.find(l => l.id === id);
-        // alert(`${id} | ${_loan?.id}`)
         _loan.confirmed = true;
         putLoan(_loan);
     }
 
+    
+    function formatDate(_date: string) {
+        let date = new Date(_date);
+        let formattedDate = `${date.toLocaleDateString()}`;
+
+        return formattedDate;
+    }
+
     const data = memoLoans?.map((loan) => {
         const book = getBookById(loan?.bookId);
-        // const patron = Utils.getPatronUserInfo(loan?.patronId);
         const content = <ViewPatron id={loan.patronId} />;
         return {
             key: loan.id,
             id: loan.id,
             book: book?.name,
             patron: (<Popover content={content} title="Patron details"><Button>{loan?.patronId}</Button></Popover>),
-            dateCreated: loan.dateCreated,
-            dateDue: loan.dateDue,
-            dateReturned: loan.dateReturned,
+            dateCreated: formatDate(loan.dateCreated),
+            dateDue: formatDate(loan.dateDue),
+            dateReturned: formatDate(loan.dateReturned),
             status: loan?.isReturned ? (<Tag color="blue">{"Returned"}</Tag>) : (<Tag color="red">{"Not Returned"}</Tag>),
             isOverdue: loan?.isOverdue ? "Overdue" : "Not Overdue",
             confirm: loan?.confirmed ? 
@@ -171,7 +172,6 @@ const Page = (): React.ReactNode => {
                 (<>
                     <Tag color="orange">No</Tag>
                     <Checkbox onChange={e => {
-                        console.log("checked----", e.target.checked);
                         if (e.target.checked) {
                             confirmLoan(loan?.id);
                         }
@@ -189,7 +189,6 @@ const Page = (): React.ReactNode => {
     ];
 
     const onSegmentOptionChange = (value: any) => {
-        console.log("Chosen",  value);
         let result = loans;
         switch (value) {
             case options[1]:
@@ -211,18 +210,17 @@ const Page = (): React.ReactNode => {
     }
 
     return (
-        <>
-            <div>
-                <Title level={3}>Loans( {loans?.length} )</Title>
-                <Segmented<string>
-                    options={options}
-                    onChange={onSegmentOptionChange}
-                />
-                <Table columns={columns} dataSource={data} />
-                <Typography.Title level={3}>Calendar</Typography.Title>
-                <Calendar className={cx(styles.padding)} cellRender={cellRender} />
-            </div>
-        </>
+        <div>
+            <Title level={2}>Loans ({loans?.length} in total)</Title>
+            <Segmented<string>
+                options={options}
+                onChange={onSegmentOptionChange}
+            />
+            <Table columns={columns} dataSource={data} />
+            <Title level={2}>Calendar</Title>
+            <Paragraph>Expected book returns</Paragraph>
+            <Calendar className={cx(styles.padding)} cellRender={cellRender} />
+        </div>
     );
 }
 

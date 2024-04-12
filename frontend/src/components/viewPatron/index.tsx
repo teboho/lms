@@ -9,7 +9,6 @@ const ViewPatron: React.FC<{id: number}> = ({ id }) => {
     useEffect(() => {
         getPatronInfo(id)
             .then((response) => {
-                console.log("Patron......", response);
                 setUser(response);
             })
             .catch((error) => {

@@ -31,14 +31,6 @@ export interface UserType {
     fullName?: string
 }
 
-export interface AUTH_STATE_TYPE {
-    isPending: boolean;
-    isSuccess: boolean;
-    isError: boolean;
-    authObj: AUTH_RESPONSE_TYPE | undefined;
-    registerObj?: REGISTER_RESPONSE_TYPE | undefined;
-    userObj: UserType;
-}
 
 export interface AUTH_REQUEST_TYPE {
     "userNameOrEmailAddress": string;
@@ -84,7 +76,17 @@ export const User_Init: UserType = {
     fullName: ""
 }
 
-export const AUTH_INITIAL_STATE = {
+export interface AuthContextStateType {
+    isPending: boolean;
+    isSuccess: boolean;
+    isError: boolean;
+    profilePic?: string;
+    authObj?: AUTH_RESPONSE_TYPE;
+    registerObj?: REGISTER_RESPONSE_TYPE;
+    userObj?: UserType;
+}
+
+export const AuthContextStateInit: AuthContextStateType = {
     isPending: false,
     isError: false,
     isSuccess: false,
@@ -106,7 +108,8 @@ export const AUTH_INITIAL_STATE = {
         "roleNames": [""],
         "id": 0
     },
-    userObj: User_Init
+    userObj: User_Init,
+    profilePic: ""
 }
 
 // auth value type
@@ -123,14 +126,15 @@ export interface AuthValueType {
     isLoggedIn: () => boolean;
     getUserId: () => number;
     getPatronInfo: (id: number) => Promise<UserType>;
+    getProfilePic: () => string;
 }
 
 /**
  * Default value that the provider will pass down to the children
  */
 const AuthContext = createContext<AuthValueType>({
-    authObj: AUTH_INITIAL_STATE.authObj, 
-    registerObj: AUTH_INITIAL_STATE.registerObj, 
+    authObj: AuthContextStateInit.authObj, 
+    registerObj: AuthContextStateInit.registerObj, 
     userObj: User_Init,
     login: (authObj: AUTH_REQUEST_TYPE) => {}, 
     logout: () => {}, 
@@ -140,7 +144,8 @@ const AuthContext = createContext<AuthValueType>({
     getUserInfo: (id: number) => {},
     isLoggedIn: () => false, 
     getUserId: () => 0,
-    getPatronInfo: (id: number) => Promise.resolve(User_Init)
+    getPatronInfo: (id: number) => Promise.resolve(User_Init),
+    getProfilePic: () => ""
 });
 
 export default AuthContext;

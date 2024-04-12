@@ -23,22 +23,19 @@ const Page = (): React.ReactNode => {
     const { getAuthorById } = useContext(AuthorsContext);
     const { userObj } = useContext(AuthContext);
     const { books } = useContext(BookContext);
-    const { history, historyData, getHistoryData, postHistory, viewCount } = useContext(HistoryContext);
+    const { postHistory } = useContext(HistoryContext);
     const { styles, cx } = useStyles();
     const isMountedRef = React.useRef(false);
 
     const bookId = params.get("bookId");
     useEffect(() => {
         if (!isMountedRef.current) {
-            console.log("Book useEffect");
-            // supposed to make a history call here
             const userId = userObj?.id;
             const historyObj: HistoryType = {
                 patronId: userId,
                 dateRead: new Date().toISOString(),
                 bookId: bookId
             };
-            console.log("history obj ready", historyObj);
 
             postHistory(historyObj);
             

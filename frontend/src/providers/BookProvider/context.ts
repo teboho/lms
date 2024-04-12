@@ -8,7 +8,7 @@ import { CreateBookType } from "./types";
 export enum BookType {
     "Physical",
     "Digital",
-    "Both",
+    "Both"
 }
 
 export interface BookDataType {
@@ -36,17 +36,19 @@ export const BOOK_INIT: BookDataType = {
     "id": ""
 }
 
-export interface BOOK_STATE_TYPE {
-    isPending: boolean;
-    isSuccess: boolean;
-    isError: boolean;
-    books: BookDataType[] | undefined;
+export interface BookContextStateType {
+    isPending?: boolean;
+    isSuccess?: boolean;
+    isError?: boolean;
+
+    books?: BookDataType[];
     book?: BookDataType;
-    searchTerm: string;
+    
+    searchTerm?: string;
     searchBooks?: SearchBookType;
 }
 
-export const BOOK_CONTEXT_INITIAL_STATE: BOOK_STATE_TYPE = {
+export const BookContextStateInit: BookContextStateType = {
     isPending: false,
     isError: false,
     isSuccess: false,
@@ -65,7 +67,6 @@ export interface BookContextType {
      * @param term search term
      */
     search: (term: string) => void;
-    savePreferences: (prefs: Preferences) => void;
     getBook: (bookId: string) => void;
     getLocalBook: (bookId: string) => BookDataType;
     getAll: () => void;
@@ -109,7 +110,6 @@ const BookContext = createContext<BookContextType>({
     books: [],
     searchBooks: SearchBookInitState,
     search: function (term: string) {}, 
-    savePreferences: (prefs: Preferences) => {}, 
     getBook: (bookId: string) => {}, 
     getLocalBook: (bookId: string) => BOOK_INIT,
     getAll: () => {},

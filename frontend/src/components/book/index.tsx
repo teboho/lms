@@ -28,7 +28,7 @@ const Book: React.FC<BookProps> = ({ book }) => {
     return (
         <Card
             hoverable
-            style={{ width: 240 }}
+            style={{ width: 240, background: "#d0e1e1" }}
             className={cx(styles.maxHeight)}
         >
             <Image 

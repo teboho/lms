@@ -1,6 +1,7 @@
-"use client"
+"use client";
+
 import React, { useContext, useEffect, useReducer } from "react";
-import AuthorsContext, { AuthorDataType, AuthorsContextInit, } from "./context";
+import AuthorsContext, { AuthorDataType, AuthorsContextStateInit, } from "./context";
 import { makeAxiosInstance } from "../authProvider";
 import { getAuthorErrorAction, getAuthorRequestAction, getAuthorsErrorAction, getAuthorsRequestAction, getAuthorsSuccessAction, getAuthorSuccessAction } from "./actions";
 import Utils from "@/utils";
@@ -8,8 +9,7 @@ import { authorsReducer } from "./reducer";
 import AuthContext from "../authProvider/context";
 
 export default function AuthorsProvider({ children }: { children: React.ReactNode }) {
-    // we will make the state with the reducers
-    const [authorsState, dispatch] = useReducer(authorsReducer, AuthorsContextInit);
+    const [authorsState, dispatch] = useReducer(authorsReducer, AuthorsContextStateInit);
     const { authObj } = useContext(AuthContext);
 
     const accessToken = Utils.getAccessToken();
@@ -25,29 +25,38 @@ export default function AuthorsProvider({ children }: { children: React.ReactNod
         }
     }, [authObj]);
 
+    /**
+     * 
+     * @param id the author id
+     */
     const getAuthor = (id: string): void => {
         dispatch(getAuthorRequestAction());
         instance.get(`/api/services/app/Author/Get?Id=${id}`)
             .then((response) => {
-                console.log("author response", response.data.result);
                 dispatch(getAuthorSuccessAction(response.data.result));
             })
             .catch((error) => {
                 dispatch(getAuthorErrorAction());
-                console.error(error);
             });
     }
 
+    /**
+     * 
+     * @param id the author id
+     * @returns the author object
+     */
     const _getAuthor = (id: string) => {
         return authorsState.authors?.filter((author: AuthorDataType) => author.id === id)[0];
     }
 
+    /**
+     * Get all the authors
+     */
     const getAuthors = (): void => {
         const endpoint = "/api/services/app/Author/GetAll?skipCount=0&maxResultCount=1000";
         dispatch(getAuthorsRequestAction());
         instance.get(`${endpoint}`)
             .then((response) => {
-                console.log("authors", response);
                 dispatch(getAuthorsSuccessAction(response.data.result.items));
             })
             .catch((error) => {
@@ -60,6 +69,11 @@ export default function AuthorsProvider({ children }: { children: React.ReactNod
         
     }
 
+    /**
+     * 
+     * @param id the author id
+     * @returns the author object
+     */
     function getAuthorById(id: string) {
         return authorsState.authors?.filter((author: AuthorDataType) => author.id === id)[0];
     }

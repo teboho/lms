@@ -5,7 +5,8 @@ export const useStyles = createStyles(({css, cx}) => ({
         padding-top: 25px;
     `,
     navbar: css`
-        background: red;
+        background: #d0e1e1;
+        padding: 0 50px;
     `,
     search: css`
         max-width: 350px;
@@ -17,4 +18,7 @@ export const useStyles = createStyles(({css, cx}) => ({
         position: sticky;
         top: 0;
     `,
+    opaque: css`
+        bakground: #004aad;
+    `
 }));

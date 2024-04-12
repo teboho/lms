@@ -1,21 +1,20 @@
 import { handleActions } from "redux-actions";
 import { InventoryActionEnums } from "./actions";
-import { INVENTORY_CONTEXT_INITIAL_STATE } from "./context";
+import { InventoryContextStateInit, InventoryContextStateType } from "./context";
 
 /**
- * A reducer t
+ * A reducer to handle the inventory actions
  */
-export const inventoryReducer = handleActions(
+export const inventoryReducer = handleActions<InventoryContextStateType>(
     {
-        // this handler will change the value of the isPending in the state
         [InventoryActionEnums.GetInventorysRequest]: (state, action) => ({
             ...state,
             ...action.payload
-        }),  // this handler will change the value of the isSuccess in the state
+        }), 
         [InventoryActionEnums.GetInventorysSuccess]: (state, action) => ({
             ...state,
             ...action.payload
-        }), // this handler will change the value of the isError in the state
+        }), 
         [InventoryActionEnums.GetInventorysError]: (state, action) => ({
             ...state,
             ...action.payload
@@ -52,5 +51,5 @@ export const inventoryReducer = handleActions(
             ...action.payload
         }),
     },
-    INVENTORY_CONTEXT_INITIAL_STATE
+    InventoryContextStateInit
 )

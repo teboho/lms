@@ -1,6 +1,6 @@
 "use client";
 import { createAction } from "redux-actions";
-import { BookDataType, SearchBookType } from "./context";
+import { BookContextStateType, BookDataType, SearchBookType } from "./context";
 
 export const BookActionEnums = {
     GetBooksRequest: "GET_BOOKS_REQUEST",
@@ -19,6 +19,10 @@ export const BookActionEnums = {
     PostBookSuccess: "POST_BOOK_SUCCESS",
     PostBookError: "POST_BOOK_ERROR",
 
+    PostPreferenceRequest: "POST_PREFERENCE_REQUEST",
+    PostPreferenceSuccess: "POST_PREFERENCE_SUCCESS",
+    PostPreferenceError: "POST_PREFERENCE_ERROR",
+
     SetSearchTerm: "SET_SEARCH_TERM"
 }
 
@@ -26,9 +30,9 @@ export const BookActionEnums = {
  * Sets the isPending to true
  * The results array is not there yet
  */
-export const getBooksRequestAction = createAction(
+export const getBooksRequestAction = createAction<BookContextStateType>(
     BookActionEnums.GetBooksRequest,
-    (): any => ({ isSuccess: false, isPending: true, isError: false, booksObj: [], book: undefined, books: undefined })
+    () => ({ isSuccess: false, isPending: true, isError: false, booksObj: undefined, books: undefined })
 )
 
 /**
@@ -36,7 +40,7 @@ export const getBooksRequestAction = createAction(
  */
 export const getBooksSuccessAction = createAction(
     BookActionEnums.GetBooksSuccess,
-    (books: BookDataType[]): any => ({ isSuccess: true, isPending: false, isError: false, books, book: undefined})
+    (books: BookDataType[]) => ({ isSuccess: true, isPending: false, isError: false, books })
 );
 
 /**
@@ -44,7 +48,7 @@ export const getBooksSuccessAction = createAction(
  */
 export const getBooksErrorAction = createAction(
     BookActionEnums.GetBooksSuccess,
-    (): any => ({ isSuccess: false, isPending: false, isError: true, books: undefined, book: undefined })
+    () => ({ isSuccess: false, isPending: false, isError: true, books: undefined })
 );
 
 /**
@@ -53,7 +57,7 @@ export const getBooksErrorAction = createAction(
  */
 export const getBookRequestAction = createAction(
     BookActionEnums.GetBookRequest,
-    ():any => ({ isSuccess: false, isPending: true, isError: false, book: undefined, books: undefined, searchTerm: "" })
+    () => ({ isSuccess: false, isPending: true, isError: false, book: undefined })
 )
 
 /**
@@ -61,7 +65,7 @@ export const getBookRequestAction = createAction(
  */
 export const getBookSuccessAction = createAction(
     BookActionEnums.GetBookSuccess,
-    (book: BookDataType):any => ({ isSuccess: true, isPending: false, isError: false, book, books: undefined, searchTerm: "" })
+    (book: BookDataType) => ({ isSuccess: true, isPending: false, isError: false, book })
 );
 
 
@@ -71,7 +75,7 @@ export const getBookSuccessAction = createAction(
  */
 export const getBookErrorAction = createAction(
     BookActionEnums.GetBookError,
-    () => ({ isSuccess: false, isPending: false, isError: true, book: undefined, books: undefined, searchTerm: "" })
+    () => ({ isSuccess: false, isPending: false, isError: true, book: undefined })
 );
 
 /**
@@ -79,7 +83,7 @@ export const getBookErrorAction = createAction(
  */
 export const setSearchTermAction = createAction(
     BookActionEnums.SetSearchTerm,
-    (searchTerm: string): any => ({ searchTerm })
+    (searchTerm: string) => ({ searchTerm })
 );
 
 /**
@@ -88,7 +92,7 @@ export const setSearchTermAction = createAction(
  */
 export const getSearchBooksRequestAction = createAction(
     BookActionEnums.GetSearchBooksRequest,
-    (): any => ({ isSuccess: false, isPending: true, isError: false, books: undefined, searchTerm: "", searchBooks: undefined })
+    () => ({ isSuccess: false, isPending: true, isError: false, searchTerm: "", searchBooks: undefined })
 )
 
 /**
@@ -96,7 +100,7 @@ export const getSearchBooksRequestAction = createAction(
  */
 export const getSearchBooksSuccessAction = createAction(
     BookActionEnums.GetSearchBooksSuccess,
-    (searchBooks: SearchBookType): any => ({ isSuccess: true, isPending: false, isError: false, books: undefined, searchBooks })
+    (searchBooks: SearchBookType) => ({ isSuccess: true, isPending: false, isError: false, searchBooks })
 );
 
 /**
@@ -104,7 +108,7 @@ export const getSearchBooksSuccessAction = createAction(
  */
 export const getSearchBooksErrorAction = createAction(
     BookActionEnums.GetSearchBooksError,
-    (): any => ({ isSuccess: false, isPending: false, isError: true, books: undefined, searchTerm: "", searchBooks: undefined })
+    () => ({ isSuccess: false, isPending: false, isError: true, searchBooks: undefined })
 );
 
 /**
@@ -113,7 +117,7 @@ export const getSearchBooksErrorAction = createAction(
  */
 export const postBookRequestAction = createAction(
     BookActionEnums.PostBookRequest,
-    (): any => ({ isSuccess: false, isPending: true, isError: false, books: undefined, searchTerm: "", searchBooks: undefined })
+    () => ({ isSuccess: false, isPending: true, isError: false })
 );
 
 /**
@@ -122,7 +126,7 @@ export const postBookRequestAction = createAction(
  */
 export const postBookSuccessAction = createAction(
     BookActionEnums.PostBookSuccess,
-    (book: BookDataType): any => ({ isSuccess: true, isPending: false, isError: false, book, books: undefined })
+    (book: BookDataType) => ({ isSuccess: true, isPending: false, isError: false, book })
 );
 
 /**
@@ -130,5 +134,31 @@ export const postBookSuccessAction = createAction(
  */
 export const postBookErrorAction = createAction(
     BookActionEnums.PostBookError,
-    (): any => ({ isSuccess: false, isPending: false, isError: true, book: undefined, books: undefined, searchTerm: "" })
+    () => ({ isSuccess: false, isPending: false, isError: true, book: undefined })
+);
+
+/**
+ * Sets the isPending to true
+ * The results array is not there yet
+ */
+export const postPreferenceRequestAction = createAction(
+    BookActionEnums.PostPreferenceRequest,
+    () => ({ isSuccess: false, isPending: true, isError: false })
+);
+
+/**
+ * Sets the isSuccess to true but then all else to false
+ * after the book has been posted and saved to the database
+ */
+export const postPreferenceSuccessAction = createAction(
+    BookActionEnums.PostPreferenceSuccess,
+    () => ({ isSuccess: true, isPending: false, isError: false })
+);
+
+/**
+ * Sets the isError to true but then all else to false
+ */
+export const postPreferenceErrorAction = createAction(
+    BookActionEnums.PostPreferenceError,
+    () => ({ isSuccess: false, isPending: false, isError: true })
 );

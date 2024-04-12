@@ -6,14 +6,20 @@ export const useStyles = createStyles(({css, cx}) => ({
     `,
     content: css`
         width: 100%;
-        /*border: 1px solid red;*/
+        overflow-Y: auto;  
     `,
     right: css`
         width: 100%;
-        /*border: 1px solid red;*/
+        height: 100%;
         background: white;
     `,
     padding: css`
         padding: 20px;
+    `,
+    center: css`
+        text-align: center;
+    `,
+    cardSize: css`
+        height: 500px;
     `,
 }));

@@ -1,6 +1,6 @@
 "use client";
 import { createAction } from "redux-actions";
-import { AuthorDataType, AuthorsContextType, AuthorsContextValueType } from "./context";
+import { AuthorDataType, AuthorsContextStateType, AuthorsContextValueType } from "./context";
 
 export const AuthorsActionEnums = {
     GetAuthorsRequest: "GET_AUTHORS_REQUEST",
@@ -18,7 +18,7 @@ export const AuthorsActionEnums = {
  */
 export const getAuthorsRequestAction = createAction(
     AuthorsActionEnums.GetAuthorsRequest,
-    (): AuthorsContextType => ({ isSuccess: false, isPending: true, isError: false, authors: undefined, author: undefined })
+    (): AuthorsContextStateType => ({ isSuccess: false, isPending: true, isError: false, author: undefined })
 )
 
 /**
@@ -26,7 +26,7 @@ export const getAuthorsRequestAction = createAction(
  */
 export const getAuthorsSuccessAction = createAction(
     AuthorsActionEnums.GetAuthorsSuccess,
-    (authors: AuthorDataType[]): AuthorsContextType => ({ isSuccess: true, isPending: false, isError: false, authors, author: undefined })
+    (authors: AuthorDataType[]): AuthorsContextStateType => ({ isSuccess: true, isPending: false, isError: false, authors })
 );
 
 /**
@@ -34,7 +34,7 @@ export const getAuthorsSuccessAction = createAction(
  */
 export const getAuthorsErrorAction = createAction(
     AuthorsActionEnums.GetAuthorsError,
-    (): AuthorsContextType => ({ isSuccess: false, isPending: false, isError: true, authors: undefined, author: undefined })
+    (): AuthorsContextStateType => ({ isSuccess: false, isPending: false, isError: true, authors: undefined })
 );
 
 /**
@@ -43,7 +43,7 @@ export const getAuthorsErrorAction = createAction(
  */
 export const getAuthorRequestAction = createAction(
     AuthorsActionEnums.GetAuthorRequest,
-    (): AuthorsContextType => ({ isSuccess: false, isPending: true, isError: false, authors: undefined, author: undefined })
+    (): AuthorsContextStateType => ({ isSuccess: false, isPending: true, isError: false, author: undefined })
 )
 
 /**
@@ -51,7 +51,7 @@ export const getAuthorRequestAction = createAction(
  */
 export const getAuthorSuccessAction = createAction(
     AuthorsActionEnums.GetAuthorSuccess,
-    (author: AuthorDataType): AuthorsContextType => ({ isSuccess: true, isPending: false, isError: false, authors: undefined, author })
+    (author: AuthorDataType): AuthorsContextStateType => ({ isSuccess: true, isPending: false, isError: false, author })
 );
 
 /**
@@ -59,5 +59,5 @@ export const getAuthorSuccessAction = createAction(
  */
 export const getAuthorErrorAction = createAction(
     AuthorsActionEnums.GetAuthorError,
-    (): AuthorsContextType => ({ isSuccess: false, isPending: false, isError: true, authors: undefined, author: undefined })
+    (): AuthorsContextStateType => ({ isSuccess: false, isPending: false, isError: true, author: undefined })
 );

@@ -1,6 +1,6 @@
 "use client"
-import { useEffect, useReducer } from "react";
-import AuthContext, { AUTH_INITIAL_STATE, AUTH_REQUEST_TYPE, AUTH_RESPONSE_TYPE, REGISTER_REQUEST_TYPE, UserType } from "./context";
+import { useEffect, useMemo, useReducer } from "react";
+import AuthContext, { AuthContextStateInit, AUTH_REQUEST_TYPE, AUTH_RESPONSE_TYPE, REGISTER_REQUEST_TYPE, UserType } from "./context";
 import { authReducer } from "./reducer";
 import { clearAuthAction, getUserErrorAction, getUserRequestAction, getUserSuccessAction, postAuthErrorAction, postAuthRequestAction, postAuthSuccessAction } from "./actions";
 import { useRouter } from 'next/navigation';
@@ -13,11 +13,11 @@ export const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
 /**
  * 
- * @param accessToken access token
+ * @param accessToken? the access token
  * @returns an axios instance
  */
-export function makeAxiosInstance(accessToken:string) {
-
+export function makeAxiosInstance(accessToken?:string) {
+    if (!accessToken) accessToken = Utils.getAccessToken();
     return axios.create({
         baseURL: baseURL,
         headers: {
@@ -28,17 +28,14 @@ export function makeAxiosInstance(accessToken:string) {
 }
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
-    // we will make the state with the reducers
-    const [authState, dispatch] = useReducer(authReducer, AUTH_INITIAL_STATE);
+    const [authState, dispatch] = useReducer(authReducer, AuthContextStateInit);
     const { push } = useRouter();
     const [messageApi, contextHolder] = message.useMessage();
     
-    const accessToken = Utils.getAccessToken();// localStorage.getItem("accessToken");
-
+    let accessToken = useMemo(() => Utils.getAccessToken(), []);
     const instance = makeAxiosInstance(accessToken);
 
     useEffect(() => {
-        // check if the user is logged in
         if (accessToken) {
             dispatch(postAuthSuccessAction({
                 accessToken: accessToken,
@@ -47,45 +44,42 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
                 userId: parseInt(localStorage.getItem("userId"))
             }));
 
-            // if the user is logged in, then we should get the user info
             const userId = parseInt(localStorage.getItem("userId"));
             getUserInfo(userId);
             
-            console.log("Auth mounts for the first time.");
+            console.log("AuthProvider mounts for the first time.");
+            accessToken = Utils.getAccessToken();
         }
     }, []);
 
     const getUserInfo = (id: number): void => {
-        // conduct the fetch and dispatch based on the response
         const endpoint = `/api/services/app/User/Get?Id=${id}`;
-
-        const accessToken = Utils.getAccessToken(); // localStorage.getItem("accessToken");
-        const instance = makeAxiosInstance(accessToken);
 
         dispatch(getUserRequestAction());
         instance.get(endpoint)
             .then(response => {
                 const data = response.data;
-                console.log("User GET...", data);
                 if (data.success) {
                     const res = data.result;
                     dispatch(getUserSuccessAction(res));
-                    console.log("User GET success");
                 } else {
-                    console.log("User GET unsuccessful");
+                    throw new Error("Login unsuccessful");
                 }
             })
             .catch(error => {
-                console.log(error);
                 dispatch(getUserErrorAction());
             });
     }
 
+    /**
+     * 
+     * @param id user id
+     * @returns the user object in a promise
+     */
     const getPatronInfo = async (id: number): Promise<UserType> => {
-        // conduct the fetch and dispatch based on the response
         const endpoint = `/api/services/app/User/Get?Id=${id}`;
 
-        const accessToken = Utils.getAccessToken(); // localStorage.getItem("accessToken");
+        const accessToken = Utils.getAccessToken(); 
         const instance = makeAxiosInstance(accessToken);
 
         return instance.get(endpoint)
@@ -116,7 +110,6 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
      * @param authObj login object
      */
     function login(authObj: AUTH_REQUEST_TYPE): void {
-        // conduct the fetch and dispatch based on the response
         const endpoint = baseURL + "/api/TokenAuth/Authenticate";
         
         dispatch(postAuthRequestAction());
@@ -129,34 +122,33 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
             mode: "cors"
         }).then(res => res.json())
         .then(data => {
-            console.log("Auth login data", data);
             if (data.success) {
                 const res = data.result;
-                console.log("Log in success");
                 dispatch(postAuthSuccessAction(res));
 
-                console.log("saving token", res.accessToken, "|", res.encryptedAccessToken)
                 localStorage.setItem("accessToken", res.accessToken);
                 localStorage.setItem("encryptedAccessToken", res.encryptedAccessToken);
                 localStorage.setItem("expireInSeconds", res.expireInSeconds.toString());
                 localStorage.setItem("userId", res.userId.toString());
 
                 getUserInfo(res.userId);
-                    
+
                 push("/");
             } else {
-                console.log("Login is unsuccessful");
                 fail();
+                throw new Error();
             }
         })
         .catch(err => {
-            console.log(err);
             dispatch(postAuthErrorAction());
         })
     }
 
+    /**
+     * 
+     * @param registerObj registration object
+     */
     function register(registerObj: REGISTER_REQUEST_TYPE): void {
-        // conduct the fetch and dispatch based on the response
         const endpoint = baseURL + "/api/services/app/User/Create";
         
         dispatch(postAuthRequestAction());
@@ -169,25 +161,25 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
             mode: "cors"
         }).then(res => res.json())
         .then(data => {
-            console.log("data", data);
             if (data.success) {
                 const res: AUTH_RESPONSE_TYPE = data.result;
                 dispatch(postAuthSuccessAction(res));
-                console.log("Register success");
 
                 success();
                 setTimeout(() => push("/login"), 300);
             } else {
-                console.log("Register is unsuccc");
                 fail();
+                throw new Error("Registration unsuccessful");
             }
         })
         .catch(err => {
-            console.log(err);
             dispatch(postAuthErrorAction());
         })
     }
 
+    /**
+     * Logs the user out
+     */
     function logout(): void {
         push("/login");
         
@@ -198,12 +190,18 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         })
 
         dispatch(clearAuthAction());
+        // clear the entire application state
+                
     }
 
     function refreshToken() {
         // ideally it would be better to record the time we first log in so that we can compare the lifespan of the token to how long it has existed since creation
     }
 
+    /**
+     * 
+     * @returns whether the user is logged in or not
+     */
     function isLoggedIn(): boolean {
         const accessToken = localStorage.getItem("accessToken");
         if (accessToken) {
@@ -212,7 +210,11 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         return false;
     }
 
-    function getUserId() {
+    /**
+     * 
+     * @returns the user id
+     */
+    function getUserId(): number {
         if (authState.authObj) return authState.authObj.userId;
         else {
             const accessToken = localStorage.getItem("accessToken");
@@ -221,6 +223,10 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
                 return Number.parseInt(decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"]);
             }
         }
+    }
+
+    function getProfilePic() {
+        return authState?.profilePic;
     }
 
     return (
@@ -237,7 +243,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
                 isLoggedIn, 
                 getUserId,
                 getUserInfo,
-                getPatronInfo
+                getPatronInfo, getProfilePic
         }}>
             {contextHolder}
             {children}

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Boxfusion.LMS_Backend.Services.AskGoogle
+namespace Boxfusion.LMS_Backend.Services.Communication
 {
     public interface ICommunicationAppService : IApplicationService
     {

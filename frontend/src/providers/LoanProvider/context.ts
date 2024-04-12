@@ -26,7 +26,7 @@ export const LoanInit: LoanType = {
     "confirmed": false
 }
 
-export interface LoanContextType {
+export interface LoanContextValueType {
     loan: LoanType;
     loans: LoanType[];
     makeLoan: (loan: LoanType) => void;
@@ -41,7 +41,7 @@ export interface LoanContextType {
     clearLoan: () => void;
 }
 
-export const LoanContextDefault: LoanContextType = {
+export const LoanContextDefault: LoanContextValueType = {
     loan: LoanInit,
     loans: [] as LoanType[],
     makeLoan: () => {},
@@ -56,32 +56,27 @@ export const LoanContextDefault: LoanContextType = {
     clearLoan: () => {},
 }
 
-// export const LoanValueDefault: LoanContextType  = {
-//     loans: [] as LoanType[],
-//     loan: LoanInit,
-//     makeLoan: () => {},
-//     updateLoan: () => {},
-//     getLoans: () => {},
-//     getLoan: (loanId) => {},
-//     getLoansByPatron: (id) => [] as LoanType[],
-//     getLoansByBook: (id) => [] as LoanType[],
-//     getReturnedLoans: () => {},
-//     putLoan: (loan) => {}
-// }
-
 /**
  * Default value that the provider will pass is an empty
  * object
  */
 export interface LoanStateType {
-    loan: LoanType;
-    loans: LoanType[];
+    loan?: LoanType;
+    loans?: LoanType[];
     isPending: boolean;
     isSuccess: boolean;
     isError: boolean;
 }
 
-export const LOAN_CONTEXT_INITIAL_STATE = {
+export interface LoanContextStateType {
+    loan?: LoanType;
+    loans?: LoanType[];
+    isPending: boolean;
+    isSuccess: boolean;
+    isError: boolean;
+}
+
+export const LoanContextStateInit: LoanContextStateType = {
     loan: LoanInit,
     loans: [] as LoanType[],
     isPending: false,
@@ -89,7 +84,4 @@ export const LOAN_CONTEXT_INITIAL_STATE = {
     isError: false
 }
 
-/**
- * Default value that the provider will pass is an empty object
- */
-export const LoanContext = createContext<LoanContextType>(LoanContextDefault);
+export const LoanContext = createContext<LoanContextValueType>(LoanContextDefault);

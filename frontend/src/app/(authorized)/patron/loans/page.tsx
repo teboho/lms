@@ -1,12 +1,14 @@
 "use client";
 import { useContext, useEffect, useState } from "react";
 import withAuth from "@/hocs/withAuth";
-import { List } from "antd";
+import { Col, List, Row, Space, Typography } from "antd";
 import BookContext from "@/providers/bookProvider/context";
 import {useStyles} from "./styles";
+import style from "./loans.module.css";
 import { LoanContext, LoanType } from "@/providers/loanProvider/context";
 import Utils from "@/utils";
 import Loan from "@/components/loan";
+
 
 const Page = (): React.ReactNode => {
     const { styles, cx } = useStyles();
@@ -23,22 +25,20 @@ const Page = (): React.ReactNode => {
     }, [])
 
     useEffect(() => {
-        const patronId = Utils.getPatronId();
-        console.log("Patron ID", patronId);
+        const patronId = Utils.getUserId();
         setLoans(getLoansByPatron(patronId));   
     }, [providerLoans]);
 
     return (
-        <div className={cx(styles.padding)}>   
-            <h1>My Loans</h1>
-            <List
-                dataSource={loans}
-                renderItem={(item) => (
-                    <List.Item>
+        <div style={{height: "100%"}} className={cx(styles.content, styles.padding, styles.cardSize)}>   
+            <Typography.Title level={1} className={cx(styles.center)}>My Loans</Typography.Title >
+            <Row gutter={16}>
+                {loans?.map((item) => (
+                    <Col key={`loan_number_${item.id}`} span={12} style={{padding: 20}}>
                         <Loan item={item} />
-                    </List.Item>
-                )}
-            />
+                    </Col>
+                ))}
+            </Row>
         </div>
     );
 }

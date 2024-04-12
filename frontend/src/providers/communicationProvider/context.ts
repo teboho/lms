@@ -1,5 +1,4 @@
 "use client";
-
 import { createContext } from "react";
 
 export type EmailType = {
@@ -14,28 +13,28 @@ export const emailInit = {
     toEmail: ""
 }
 
-export type communicationContextType = {
+export type CommunicationContextValueType = {
     sendEmail: (email: EmailType) => void;
 }
 
-export const communicationContextDefault = {
+export const CommunicationContextValueDefault = {
     sendEmail: (email: EmailType) => {}
 }
 
-export type communicationStateType = {
-    email: EmailType;
+export type CommunicationContextStateType = {
+    email?: EmailType;
     isError: boolean;
     isPending: boolean;
     isSuccess: boolean;
 };
 
-export const communicationInitialState: communicationStateType = {
+export const CommunicationContextStateInit: CommunicationContextStateType = {
     email: emailInit,
     isError: false,
     isPending: false,
     isSuccess: false
 }
 
-const CommunicationContext = createContext<communicationContextType>(communicationContextDefault);
+const CommunicationContext = createContext<CommunicationContextValueType>(CommunicationContextValueDefault);
 
 export default CommunicationContext;

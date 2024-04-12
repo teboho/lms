@@ -1,5 +1,6 @@
-import { AuthorDataType } from "../AuthorsProvider/context";
-import { CategoryType } from "../CategoryProvider/context";
+import { AuthorDataType } from "../authorsProvider/context";
+import { CategoryType } from "../categoryProvider/context";
+
 
 export interface CreateBookType {
     name: string;

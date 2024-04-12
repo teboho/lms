@@ -64,16 +64,17 @@ export default function Register(): React.ReactNode {
     const { styles, cx, theme } = useMainStyles();
     const { register } = useContext(AuthContext);
 
-    const onFinish = (values: object): void => {
-        console.log(values);
-    }
-
     /**
      * Get the data from the form and send it to the backend
      * @param e event
      */
     const onComplete = () => {
         const formstuff = form.getFieldValue("user");
+        if (formstuff.password.password === formstuff.password.password) {
+            alert("Your password is not the same.")
+            return;
+        }
+
         const user = {
             name: formstuff.name.name,
             surname: formstuff.name.surname,
@@ -88,29 +89,30 @@ export default function Register(): React.ReactNode {
         console.log(user);
         register(user);
     }
+    
+    const onFinish = (values: object): void => {
+        console.log(values);
+    }
 
     return (
-        <Flex className={styles.form} align="center" justify="center">
-            <Sider width={"25%"} style={{background: "#004aad"}} className={cx(styles["left-sider"])}>
-                <Flex vertical>
-                    <Tag color="green"><Title level={4}>Step 1: Fill in your details</Title></Tag>
-                    <Tag color="null"><Title level={4}>Step 2: Complete registration</Title></Tag>
-                </Flex>
+        <Flex className={styles.form} style={{background: "#d0e1e1"}} align="center" justify="center">
+            <Sider width={"25%"} style={{background: "#d0e1e1"}} className={cx(styles["left-sider"])}>
+                <img src={"/assets/images/books.png"} alt="books" />
             </Sider>
-            <Sider theme="light" width={"75%"} >
-                <Form className={cx(styles["the-form"])} name="form_item_path" layout="vertical" onFinish={onFinish} form={form}>
+            <Sider theme="light" style={{background: "#d0e1e1"}} width={"75%"} >
+                <Form className={cx(styles["the-form"], styles.bg)} name="form_item_path" layout="vertical" onFinish={onFinish} form={form}>
                 <Title className="">Register with your personal information</Title>
                     <MyFormItemGroup prefix={["user"]}>
                         <Row gutter={5}>
                             <MyFormItemGroup prefix={["name"]}>
                                 <Col span={12}>
                                     <MyFormItem name="name" label="First Name" prefix={""}>
-                                        <Input />
+                                        <Input required/>
                                     </MyFormItem>
                                 </Col>
                                 <Col span={12}>
                                     <MyFormItem name="surname" label="Last Name" prefix={""}>
-                                        <Input />
+                                        <Input required/>
                                     </MyFormItem>
                                 </Col>
                             </MyFormItemGroup>
@@ -119,7 +121,7 @@ export default function Register(): React.ReactNode {
                             <Col span={24}>
                             <MyFormItemGroup prefix={["email"]}>
                                 <MyFormItem name="email" label="Email" prefix={""}>
-                                    <Input />
+                                    <Input required/>
                                 </MyFormItem>
                             </MyFormItemGroup>
                             </Col>
@@ -128,12 +130,12 @@ export default function Register(): React.ReactNode {
                             <MyFormItemGroup prefix={["password"]}>
                                 <Col span={12}>
                                     <MyFormItem name="password" label="Password" prefix={""}>
-                                        <Input.Password />
+                                        <Input.Password required />
                                     </MyFormItem>
                                 </Col>
                                 <Col span={12}>
                                     <MyFormItem name="confirm" label="Confirm" prefix={""}>
-                                        <Input.Password />
+                                        <Input.Password required />
                                     </MyFormItem>
                                 </Col>
                             </MyFormItemGroup>

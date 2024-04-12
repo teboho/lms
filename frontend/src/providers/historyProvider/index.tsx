@@ -5,8 +5,15 @@ import { HISTORY_CONTEXT_INITIAL_STATE, HistoryContext, HistoryType } from "./co
 import { historyReducer } from "./reducer";
 import { makeAxiosInstance } from "../authProvider";
 import Utils from "@/utils";
-import { getHistoryDataErrorAction, getHistoryDataRequestAction, getHistoryDataSuccessAction, postHistoryErrorAction, postHistoryRequestAction, postHistorySuccessAction, upViewCountAction } from "./actions";
-import { stat } from "fs";
+import { 
+    getHistoryDataErrorAction, 
+    getHistoryDataRequestAction, 
+    getHistoryDataSuccessAction, 
+    postHistoryErrorAction, 
+    postHistoryRequestAction, 
+    postHistorySuccessAction, 
+    upViewCountAction 
+} from "./actions";
 
 export default function HistoryProvider({ children }: { children: React.ReactNode }) {
     const [state, dispatch] = useReducer(historyReducer, HISTORY_CONTEXT_INITIAL_STATE);
@@ -16,92 +23,86 @@ export default function HistoryProvider({ children }: { children: React.ReactNod
 
     useEffect(() => {
         console.log("History Provider is mounted for first time.")
-        // get history data
         if (accessToken) {
             getHistoryData();
         }
     }, []);
 
+    /**
+     * Gets all the History data
+     */
     function getHistoryData() {
-        // get all history 
         const endpoint = "/api/services/app/History/GetAll";
         dispatch(getHistoryDataRequestAction());
         instance.get(endpoint)
             .then((response) => {
-                console.log("all the history data so far", response.data.result);
                 if (response.data.success) {
-                    // dispatch success action
                     dispatch(getHistoryDataSuccessAction(response.data.result.items));
                 } else {
-                    // dispatch error action
                     dispatch(getHistoryDataErrorAction());
                 }
             })
             .catch((error) => {
-                // dispatch error action
                 dispatch(getHistoryDataErrorAction());
             });
     }
 
+    /**
+     * Sends history item to the backend
+     * @param data the new history object
+     */
     function postHistory(data: HistoryType) {
-        // post history data
         const endpoint = "/api/services/app/History/Create";
         dispatch(postHistoryRequestAction());
         instance.post(endpoint, data)
             .then((response) => {
                 if (response.data.success) {
-                    // dispatch success action
-                    console.log(response.data.result);
                     dispatch(postHistorySuccessAction(response.data.result));
                 } else {
-                    // dispatch error action
                     dispatch(postHistoryErrorAction());
                 }
             })
             .catch((error) => {
-                // dispatch error action
                 dispatch(postHistoryErrorAction());
             });
     }
 
+    /**
+     * 
+     * @param patronId the patron id whose history we seek
+     */
     function getHistoryByPatron(patronId: number) {
-        console.log("patron id", patronId);
         const endpoint = "/api/services/app/History/GetByPatron";
         dispatch(getHistoryDataRequestAction());
         instance.get(`${endpoint}?patronId=${patronId}`, { params: { patronId } })
             .then((response) => {
-                console.log("history data..", response.data.result);
                 if (response.data.success) {
-                    // dispatch success action
                     dispatch(getHistoryDataSuccessAction(response.data.result));
                 } else {
-                    // dispatch error action
                     dispatch(getHistoryDataErrorAction());
                 }
             })
             .catch((error) => {
-                // dispatch error action
                 dispatch(getHistoryDataErrorAction());
             });
     }
 
+    /**
+     * 
+     * @param bookId for the book whose history we want to see
+     */
     function getHistoryByBook(bookId: string) {
-        // get history by book id
         const endpoint = "/api/services/app/History/GetByBookId";
         dispatch(getHistoryDataRequestAction());
         instance.get(`${endpoint}?bookId=${bookId}`, { params: { bookId } })
             .then((response) => {
-                console.log(response.data.result);
                 if (response.data.success) {
-                    // dispatch success action
                     dispatch(getHistoryDataSuccessAction(response.data.result.items));
                 } else {
-                    // dispatch error action
                     dispatch(getHistoryDataErrorAction());
                 }
             })
             .catch((error) => {
-                // dispatch error action
                 dispatch(getHistoryDataErrorAction());
             });
     }

@@ -7,4 +7,17 @@ export const useMainStyles = createStyles(({ css, cx }) => ({
   padding: css`
     padding: 20px;
   `,
+  border: css`
+    height: 300px;
+    border-radius: 20px;
+    box-shadow: 2px 2px 5px grey;
+  `, 
+  image: css`
+    width: 200px;
+    height: 300px;
+    object-fit: cover;
+  `, 
+  "height": css`
+    height: 400px;
+  `
 }));

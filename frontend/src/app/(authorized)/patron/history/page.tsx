@@ -7,9 +7,11 @@ import BookContext, { BookType } from "@/providers/bookProvider/context";
 import CategoryContext from "@/providers/categoryProvider/context";
 import { HistoryContext } from "@/providers/historyProvider/context";
 import Utils from "@/utils";
-import { Table, theme } from 'antd';
+import { Table, theme, Typography } from 'antd';
 import { useContext, useEffect } from "react";
  
+
+const { Title } = Typography;
 
 const Page = (): React.ReactNode => {
     const { token } = theme.useToken();
@@ -98,7 +100,7 @@ const Page = (): React.ReactNode => {
     
     return (
         <div>
-            <h1>History</h1>
+            <Title level={1}>History</Title>
             <div>
                 <div>
                     {showData}

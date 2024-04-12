@@ -19,6 +19,9 @@ namespace Boxfusion.LMS_Backend.EntityFrameworkCore
         public DbSet<Author> Authors { get; set; }
         public DbSet<Inventory> InventoryData { get; set; }
 
+        public DbSet<StoredFile> FileStore { get; set; }
+        public DbSet<UserFileStore> UserFileStore { get; set; }
+
         public LMS_BackendDbContext(DbContextOptions<LMS_BackendDbContext> options)
             : base(options)
         {

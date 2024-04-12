@@ -28,7 +28,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Http;
 
-namespace Boxfusion.LMS_Backend.Services.AskGoogle
+namespace Boxfusion.LMS_Backend.Services.Communication
 {
     [AbpAuthorize]
     public class CommunicationAppService : LMS_BackendAppServiceBase, ICommunicationAppService
@@ -61,7 +61,7 @@ namespace Boxfusion.LMS_Backend.Services.AskGoogle
                 recipientAddress: $"{email.ToEmail}",
                 subject: $"{email.Subject}",
                 plainTextContent: $"{email.Message}",
-                htmlContent: $"<html><head></head><body><h1>{email.Message}</h1></body></html>"  
+                htmlContent: $"<html><head></head><body><h1>{email.Message}</h1></body></html>"
             );
 
             if (emailSendOperation.HasCompleted)

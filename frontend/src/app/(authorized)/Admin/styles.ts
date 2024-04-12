@@ -6,13 +6,11 @@ export const useStyles = createStyles(({css, cx}) => ({
     `,
     content: css`
         width: 100%;
-        /* border: 1px solid red; */
-        padding: 20px;
-        background: white;
+        padding-right: 20px;
+        padding-left: 20px;
     `,
     right: css`
         width: 100%;
-        /* border: 1px solid grey; */
         background: white;
     `,
     border: css`
@@ -23,6 +21,9 @@ export const useStyles = createStyles(({css, cx}) => ({
     `,
     sticky: css`
         position: sticky;
-        top: 0;
+        top: 0px;
     `,
+    bgblue: css`
+        background: #d0e1e1;
+    `
 }));

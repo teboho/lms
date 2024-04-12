@@ -1,6 +1,6 @@
 import { handleActions } from "redux-actions";
 import { PreferenceActionEnums } from "./actions";
-import { PREFERENCE_CONTEXT_INITIAL_STATE } from "./context";
+import { PreferenceContextStateInit } from "./context";
 
 export const preferenceReducer = handleActions(
     {
@@ -44,5 +44,5 @@ export const preferenceReducer = handleActions(
             ...action.payload
         }),
     },
-    PREFERENCE_CONTEXT_INITIAL_STATE
+    PreferenceContextStateInit
 )

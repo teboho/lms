@@ -7,7 +7,7 @@ import BookContext, { BookType } from "@/providers/bookProvider/context";
 import CategoryContext from "@/providers/categoryProvider/context";
 import { PreferenceContext, PreferenceType } from "@/providers/preferenceProvider/context";
 import Utils from "@/utils";
-import { Card, Col, Row, Table, theme } from 'antd';
+import { Card, Col, Row, Table, theme, Typography } from 'antd';
 import { useContext, useEffect, useMemo, useState } from "react"; 
 import { jwtDecode } from "jwt-decode";
 import Link from "next/link";
@@ -28,9 +28,7 @@ const Page = (): React.ReactNode => {
     }, []);
 
     const getCategory = (id: string) => {
-        console.log("Getting category with id: ", id);
         const category = categories?.find(c => c.id === id);
-        console.log("Category: ", category);
         return category;
     }
 
@@ -38,22 +36,18 @@ const Page = (): React.ReactNode => {
         if (accessToken && preferenceData) {
             const decoded = jwtDecode(accessToken);
             const userId = decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
-            console.log(decoded);
             const patronId = Number.parseInt(userId)
 
             const prefs = getPreferenceByPatron(patronId);
-            // setPreferences(getPreferenceByPatron(userId));
-            console.log("This user's preferences: ", prefs);
             if (prefs) {
-                // const prefs = preferenceData?.find(p => p.patronId === patronId);
                 setPreferences(prev => prefs);
             }
         }
     }, [preferenceData]);
-    
+    const { Title } = Typography;
     return (
         <div>
-            <h1>Preferences</h1>
+            <Title>Preferences</Title>
             {preferences ? (
                 <Row gutter={16}>
                 <Col span={8}>

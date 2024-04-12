@@ -6,6 +6,8 @@ import { Layout, Menu, MenuProps } from "antd";
 import { useStyles } from "./styles";
 import Link from "next/link";
 import withAuth from "@/hocs/withAuth";
+import { DatabaseOutlined } from "@ant-design/icons";
+import { MenuItemType } from "antd/es/menu/hooks/useItems";
 
 const { Content, Sider } = Layout;
 
@@ -24,21 +26,22 @@ function getItem(
       children,
       label,
       type,
+      onClick: () => {}
     } as MenuItem;
 }
 
 const inventoryMenu: MenuItem[] = [
-    getItem(<Link href={"/admin/inventory/"}>Inventory</Link>, "admin-inventory", undefined, undefined, undefined),
-    getItem(<Link href={"/admin/addbook/"}>Add New Book</Link>, "admin-addbook", undefined, undefined, undefined),
+    getItem(<Link href={"/admin/inventory/"}>Inventory</Link>, "admin-inventory", <i className="ri-database-2-line"></i>, undefined, undefined),
+    getItem(<Link href={"/admin/addbook/"}>Add New Book</Link>, "admin-addbook", <i className="ri-add-box-line"></i>, undefined, undefined),
 ];
 
 const categoryMenu: MenuItem[] = [
-    getItem(<Link href={"/admin/categories/"}>Categories</Link>, "admin-categories", undefined, undefined, undefined),
+    getItem(<Link href={"/admin/categories/"}>Categories</Link>, "admin-categories", <DatabaseOutlined />, undefined, undefined),
     // getItem(<Link href={"/admin/addCategory/"}>Add New Category</Link>, "admin-addcategory", undefined, undefined, undefined),
 ];
 
 const loanMenu: MenuItem[] = [
-    getItem(<Link href={"/admin/loans/"}>Loans</Link>, "admin-loans", undefined, undefined, undefined),
+    getItem(<Link href={"/admin/loans/"}>Loans</Link>, "admin-loans", <i className="ri-bill-line"></i>, undefined, undefined),
     // getItem(<Link href={"/admin/finishedLoans/"}>Finished Loans</Link>, "admin-finishedloans", undefined, undefined, undefined),
 ];
 
@@ -47,7 +50,7 @@ const paymentsMenu: MenuItem[] = [
 ]
 
 const adminMenu: MenuItem[] = [
-    getItem(<Link href="/admin">Admin</Link>, "admin", undefined, undefined, 'group'),
+    // getItem(<Link href="/admin">Admin</Link>, "admin", undefined, undefined, 'group'),
     getItem("Categories", "categories", undefined, categoryMenu, 'group'),
     getItem("Inventory", "inventory", undefined, inventoryMenu, 'group'),
     // getItem("Payments", "payments", undefined, paymentsMenu, 'group'),
@@ -60,11 +63,11 @@ const AdminLayout = ({ children }: { children: React.ReactNode }): React.ReactNo
 
     return (
         <Layout>
-            <Sider style={{background: "white"}} className={cx(styles.right)} width={"25%"}>
+            <Sider style={{background: "#d0e1e1"}} className={cx(styles.sticky, styles.right)} width={"250"}>
                 <Menu
                     onClick={() => {}}
                     items={adminMenu}
-                    className={cx(styles.sticky)}
+                    className={cx(styles.sticky, styles.bgblue)}
                     mode="inline"
                 />
             </Sider>

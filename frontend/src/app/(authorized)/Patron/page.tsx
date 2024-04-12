@@ -1,7 +1,7 @@
 "use client";
 import { useContext, useEffect, useMemo, useState } from "react";
 import withAuth from "@/hocs/withAuth";
-import { Button, Layout, Select, Space } from "antd";
+import { Button, Flex, Layout, Select, Space, Typography } from "antd";
 import BookContext from "@/providers/bookProvider/context";
 import {useStyles} from "./styles";
 import AuthContext from "@/providers/authProvider/context";
@@ -9,45 +9,73 @@ import SearchResults from "@/components/searchResults";
 import CategoryContext from "@/providers/categoryProvider/context";
 import InventoryContext from "@/providers/inventoryProvider/context";
 import AuthorsContext from "@/providers/authorsProvider/context";
+import Image from "next/image";
+import { useSearchParams, usePathname } from "next/navigation";
+import { useStoredFileActions, useStoreFileState } from "@/providers/storedFileProvider";
+import Utils from "@/utils";
 
 const { Content } = Layout;
 const { Option } = Select;
 
 const Page = (): React.ReactNode => {
-    const { userObj } = useContext(AuthContext);
-    const { books, getAll: getAllBooks , searchTerm} = useContext(BookContext);
-    const { inventoryItems, getAll, getInventory } = useContext(InventoryContext);
-    const { categories, getCategory, getAllCategories } = useContext(CategoryContext);
-    const { getAuthorById, getAuthors } = useContext(AuthorsContext);
+    const { userObj, authObj } = useContext(AuthContext);
+    const { books, getAll: getAllBooks , searchTerm, searchDB } = useContext(BookContext);
+    const { getAll } = useContext(InventoryContext);
+    const { categories, getAllCategories } = useContext(CategoryContext);
+    const { getAuthors } = useContext(AuthorsContext);
+    const { getBridgeByUser, getStoredFiles } = useStoredFileActions();
+    const { userFile } = useStoreFileState();
     const { styles, cx } = useStyles();
-
+    const [isLoading, setIsLoading] = useState(true);
     const [currentBooks, setCurrentBooks] = useState([]);
     const memoCategories = useMemo(() => categories, [categories]);
+    const searchParams = useSearchParams();
+    const pathname = usePathname();
 
     useEffect(() => {
         getAll();
-        getAllBooks();
+        console.log("pathname", pathname);
+        
+        const search = searchParams.get("search");
+        if (search) {
+            console.log("searching for...", search);
+            searchDB(search);
+        } else {
+            getAllBooks();
+        }
+
         getAuthors();
         getAllCategories();
         setCurrentBooks(books);
+        setIsLoading(true);
+
+
+        getBridgeByUser(Utils.getUserId());
+
+        // if (userFile) {
+        //     console.log("userFile...", userFile);
+        //     getStoredFiles();
+        // }
     }, []);
 
-    useEffect(() => {
-        console.log("Home useEffect", userObj);
-        
+    useEffect(() => {        
         if (!books) {
-            console.log("Fetching books");
             getAll();
         }
     }, [userObj]);
     
     useEffect(() => {
-        console.log("Books", books);
         setCurrentBooks(books);
     }, [books]);
 
     const user = useMemo(() => userObj, [userObj]);
-    let memoBooks = useMemo(() => currentBooks, [currentBooks]);
+    let memoBooks = useMemo(() => {
+        if (currentBooks && currentBooks.length > 0) {
+            setIsLoading(false);
+        }
+        return currentBooks;
+    }, [currentBooks]);
+
     const chooseCategory = (
         <Select
             showSearch
@@ -58,9 +86,7 @@ const Page = (): React.ReactNode => {
                     `${option.children}`.toLowerCase().indexOf(input.toLowerCase()) >= 0
             }
             onSelect={(value) => {
-                console.log(value);
                 const filteredBooks = books?.filter((book) => book.categoryId === value);
-                console.log(filteredBooks);
                 setCurrentBooks(filteredBooks);
             }}
         >
@@ -69,37 +95,48 @@ const Page = (): React.ReactNode => {
             ))}
         </Select>
     ); 
+    
     return (
         <Content className={cx(styles.content, styles.padding)}>
-            <h1>Welcome back to savvyshelf</h1>     
-            {/* antd dropdown filter by category */}
-            {chooseCategory}
-            <Button onClick={() => {
-                setCurrentBooks(books);
-                // clear search term
-                // chooseCategory.
-            }}>
-                Clear
-            </Button>
-            <Space />
-            <Select
-                style={{ width: 200, marginLeft: 20 }}
-                placeholder="Sort by"
-                onSelect={(value) => {
-                    let sortedBooks;
-                    if (value === 'name') {
-                        sortedBooks = [...currentBooks].sort((a, b) => a.name.localeCompare(b.name));
-                    } else if (value === 'year') {
-                        sortedBooks = [...currentBooks].sort((a, b) => a.year - b.year);
-                    }
-                    setCurrentBooks(sortedBooks);
-                }}
-            >
-                <Option value="name">Name</Option>
-                <Option value="year">Year</Option>
-            </Select>
-
-            <SearchResults books={memoBooks} searchTerm={searchTerm} />
+            <Flex justify="space-between" align="stretch">
+                <Typography.Title level={1}>Welcome back to savvyshelf</Typography.Title>     
+                <div
+                    style={{
+                        paddingTop: 35,
+                        bottom:  0
+                    }}
+                >
+                    {chooseCategory}
+                    <Button onClick={() => {
+                        setCurrentBooks(books);
+                        console.log("clearing", books);
+                    }}>
+                        Clear
+                    </Button>
+                    <Space />
+                    <Select
+                        style={{ width: 200, marginLeft: 20 }}
+                        placeholder="Sort by"
+                        onSelect={(value) => {
+                            let sortedBooks;
+                            if (value === 'name') {
+                                sortedBooks = [...currentBooks].sort((a, b) => a.name.localeCompare(b.name));
+                            } else if (value === 'year') {
+                                sortedBooks = [...currentBooks].sort((a, b) => a.year - b.year);
+                            }
+                            setCurrentBooks(sortedBooks);
+                        }}
+                    >
+                        <Option value="name">Name</Option>
+                        <Option value="year">Year</Option>
+                    </Select>    
+                </div>        
+            </Flex>
+            {isLoading && (<Flex justify="center" align="center">
+                <Image src={"/assets/images/book-op.gif"} alt="book" width={350} height={350} style={{margin: "0 auto"}} />
+            </Flex>
+            )}
+            {memoBooks && <SearchResults books={memoBooks} searchTerm={searchTerm} /> }
         </Content>
     );
 }

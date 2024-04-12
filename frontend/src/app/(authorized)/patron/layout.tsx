@@ -5,6 +5,9 @@ import React from "react";
 import { useStyles } from "./styles";
 import Link from "next/link";
 import withAuth from "@/hocs/withAuth";
+import { DatabaseOutlined } from "@ant-design/icons";
+import 'remixicon/fonts/remixicon.css'
+import { MenuItemType } from "antd/es/menu/hooks/useItems";
 
 const { Content, Sider } = AntdLayout;
 
@@ -23,38 +26,40 @@ function getItem(
       children,
       label,
       type,
+      onClick: () => {}
     } as MenuItem;
 }
 
+// number 3 is icon
 const preferencesMenu: MenuItem[] = [
-    getItem(<Link href={"/patron/preferences/"}>View Preferences</Link>, "patron-modify-preferences", undefined, undefined, undefined),
-    getItem(<Link href={"/patron/preferences-survey/"}>Modify Preferences</Link>, "patron-preferences-survey", undefined, undefined, undefined)
+    getItem(<Link href={"/patron/preferences/"}>View Preferences</Link>, "patron-modify-preferences", <i className="ri-settings-line"></i>, undefined, undefined),
+    getItem(<Link href={"/patron/preferences-survey/"}>Modify Preferences</Link>, "patron-preferences-survey", <i className="ri-settings-6-line"></i>, undefined, undefined)
 ];
 
 const patronMenu: MenuItem[] = [
-    getItem(<Link href={"/patron/"}>Patron</Link>, "patron", undefined, undefined, 'group'),
-    getItem(<Link href={"/patron/categories/"}>Categories</Link>, "patron-categories", undefined, undefined, undefined),
-    getItem(<Link href={"/patron/loans/"}>My Loans</Link>, "patron-myloans", undefined, undefined, undefined),
+    // getItem(<Link href={"/patron/"}>Patron</Link>, "patron", undefined, undefined, 'group'),
+    getItem(<Link href={"/patron/categories/"}>Categories</Link>, "patron-categories", <DatabaseOutlined />, undefined, undefined),
+    getItem(<Link href={"/patron/loans/"}>My Loans</Link>, "patron-myloans", <i className="ri-bill-line"></i>, undefined, undefined),
     // getItem(<Link href={"/patron/payments/"}>Payments</Link>, "patron-payments", undefined, undefined, undefined),
     getItem("Preferences", "patron-preferences", undefined, preferencesMenu, "group"),
-    getItem(<Link href="/patron/history">History</Link>, "patron-history", undefined, undefined, undefined),
+    getItem(<Link href="/patron/history">History</Link>, "patron-history", <i className="ri-history-fill"></i>, undefined, undefined),
 ];
 
 const Layout = ({ children }: { children: React.ReactNode }): React.ReactNode => {
     const { styles, cx } = useStyles();
 
     return (
-        <AntdLayout>
-            <Sider theme="light" className={cx(styles.left)} width={"20%"}>
+        <AntdLayout style={{height: "100%"}}>
+            <Sider theme="light" style={{ background: "rgb(245, 245, 245)"}} className={cx(styles.height, styles.sticky)} width={"250"}>
                 <Menu
                     onClick={() => {}}
                     items={patronMenu}
-                    className={cx(styles.sticky)}
+                    className={cx(styles.sticky, styles["left-menu"])}
                 />
             </Sider>
-            <Sider theme="light" className={cx(styles.right, styles.padding)} width={"80%"}>
+            <AntdLayout className={cx(styles.right, styles.padding)}>
                 {children}
-            </Sider>
+            </AntdLayout>
         </AntdLayout>
     );
 }

@@ -15,11 +15,12 @@ export const useStyles = createStyles(({css, cx}) => ({
     `,
     hoverable: css`
         &:hover {
-            background-color: #f0f0f0;
+            background-color: #d0e1e1;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
         }
     `,
-    padding: css`  
-        padding: 20px;
+    athing: css`  
+        padding: 0 500px;
+        backround: red;
     `,
 }));

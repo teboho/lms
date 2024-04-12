@@ -6,17 +6,15 @@ export const useStyles = createStyles(({css, cx}) => ({
     `,
     content: css`
         width: 100%;
-        /*border: 1px solid grey;*/
+        height: 100%;
+        overflow: auto;
     `,
     right: css`
         width: 100%;
-        /*border-right: 1px solid grey;
-        background: grey;*/
+        height: 100vh;
     `,
     left: css`
-        width: 100%;
-        /*border: 1px solid red;*/
-        background: #00A0AD;
+        height: 100;
     `,
     border: css`
         border: 1px solid blue;
@@ -28,7 +26,18 @@ export const useStyles = createStyles(({css, cx}) => ({
         position: sticky;
         top: 0;
     `,
+    "left-menu": css`
+        background:  #d0e1e1;
+        height: 100vh;
+    `,
     padding: css`
-        padding: 20px;
-    `
+        padding-right: 20px;
+        padding-left: 20px;
+    `, 
+    layout: css`
+        height: 100%;
+    `,
+    height: css`
+        height: 100%;
+    `,
 }));

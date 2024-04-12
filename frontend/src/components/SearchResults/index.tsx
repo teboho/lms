@@ -2,7 +2,7 @@
 import React, { useContext, useState } from "react";
 import type { BookDataType } from "@/providers/bookProvider/context";
 import { Typography, Flex } from "antd";
-import Book from "../Book";
+import Book from "@/components/book";
 
 const { Title, Paragraph } = Typography;
 

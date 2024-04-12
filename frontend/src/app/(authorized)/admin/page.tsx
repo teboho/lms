@@ -1,32 +1,53 @@
 "use client";
-import { ReactNode, useState, useEffect, useMemo, useContext, use } from "react";
-import { useSearchParams } from "next/navigation";
+import { useState, useEffect, useMemo, useContext, use } from "react";
+import { useSearchParams, usePathname } from "next/navigation";
 import Link from "next/link";
-
+import styles from "./admin.module.css";
 import withAuth from "@/hocs/withAuth";
-import { Card, Typography, Image, Button , List, message, Steps, theme, Select, Space } from 'antd';
+import { Typography, Image, Button , List, message, Steps, theme, Select, Space } from 'antd';
 import BookContext, { BookDataType, BookType } from "@/providers/bookProvider/context";
-
 import InventoryContext from "@/providers/inventoryProvider/context";
 import CategoryContext, { CategoryType } from "@/providers/categoryProvider/context";
 import AuthorsContext from "@/providers/authorsProvider/context";
+import { useStoredFileActions, useStoreFileState } from "@/providers/storedFileProvider";
+import Utils from "@/utils";
 
 const { Title, Paragraph } = Typography;
 
 const Page = (): React.ReactNode => {
     const { token } = theme.useToken();
     const searchParams = useSearchParams();
-    const { books, getAll: getAllBooks } = useContext(BookContext);
+    const { books, getAll: getAllBooks, searchDB } = useContext(BookContext);
     const { inventoryItems, getAll, getInventory } = useContext(InventoryContext);
     const { categories, getCategory, getAllCategories } = useContext(CategoryContext);
     const { getAuthorById, getAuthors } = useContext(AuthorsContext);
     const [currentBooks, setCurrentBooks] = useState([]);
+    const pathname = usePathname();
+    
+    const { getStoredFiles, getBridgeByUser, postUserFile } = useStoredFileActions();
+    const { userFile } = useStoreFileState();
 
     useEffect(() => {
             getAll();
-            getAllBooks();
+            console.log("pathname", pathname);
+            
+            const search = searchParams.get("search");
+            if (search) {
+                console.log("searching for...", search);
+                searchDB(search);
+            } else {
+                getAllBooks();
+            }
+
             getAuthors();
             getAllCategories();
+
+            getBridgeByUser(Utils.getUserId());
+
+            if (userFile) {
+                console.log("userFile...", userFile);
+                getStoredFiles();
+            }
     }, []);
 
     const memoInventoryItems = useMemo(() => {
@@ -42,7 +63,6 @@ const Page = (): React.ReactNode => {
         return categories;
     }, [categories]);
 
-    // filter the inventory items by book id
     function filterInventoryItems(bookId: string) {
         return memoInventoryItems?.filter((item) => item.bookId === bookId)[0];
     }
@@ -50,15 +70,14 @@ const Page = (): React.ReactNode => {
     const { Option } = Select;
 
     return (
-        <>
+        <div className={styles.content}>
             <div>
-                <Title level={3}>Inventory</Title>
+                <Title level={1}>Inventory</Title>
                 <Paragraph>
-                    This is the inventory page
+                    This is the inventory
                 </Paragraph>
             </div>
 
-            {/* antd dropdown filter by category */}
             <Select
                 showSearch
                 style={{ width: 200 }}
@@ -68,11 +87,7 @@ const Page = (): React.ReactNode => {
                         `${option.children}`.toLowerCase().indexOf(input.toLowerCase()) >= 0
                     }
                 onSelect={(value) => {
-                    console.log(value);
-                    // document.getElementById("inventory-list")?.scrollIntoView();
-                    // show only the books that match the category id
                     const filteredBooks = books?.filter((book) => book.categoryId === value);
-                    // console.log(filteredBooks);
 
                     memoBooks = filteredBooks;
                     setCurrentBooks(filteredBooks);
@@ -150,9 +165,8 @@ const Page = (): React.ReactNode => {
                         }
                     </List.Item>
                 )}
-            />
-           
-        </>
+            />           
+        </div>
     );
 }
 

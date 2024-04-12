@@ -1,21 +1,13 @@
 "use client";
 import { useState, useEffect, useMemo, useContext } from "react";
 import withAuth from "@/hocs/withAuth";
-import { Button, List, message, Steps, theme, Input, Space, ConfigProvider } from 'antd';
+import { Button, List, message, Steps, theme, Input, ConfigProvider, Typography, Flex } from 'antd';
 import AuthContext from "@/providers/authProvider/context";
-import BookContext from "@/providers/bookProvider/context";
 import CategoryContext from "@/providers/categoryProvider/context";
 import Utils from "@/utils";
 import { useStyles } from "./styles";
-import { PreferenceContext } from "@/providers/preferenceProvider/context";
+import { PreferenceContext, PreferenceType } from "@/providers/preferenceProvider/context";
 import { jwtDecode } from "jwt-decode";
-
-export type Preferences = {
-    primaryCategoryId: number;
-    secondaryCategoryId: number;
-    tertiaryCategoryId: number;
-    patronId: number;
-}
 
 const cats: {name: string, id: number}[] = [];
 for (var i = 0; i < 10; i++) {
@@ -28,6 +20,7 @@ for (var i = 0; i < 10; i++) {
 }
 
 const { Search } = Input;
+const  { Title } = Typography;
 
 const Page = (): React.ReactNode => {
     const { token } = theme.useToken();
@@ -35,9 +28,8 @@ const Page = (): React.ReactNode => {
     const [chosen, setChosen] = useState([]);  
     const [deleted, setDeleted] = useState([]);  
     const {userObj, getUserId} = useContext(AuthContext);
-    const bookContextObject = useContext(BookContext);
     const categoryContextValue = useContext(CategoryContext);
-    const { getPreferenceData, getPreferenceByPatron, preferenceData } = useContext(PreferenceContext);
+    const { postPreference, getPreferenceByPatron, preferenceData } = useContext(PreferenceContext);
     const [_options, setOptions] = useState(null);
     const {styles, cx} = useStyles();
 
@@ -54,7 +46,6 @@ const Page = (): React.ReactNode => {
         if (userId) {
             const prefs = getPreferenceByPatron(userId);
             
-            console.log("This user's preferences: ", prefs);
             if (prefs) {
                 setChosen(prev => ([
                     getCategory(prefs.primaryCategoryId),
@@ -72,32 +63,24 @@ const Page = (): React.ReactNode => {
     }, [])
 
     useEffect(() => {
-        if (preferenceData) {
-            console.log("preferenceData", preferenceData);
-        }
         const accessToken = Utils.getAccessToken();
         if (accessToken) {
             const decoded = jwtDecode(accessToken);
             const userId = decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
-            console.log(decoded);
             const patronId = Number.parseInt(userId)
 
             const prefs = getPreferenceByPatron(patronId);
-            console.log("This user's preferences: ", prefs);
             if (prefs) {
                 setChosen(prev => ([
                     getCategory(prefs.primaryCategoryId),
                     getCategory(prefs.secondaryCategoryId),
                     getCategory(prefs.tertiaryCategoryId)
                 ]));
-                // also set the current step to the last one
-                // setCurrent(2);
             } 
         }       
     }, [preferenceData]);
 
     useEffect(() => {
-        console.log("categories", categoryContextValue.categories);
         setOptions(categoryContextValue.categories);
     }, [categoryContextValue.categories])
 
@@ -121,22 +104,19 @@ const Page = (): React.ReactNode => {
     }
 
     const savePreferences = (): void => {
-        console.log(chosen);
-        var prefs: Preferences = {
+        var prefs: PreferenceType = {
             patronId: user?.id,
             primaryCategoryId: chosen[0].id,
             secondaryCategoryId: chosen[1].id,
             tertiaryCategoryId: chosen[2].id
         };
-        bookContextObject.savePreferences({
+        postPreference({
             ...prefs
         });
     }
 
     const getCategory = (id: string) => {
-        console.log("Getting category with id: ", id);
         const category = categoryContextValue.categories?.find(c => c.id === id);
-        console.log("Category: ", category);
         return category;
     }
 
@@ -150,9 +130,7 @@ const Page = (): React.ReactNode => {
         setChosen(prev => ([
             ...stateCopy,          
         ]));
-        
-        console.log("what to bring back to the content", spliced);
-        console.log("current", current);
+
         spliced.forEach((cat, i) => {
             cats.push(cat);
         })
@@ -198,14 +176,14 @@ const Page = (): React.ReactNode => {
     ));
 
     const onSearch = (value: string) => {
-        console.log(value);
         const results = memoOptions.filter((item) => item?.name?.toLowerCase().includes(value));
-        console.log(results);
         setOptions(results);
     }
-                
+           
     return (
-        <>
+        <div className={cx(styles.padding)}>
+            <Title level={1}>Add / Modify Your Preferences</Title>
+
             <div> 
                 <Search
                     placeholder="Enter book title"
@@ -213,40 +191,31 @@ const Page = (): React.ReactNode => {
                     style={{ width: 400 }}
                 />
                 {" "}
-                <Button type="primary" onClick={() => setOptions(categoryContextValue.categories)}>
-                    Reset
-                </Button>
             </div>
 
-            <Steps current={current} items={items} />
-
-            {/* the choices */}
-            <div style={contentStyle}>
-                <div className={cx(styles.center)}>{current >= 0 && steps[current].content}</div>
-                <br />
-                <br />
+            <Flex align="center" justify="center" wrap="wrap" style={{ width : "100%" }}>
                 {chosen.length < steps.length && (
                     memoOptions?.map((item, index: number) => (
-                        <>
-                        <ConfigProvider 
-                            theme={{
-                                token: {
-                                    colorPrimary: "#00BF63",
-                                }                        
-                            }}>
-                                <Button key={`choice_${item.id}`}
-                                    onClick={() => {
-                                        savePref(index, item)
-                                        if (current < steps.length - 1) next();
-                                    }}>
-                                    {item.name}
-                                </Button>
-                            </ConfigProvider>                        
-                        {" "}
-                        </>
+                        <div key={`button_${index}`}>
+                            <ConfigProvider 
+                                theme={{
+                                    token: {
+                                        colorPrimary: "#00BF63",
+                                    }                        
+                                }}>
+                                    <Button key={`choice_${item.id}`}
+                                        onClick={() => {
+                                            savePref(index, item)
+                                            if (current < steps.length - 1) next();
+                                        }}>
+                                        {item.name}
+                                    </Button>
+                                </ConfigProvider>                        
+                            {" "}
+                        </div>
                     ))
                 )}
-            </div>
+            </Flex>
             
             <div style={{ marginTop: 24 }}>
                 {current === steps.length - 1 && (
@@ -272,12 +241,12 @@ const Page = (): React.ReactNode => {
                 dataSource={chosen}
                 style={{ alignContent: 'center' }}
                 renderItem={(item, index) => (
-                    <List.Item>
+                    <List.Item key={`list_item_${index}`}>
                         {`${item.name}`}
                     </List.Item>
                 )}
             />
-        </>
+        </div>
     );
 }
 
