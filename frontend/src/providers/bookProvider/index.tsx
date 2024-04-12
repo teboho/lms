@@ -32,7 +32,7 @@ export default function BookProvider({ children }: { children: React.ReactNode }
     }, []);
 
     useEffect(() => {
-        if (authObj && authObj?.accessToken.length > 0) {
+        if (authObj && authObj?.accessToken?.length > 0) {
             getAll();
         }
     }, [authObj]);
