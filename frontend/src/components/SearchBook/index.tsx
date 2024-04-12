@@ -104,6 +104,7 @@ const SearchBook: React.FC<BookProps> = ({ bookStuff }) => {
                 onCancel={cancel}
                 okText="Add book"
                 cancelText="Cancel"
+                placement="bottom"
             >
                 <Button type="primary">Add</Button>
             </Popconfirm>
