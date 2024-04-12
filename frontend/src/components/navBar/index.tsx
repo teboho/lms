@@ -19,7 +19,7 @@ const outItems: MenuProps['items'] = [
     {
         label: <Link href={"/"}>Home</Link>, 
         key: 'home',
-        icon: <Image src="/assets/images/LMS-logo1-transparent.png" width={30} height={30} alt="logo"/>
+        icon: <Image src="/assets/images/LMS-hq.png" width={30} height={30} alt="logo"/>
     },
     {
         label: <Link href={"/login"}>Login</Link>,

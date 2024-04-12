@@ -16,14 +16,15 @@ export const HISTORY_INIT: HistoryType = {
 }
 
 export interface History_CONTEXT_STATE_TYPE {
-    isInProgress: boolean;
-    isSuccess: boolean;
-    isError: boolean;
+    isInProgress?: boolean;
+    isSuccess?: boolean;
+    isError?: boolean;
     history?: HistoryType;
     historyData?: HistoryType[];
+    viewCount?: number;
 }
 
-export const HISTORY_CONTEXT_INITIAL_STATE = {
+export const HISTORY_CONTEXT_INITIAL_STATE: History_CONTEXT_STATE_TYPE = {
     isInProgress: false,
     isError: false,
     isSuccess: false,
@@ -35,22 +36,22 @@ export const HISTORY_CONTEXT_INITIAL_STATE = {
 export interface HistoryContextType {
     history: HistoryType;
     historyData: HistoryType[];
+    viewCount: number;
     getHistoryData: () => void;
     postHistory: (data: HistoryType) => void;
     getHistoryByBook: (bookId: string) => void;
     getHistoryByPatron: (patronId: number) => void;
-    viewCount: number;
     upViewCount: () => void;
 }
 
 export const HistoryContextDefault: HistoryContextType = {
     history: HISTORY_INIT,
     historyData: [],
+    viewCount: 0,
     getHistoryData: () => {},
     postHistory: (data: HistoryType) => {},
     getHistoryByBook: (bookId: string) => {},
     getHistoryByPatron: (patronId: number) => {},
-    viewCount: 0,
     upViewCount: () => {}
 }
 

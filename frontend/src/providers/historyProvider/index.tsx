@@ -1,6 +1,6 @@
 "use client"
 
-import { use, useEffect, useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import { HISTORY_CONTEXT_INITIAL_STATE, HistoryContext, HistoryType } from "./context";
 import { historyReducer } from "./reducer";
 import { makeAxiosInstance } from "../authProvider";
@@ -108,7 +108,7 @@ export default function HistoryProvider({ children }: { children: React.ReactNod
     }
 
     function upViewCount() {
-        dispatch(upViewCountAction(state));
+        dispatch(upViewCountAction());
     }
 
     return (

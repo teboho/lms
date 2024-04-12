@@ -1,9 +1,10 @@
 "use client";
-import React, { use, useContext, useEffect, useReducer } from 'react';
+import React, { useContext, useEffect, useReducer } from 'react';
 import storedFileReducer from './reducer';
 import { StoredFile, StoredFileActionContext, StoredFileStateContext, StoredFileStateContext_InitState, UserFileStore } from './context';
 import { makeAxiosInstance } from '../authProvider';
 import { deleteStoredFileErrorAction, deleteStoredFileSuccessAction, getBridgeByUserErrorAction, getBridgeByUserRequestAction, getBridgeByUserSuccessAction, getStoredFileErrorAction, getStoredFileRequestAction, getStoredFilesErrorAction, getStoredFilesRequestAction, getStoredFilesSuccessAction, getStoredFileSuccessAction, postUserFileErrorAction, postUserFileRequestAction, postUserFileSuccessAction, putStoredFileErrorAction, putStoredFileRequestAction, putStoredFileSuccessAction } from './actions';
+import Utils from '@/utils';
 
 const StoredFileProvider = ({children}: {children: React.ReactNode}): React.ReactNode => {
     const [state, dispatch] = useReducer(storedFileReducer, StoredFileStateContext_InitState);
@@ -11,7 +12,7 @@ const StoredFileProvider = ({children}: {children: React.ReactNode}): React.Reac
     let instance = makeAxiosInstance();
 
     useEffect(() => {
-        const accessToken = localStorage.getItem('accessToken');
+        const accessToken = Utils.getAccessToken();
         if (accessToken) {
             console.log("found the accesss token", accessToken);
             instance = makeAxiosInstance(accessToken);

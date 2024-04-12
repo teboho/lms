@@ -203,7 +203,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
      * @returns whether the user is logged in or not
      */
     function isLoggedIn(): boolean {
-        const accessToken = localStorage.getItem("accessToken");
+        const accessToken = Utils.getAccessToken();
         if (accessToken) {
             return true;
         }
@@ -217,7 +217,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     function getUserId(): number {
         if (authState.authObj) return authState.authObj.userId;
         else {
-            const accessToken = localStorage.getItem("accessToken");
+            const accessToken = Utils.getAccessToken();
             if (accessToken) {
                 const decoded = jwtDecode(accessToken);
                 return Number.parseInt(decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"]);

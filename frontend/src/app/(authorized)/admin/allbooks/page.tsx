@@ -1,13 +1,13 @@
 "use client";
-import { useContext, useEffect, useMemo } from "react";
+import { useContext, useEffect } from "react";
 import withAuth from "@/hocs/withAuth";
 import { Layout, List, Typography } from "antd";
 import BookContext from "@/providers/bookProvider/context";
 const { Content, Sider } = Layout;
-import {useStyles} from "./styles";
-import Book from "@/components/Book";
+import { useStyles } from "./styles";
 import SearchResults from "@/components/searchResults";
 import Utils from "@/utils";
+import Book from "@/components/book";
 
 const { Title } = Typography;
 

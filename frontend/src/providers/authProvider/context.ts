@@ -2,10 +2,10 @@
 import { createContext } from "react";
 
 export interface AUTH_RESPONSE_TYPE {
-    "accessToken": string;
-    "encryptedAccessToken": string;
-    "expireInSeconds": number;
-    "userId": number;
+    accessToken: string;
+    encryptedAccessToken: string;
+    expireInSeconds: number;
+    userId: number;
 }
 
 export interface REGISTER_RESPONSE_TYPE {

@@ -34,7 +34,10 @@ export enum TokenProperies {
 export default class Utils {
     static getAccessToken() {
         const tokenKey = process.env.NEXT_PUBLIC_ACCESS_TOKEN_KEY;
-        return localStorage.getItem(tokenKey);
+        if (typeof window !== "undefined") {
+            return localStorage.getItem(tokenKey);
+        }
+        return undefined;
     }
     static getApiUrl() {
         return process.env.NEXT_PUBLIC_API_URL;

@@ -1,7 +1,6 @@
 "use client";
 import { createAction } from "redux-actions";
-import { History_CONTEXT_STATE_TYPE, HistoryType } from "./context";
-import { HistoryState } from "next/dist/shared/lib/router/router";
+import { HistoryType } from "./context";
 
 export const HistoryActionEnums = {
     GetHistoryRequest: "GET_History_REQUEST",
@@ -25,7 +24,7 @@ export const HistoryActionEnums = {
  */
 export const getHistoryRequestAction = createAction(
     HistoryActionEnums.GetHistoryRequest,
-    () => ({ isSuccess: false, isInProgress: true, isError: false, history: undefined, historyData: undefined, viewCount: 0 })
+    () => ({ isSuccess: false, isInProgress: true, isError: false, history: undefined })
 )
 
 /**
@@ -33,7 +32,7 @@ export const getHistoryRequestAction = createAction(
  */
 export const getHistorySuccessAction = createAction(
     HistoryActionEnums.GetHistorySuccess,
-    (history: HistoryType): any => ({ isSuccess: true, isInProgress: false, isError: false, history, historyData: undefined, viewCount: 0 })
+    (history: HistoryType) => ({ isSuccess: true, isInProgress: false, isError: false, history })
 );
 
 /**
@@ -41,7 +40,7 @@ export const getHistorySuccessAction = createAction(
  */
 export const getHistoryErrorAction = createAction(
     HistoryActionEnums.GetHistoryError,
-    () => ({ isSuccess: false, isInProgress: false, isError: true, history: undefined, historyData: undefined, viewCount: 0 })
+    () => ({ isSuccess: false, isInProgress: false, isError: true, history: undefined })
 );
 
 /**
@@ -50,7 +49,7 @@ export const getHistoryErrorAction = createAction(
  */
 export const getHistoryDataRequestAction = createAction(
     HistoryActionEnums.GetHistoryDataRequest,
-    () => ({ isSuccess: false, isInProgress: true, isError: false, history: undefined, historyData: undefined, viewCount: 0 })
+    () => ({ isSuccess: false, isInProgress: true, isError: false, historyData: undefined })
 )
 
 /**
@@ -58,7 +57,7 @@ export const getHistoryDataRequestAction = createAction(
  */
 export const getHistoryDataSuccessAction = createAction(
     HistoryActionEnums.GetHistoryDataSuccess,
-    (historyData: HistoryType[]): any => ({ isSuccess: true, isInProgress: false, isError: false, history: undefined, historyData, viewCount: 0})
+    (historyData: HistoryType[]): any => ({ isSuccess: true, isInProgress: false, isError: false,historyData })
 );
 
 /**
@@ -66,7 +65,7 @@ export const getHistoryDataSuccessAction = createAction(
  */
 export const getHistoryDataErrorAction = createAction(
     HistoryActionEnums.GetHistoryDataError,
-    () => ({ isSuccess: false, isInProgress: false, isError: true, history: undefined, historyData: undefined, viewCount: 0 })
+    () => ({ isSuccess: false, isInProgress: false, isError: true, historyData: undefined })
 );
 
 /**
@@ -75,7 +74,7 @@ export const getHistoryDataErrorAction = createAction(
  */
 export const postHistoryRequestAction = createAction(
     HistoryActionEnums.PostHistoryRequest,
-    () => ({ isSuccess: false, isInProgress: true, isError: false, history: undefined, historyData: undefined, viewCount: 0 })
+    () => ({ isSuccess: false, isInProgress: true, isError: false, history: undefined })
 );
 
 /**
@@ -83,7 +82,7 @@ export const postHistoryRequestAction = createAction(
  */
 export const postHistorySuccessAction = createAction(
     HistoryActionEnums.PostHistorySuccess,
-    (history: HistoryType): any => ({ isSuccess: true, isInProgress: false, isError: false, history, historyData: undefined, viewCount: 0})
+    (history: HistoryType): any => ({ isSuccess: true, isInProgress: false, isError: false, history })
 );
 
 /**
@@ -91,10 +90,10 @@ export const postHistorySuccessAction = createAction(
  */
 export const postHistoryErrorAction = createAction(
     HistoryActionEnums.PostHistoryError,
-    () => ({ isSuccess: false, isInProgress: false, isError: true, history: undefined, historyData: undefined, viewCount: 0 })
+    () => ({ isSuccess: false, isInProgress: false, isError: true, history: undefined })
 );
 
 export const upViewCountAction = createAction(
     HistoryActionEnums.UpViewCount,
-    (state: History_CONTEXT_STATE_TYPE) => ({ ...state, viewCount: 1 })
+    () => ({ viewCount: 1 })
 );
