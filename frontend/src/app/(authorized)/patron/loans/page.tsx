@@ -8,24 +8,26 @@ import style from "./loans.module.css";
 import { LoanContext, LoanType } from "@/providers/loanProvider/context";
 import Utils from "@/utils";
 import Loan from "@/components/loan";
+import AuthContext from "@/providers/authProvider/context";
 
 
 const Page = (): React.ReactNode => {
     const { styles, cx } = useStyles();
+    const { authObj } = useContext(AuthContext);
     const { books } = useContext(BookContext);
     const { getLoansByPatron, loans: providerLoans, getLoans } = useContext(LoanContext);
 
     const [loans, setLoans] = useState<LoanType[]>([]);
 
     useEffect(() => {
-        const accessToken = Utils.getAccessToken();
+        const accessToken = authObj?.accessToken;
         if (accessToken && (!loans || loans.length === 0)) {
             getLoans();
         }   
     }, [])
 
     useEffect(() => {
-        const patronId = Utils.getUserId();
+        const patronId = authObj?.userId;
         setLoans(getLoansByPatron(patronId));   
     }, [providerLoans]);
 

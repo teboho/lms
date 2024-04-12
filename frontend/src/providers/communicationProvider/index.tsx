@@ -1,17 +1,20 @@
 "use client";
-import { useEffect, useReducer } from "react";
+import { useContext, useEffect, useMemo, useReducer } from "react";
 import { communicationReducer } from "./reducer";
 import CommunicationContext, { CommunicationContextStateInit, EmailType } from "./context";
 import { makeAxiosInstance } from "../authProvider";
 import Utils from "@/utils";
 import { message } from "antd";
 import { sendEmailErrorAction, sendEmailRequestAction, sendEmailSuccessAction } from "./actions";
+import AuthContext from "../authProvider/context";
 
 const CommunicationProvider = ({ children }: { children: React.ReactNode }) => {
     const [state, dispatch] = useReducer(communicationReducer, CommunicationContextStateInit);
+    const {authObj} = useContext(AuthContext);
     const [messageApi, contextHolder] = message.useMessage();
     
-    const accessToken = Utils.getAccessToken();
+    let accessToken = useMemo(() => authObj?.accessToken, []);
+    accessToken = useMemo(() => authObj?.accessToken, [authObj]);
     const instance = makeAxiosInstance(accessToken);
 
     useEffect(() => {

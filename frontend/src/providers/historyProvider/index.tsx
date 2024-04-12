@@ -1,6 +1,6 @@
 "use client"
 
-import { use, useEffect, useReducer } from "react";
+import { useContext, useEffect, useMemo, useReducer } from "react";
 import { HISTORY_CONTEXT_INITIAL_STATE, HistoryContext, HistoryType } from "./context";
 import { historyReducer } from "./reducer";
 import { makeAxiosInstance } from "../authProvider";
@@ -14,11 +14,13 @@ import {
     postHistorySuccessAction, 
     upViewCountAction 
 } from "./actions";
+import AuthContext from "../authProvider/context";
 
 export default function HistoryProvider({ children }: { children: React.ReactNode }) {
     const [state, dispatch] = useReducer(historyReducer, HISTORY_CONTEXT_INITIAL_STATE);
+    const { authObj } = useContext(AuthContext);
     
-    const accessToken = Utils.getAccessToken();
+    const accessToken = useMemo(() => authObj?.accessToken, [authObj]);
     const instance = makeAxiosInstance(accessToken);
 
     useEffect(() => {
@@ -108,7 +110,7 @@ export default function HistoryProvider({ children }: { children: React.ReactNod
     }
 
     function upViewCount() {
-        dispatch(upViewCountAction(state));
+        dispatch(upViewCountAction());
     }
 
     return (

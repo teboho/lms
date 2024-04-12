@@ -30,7 +30,7 @@ const Loan = ({ item }: { item: LoanType }): React.ReactNode => {
     }
 
     
-    function formatDate(_date: string) {
+    function formatDate(_date: string | Date) {
         let date = new Date(_date);
         let formattedDate = `${date.toLocaleDateString()}`;
 

@@ -12,12 +12,18 @@ import SearchResults from "@/components/searchResults";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Utils, { TokenProperies } from "@/utils";
+import CategoryContext from "@/providers/categoryProvider/context";
+import InventoryContext from "@/providers/inventoryProvider/context";
+import AuthorsContext from "@/providers/authorsProvider/context";
 
 const { Title } = Typography;
 
 const Page = (): React.ReactNode => {
-    const { userObj } = useContext(AuthContext);
-    const { books } = useContext(BookContext);
+    const { userObj, authObj } = useContext(AuthContext);
+    const { books, getAll: getAllBooks , searchDB } = useContext(BookContext);
+    const { getAll } = useContext(InventoryContext);
+    const { getAuthors } = useContext(AuthorsContext);
+    const { categories, getAllCategories } = useContext(CategoryContext);
     const { styles, cx } = useStyles();
     const { searchTerm } = useContext(BookContext);
     const { push } = useRouter();
@@ -25,9 +31,15 @@ const Page = (): React.ReactNode => {
     const user = useMemo(() => userObj, [userObj]);
 
     useEffect(() => {
-        const decodedToken = Utils.decodedToken();
+        const decodedToken = Utils.decodedToken(authObj?.accessToken);
         const roleKey = `${TokenProperies.role}`;
         const isPatron = decodedToken[roleKey] === "Patron";
+        if (authObj) {
+            getAllBooks();
+            getAll();
+            getAuthors();
+            getAllCategories();
+        }
         if (isPatron) {
             push(`/patron`);
         } else {

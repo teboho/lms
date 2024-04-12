@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useEffect, useReducer } from "react";
+import React, { useContext, useEffect, useMemo, useReducer } from "react";
 import AuthorsContext, { AuthorDataType, AuthorsContextStateInit, } from "./context";
 import { makeAxiosInstance } from "../authProvider";
 import { getAuthorErrorAction, getAuthorRequestAction, getAuthorsErrorAction, getAuthorsRequestAction, getAuthorsSuccessAction, getAuthorSuccessAction } from "./actions";
@@ -12,7 +12,8 @@ export default function AuthorsProvider({ children }: { children: React.ReactNod
     const [authorsState, dispatch] = useReducer(authorsReducer, AuthorsContextStateInit);
     const { authObj } = useContext(AuthContext);
 
-    const accessToken = Utils.getAccessToken();
+    let accessToken = useMemo(() => authObj?.accessToken, []);
+    accessToken = useMemo(() => authObj?.accessToken, [authObj]);
     const instance = makeAxiosInstance(accessToken);
 
     useEffect(() => {

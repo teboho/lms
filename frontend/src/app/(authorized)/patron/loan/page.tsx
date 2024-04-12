@@ -56,7 +56,7 @@ const Loan = (): React.ReactNode => {
         
         let userId = authObj?.userId;
         if (!userId) {
-            userId = parseInt(localStorage.getItem("userId"));
+            userId = authObj?.userId;
         }
         const _loan: LoanType = {
             patronId: userId,
@@ -72,7 +72,7 @@ const Loan = (): React.ReactNode => {
 
     return (
         <div className={cx(styles.padding)}>
-            <h1>Loan book checkout {params.get("bookId")}</h1>
+            <h1>Loan book checkout</h1>
     
             <Row gutter={16}>
                 <Col span={8}>

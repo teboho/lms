@@ -1,5 +1,5 @@
 "use client"
-import { useContext, useEffect, useReducer } from "react";
+import { useContext, useEffect, useMemo, useReducer } from "react";
 import { inventoryReducer } from "./reducer";
 import InventoryContext, { InventoryContextStateInit } from "./context";
 import { makeAxiosInstance } from "../authProvider";
@@ -20,7 +20,8 @@ export default function InventoryProvider({ children }: { children: React.ReactN
     const { authObj } = useContext(AuthContext);
     const { push } = useRouter();
 
-    const accessToken = Utils.getAccessToken();
+    let accessToken = useMemo(() => authObj?.accessToken, []);
+    accessToken = useMemo(() => authObj?.accessToken, [authObj]);
 
     const instance = makeAxiosInstance(accessToken);
 

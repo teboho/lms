@@ -17,7 +17,6 @@ export const baseURL = process.env.NEXT_PUBLIC_API_URL;
  * @returns an axios instance
  */
 export function makeAxiosInstance(accessToken?:string) {
-    if (!accessToken) accessToken = Utils.getAccessToken();
     return axios.create({
         baseURL: baseURL,
         headers: {
@@ -28,27 +27,29 @@ export function makeAxiosInstance(accessToken?:string) {
 }
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
-    const [authState, dispatch] = useReducer(authReducer, AuthContextStateInit);
+    const [state, dispatch] = useReducer(authReducer, AuthContextStateInit);
     const { push } = useRouter();
     const [messageApi, contextHolder] = message.useMessage();
     
-    let accessToken = useMemo(() => Utils.getAccessToken(), []);
+    let accessToken = useMemo(() => state.authObj?.accessToken, [state.authObj]);
+    let encryptedAccessToken = useMemo(() => state.authObj?.encryptedAccessToken, [state.authObj]);
+    let expireInSeconds = useMemo(() => state.authObj?.expireInSeconds, [state.authObj]);
+    let userId = useMemo(() => state.authObj?.userId, [state.authObj]);
     const instance = makeAxiosInstance(accessToken);
 
     useEffect(() => {
+        const sessionAuthObject: AUTH_RESPONSE_TYPE = {
+            accessToken: sessionStorage.getItem("accessToken"),
+            encryptedAccessToken: sessionStorage.getItem("encryptedAccessToken"),
+            expireInSeconds: Number.parseInt(sessionStorage.getItem("expireInSeconds")),
+            userId: Number.parseInt(sessionStorage.getItem("userId"))
+        }
         if (accessToken) {
-            dispatch(postAuthSuccessAction({
-                accessToken: accessToken,
-                encryptedAccessToken: localStorage.getItem("encryptedAccessToken"),
-                expireInSeconds: parseInt(localStorage.getItem("expireInSeconds")),
-                userId: parseInt(localStorage.getItem("userId"))
-            }));
+            dispatch(postAuthSuccessAction(sessionAuthObject));
 
-            const userId = parseInt(localStorage.getItem("userId"));
             getUserInfo(userId);
             
             console.log("AuthProvider mounts for the first time.");
-            accessToken = Utils.getAccessToken();
         }
     }, []);
 
@@ -79,7 +80,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     const getPatronInfo = async (id: number): Promise<UserType> => {
         const endpoint = `/api/services/app/User/Get?Id=${id}`;
 
-        const accessToken = Utils.getAccessToken(); 
+        // const accessToken = Utils.getAccessToken(); 
         const instance = makeAxiosInstance(accessToken);
 
         return instance.get(endpoint)
@@ -123,20 +124,24 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         }).then(res => res.json())
         .then(data => {
             if (data.success) {
-                const res = data.result;
+                const res: AUTH_RESPONSE_TYPE = data.result;
                 dispatch(postAuthSuccessAction(res));
 
-                localStorage.setItem("accessToken", res.accessToken);
-                localStorage.setItem("encryptedAccessToken", res.encryptedAccessToken);
-                localStorage.setItem("expireInSeconds", res.expireInSeconds.toString());
-                localStorage.setItem("userId", res.userId.toString());
+                // localStorage.setItem("accessToken", res.accessToken);
+                sessionStorage.setItem("accessToken", res.accessToken);
+                // localStorage.setItem("encryptedAccessToken", res.encryptedAccessToken);
+                sessionStorage.setItem("encryptedAccessToken", res.encryptedAccessToken);
+                // localStorage.setItem("expireInSeconds", res.expireInSeconds.toString())
+                sessionStorage.setItem("expireInSeconds", res.expireInSeconds.toString());
+                // localStorage.setItem("userId", res.userId.toString());
+                sessionStorage.setItem("userId", res.userId.toString());
 
                 getUserInfo(res.userId);
 
                 push("/");
             } else {
                 fail();
-                throw new Error();
+                dispatch(postAuthErrorAction());
             }
         })
         .catch(err => {
@@ -183,7 +188,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     function logout(): void {
         push("/login");
         
-        localStorage.clear();
+        sessionStorage.clear();
         messageApi.open({
             type: "success",
             content: "Logout Successful"
@@ -203,7 +208,6 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
      * @returns whether the user is logged in or not
      */
     function isLoggedIn(): boolean {
-        const accessToken = localStorage.getItem("accessToken");
         if (accessToken) {
             return true;
         }
@@ -215,9 +219,8 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
      * @returns the user id
      */
     function getUserId(): number {
-        if (authState.authObj) return authState.authObj.userId;
+        if (state.authObj) return state.authObj.userId;
         else {
-            const accessToken = localStorage.getItem("accessToken");
             if (accessToken) {
                 const decoded = jwtDecode(accessToken);
                 return Number.parseInt(decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"]);
@@ -226,15 +229,15 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     }
 
     function getProfilePic() {
-        return authState?.profilePic;
+        return state?.profilePic;
     }
 
     return (
         <AuthContext.Provider 
             value={{
-                authObj: authState?.authObj, 
-                registerObj: authState.registerObj,
-                userObj: authState.userObj, 
+                authObj: state.authObj, 
+                registerObj: state.registerObj,
+                userObj: state.userObj, 
                 login, 
                 logout, 
                 refreshToken, 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useReducer } from "react";
+import { useContext, useEffect, useMemo, useReducer } from "react";
 import { PreferenceContextStateInit, PreferenceContext, PreferenceType } from "./context";
 import { preferenceReducer } from "./reducer";
 import { makeAxiosInstance } from "../authProvider";
@@ -15,11 +15,14 @@ import {
     postPreferenceSuccessAction 
 } from "./actions";
 import { message } from "antd";
+import AuthContext from "../authProvider/context";
 
 export default function PreferenceProvider({ children }: { children: React.ReactNode }) {
     const [state, dispatch] = useReducer(preferenceReducer, PreferenceContextStateInit);
+    const { authObj } = useContext(AuthContext);
     
-    const accessToken = Utils.getAccessToken();
+    let accessToken = useMemo(() => authObj?.accessToken, []);
+    accessToken = useMemo(() => authObj?.accessToken, [authObj]);
     const instance = makeAxiosInstance(accessToken);
 
     useEffect(() => {

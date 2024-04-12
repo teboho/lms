@@ -68,7 +68,7 @@ export const postRegisterSuccessAction = createAction(
 
 export const getUserRequestAction = createAction(
     AuthActionEnums.GetUserRequest,
-    () => ({ isSuccess: false, isPending: true, isError: false, authObj: undefined, userObj: undefined })
+    () => ({ isSuccess: false, isPending: true, isError: false, userObj: undefined })
 );
 
 export const getUserSuccessAction = createAction(

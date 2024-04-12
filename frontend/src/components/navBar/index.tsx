@@ -1,5 +1,5 @@
 'use client';
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { Flex, Input, Button, Drawer, Avatar, App, Form, Upload } from "antd";
 import type { DrawerProps, MenuProps } from "antd";
 import  { useStyles } from "./styles";
@@ -19,7 +19,7 @@ const outItems: MenuProps['items'] = [
     {
         label: <Link href={"/"}>Home</Link>, 
         key: 'home',
-        icon: <Image src="/assets/images/LMS-logo1-transparent.png" width={30} height={30} alt="logo"/>
+        icon: <Image src="/assets/images/LMS-hq.png" width={30} height={30} alt="logo"/>
     },
     {
         label: <Link href={"/login"}>Login</Link>,
@@ -47,7 +47,8 @@ const NavBar = (): React.ReactNode => {
     const [fileList, setFileList] = useState([]);
     const [uploading, setUploading] = useState(false);
 
-    const instance = makeAxiosInstance();
+    const accessToken = useMemo(() => authObj?.accessToken, [authObj]);
+    const instance = makeAxiosInstance(accessToken);
   
     useEffect(() => {
         if (userFile) {
@@ -57,8 +58,6 @@ const NavBar = (): React.ReactNode => {
     }, []);
 
     useEffect(() => {
-        console.log("user is", authObj);
-
         if (authObj && authObj.userId) {
             getBridgeByUser(authObj.userId);
         }
@@ -177,9 +176,9 @@ const NavBar = (): React.ReactNode => {
         });
     }
 
-    const accessToken = localStorage.getItem("accessToken");
+
     const onSearch: SearchProps["onSearch"] = (value, _e, info) => {       
-        const decodedToken = Utils.decodedToken();
+        const decodedToken = Utils.decodedToken(accessToken);
         const roleKey = `${TokenProperies.role}`;
         const isPatron = decodedToken[roleKey] === "Patron";
 

@@ -1,32 +1,30 @@
 "use client";
-import { ReactNode, useContext, useEffect, useMemo, useState } from "react";
-import { Flex, Layout, Input, List, Typography, Select, message } from "antd";
-import type { SearchProps } from "antd/es/input";
-const { Content, Sider } = Layout;
+import { useContext, useEffect, useMemo, useState } from "react";
+import { Layout, Input, Typography } from "antd";
+const { Content } = Layout;
 const { Search } = Input;
 import {useStyles} from "./styles";
 import withAuth from "@/hocs/withAuth";
 import BookContext, { BookDataType } from "@/providers/bookProvider/context";
-import SearchResults from "@/components/searchResults";
 import GoogleSearchResults from "@/components/googleSearchResults";
-import Utils, { TokenProperies } from "@/utils";
-import { PreferenceContext, PreferenceType } from "@/providers/preferenceProvider/context";
 import CategoryContext from "@/providers/categoryProvider/context";
 import { HistoryContext, HistoryType } from "@/providers/historyProvider/context";
+import AuthContext from "@/providers/authProvider/context";
+import Utils from "@/utils";
 
 const Page = (): React.ReactNode => {
+    const { authObj } = useContext(AuthContext);
     const { getAll, search, getLocalBook } = useContext(BookContext);
-    const { getPreferenceByPatron } = useContext(PreferenceContext);
     const { getCategory, getAllCategories } = useContext(CategoryContext);
     const { historyData, getHistoryData } =  useContext(HistoryContext);
     const [categories, setCategories] = useState([]);
     const [books, setBooks] = useState([]);
-    const [googleResults, setGoogleResults] = useState([]);
     
     const { styles, cx } = useStyles();
-    const accessToken = Utils.getAccessToken(); // localStorage.getItem("accessToken");
 
+    let accessToken = useMemo(() => authObj?.accessToken, [authObj]);
     useEffect(() => {
+
         console.log("AllBooks useEffect");     
 
         if (accessToken) { 
@@ -34,6 +32,8 @@ const Page = (): React.ReactNode => {
             getAllCategories();
             getAll();
         }
+        console.log("AllBooks useEffect end");
+        console.log("check this", authObj);
     }, []);
 
     useEffect(() => {

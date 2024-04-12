@@ -70,7 +70,7 @@ export default function Register(): React.ReactNode {
      */
     const onComplete = () => {
         const formstuff = form.getFieldValue("user");
-        if (formstuff.password.password === formstuff.password.password) {
+        if (formstuff.password.password !== formstuff.password.confirm) {
             alert("Your password is not the same.")
             return;
         }

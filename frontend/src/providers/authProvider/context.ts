@@ -2,10 +2,10 @@
 import { createContext } from "react";
 
 export interface AUTH_RESPONSE_TYPE {
-    "accessToken": string;
-    "encryptedAccessToken": string;
-    "expireInSeconds": number;
-    "userId": number;
+    accessToken: string;
+    encryptedAccessToken: string;
+    expireInSeconds: number;
+    userId: number;
 }
 
 export interface REGISTER_RESPONSE_TYPE {
@@ -30,7 +30,6 @@ export interface UserType {
     roleNames?: string[],
     fullName?: string
 }
-
 
 export interface AUTH_REQUEST_TYPE {
     "userNameOrEmailAddress": string;
@@ -114,9 +113,9 @@ export const AuthContextStateInit: AuthContextStateType = {
 
 // auth value type
 export interface AuthValueType {
-    authObj?: AUTH_RESPONSE_TYPE | undefined;
-    registerObj?: REGISTER_RESPONSE_TYPE | undefined;
-    userObj: UserType | undefined;
+    authObj?: AUTH_RESPONSE_TYPE;
+    registerObj?: REGISTER_RESPONSE_TYPE;
+    userObj?: UserType;
     login: (authObj: AUTH_REQUEST_TYPE) => void;
     logout: () => void;
     refreshToken: () => void;

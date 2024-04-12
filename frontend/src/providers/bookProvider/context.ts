@@ -1,5 +1,4 @@
 "use client";
-import { Preferences } from "@/app/(authorized)/patron/preferences-survey/page";
 import { createContext } from "react";
 import { CATEGORY_INIT, CategoryType } from "../categoryProvider/context";
 import { AuthorDataType, AuthorInitialData } from "../authorsProvider/context";
