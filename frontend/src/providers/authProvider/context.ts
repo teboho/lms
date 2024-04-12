@@ -31,7 +31,6 @@ export interface UserType {
     fullName?: string
 }
 
-
 export interface AUTH_REQUEST_TYPE {
     "userNameOrEmailAddress": string;
     "password": string;
@@ -114,9 +113,9 @@ export const AuthContextStateInit: AuthContextStateType = {
 
 // auth value type
 export interface AuthValueType {
-    authObj?: AUTH_RESPONSE_TYPE | undefined;
-    registerObj?: REGISTER_RESPONSE_TYPE | undefined;
-    userObj: UserType | undefined;
+    authObj?: AUTH_RESPONSE_TYPE;
+    registerObj?: REGISTER_RESPONSE_TYPE;
+    userObj?: UserType;
     login: (authObj: AUTH_REQUEST_TYPE) => void;
     logout: () => void;
     refreshToken: () => void;

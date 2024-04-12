@@ -19,7 +19,7 @@ const { Option } = Select;
 
 const Page = (): React.ReactNode => {
     const { userObj, authObj } = useContext(AuthContext);
-    const { books, getAll: getAllBooks , searchTerm, searchDB } = useContext(BookContext);
+    const { books , searchTerm, searchDB } = useContext(BookContext);
     const { getAll } = useContext(InventoryContext);
     const { categories, getAllCategories } = useContext(CategoryContext);
     const { getAuthors } = useContext(AuthorsContext);
@@ -40,23 +40,23 @@ const Page = (): React.ReactNode => {
         if (search) {
             console.log("searching for...", search);
             searchDB(search);
-        } else {
-            getAllBooks();
-        }
+        } 
 
-        getAuthors();
-        getAllCategories();
         setCurrentBooks(books);
         setIsLoading(true);
-
-
-        getBridgeByUser(Utils.getUserId());
-
-        // if (userFile) {
-        //     console.log("userFile...", userFile);
-        //     getStoredFiles();
-        // }
+        
+        if (userFile) {
+            console.log("userFile...", userFile);
+            getStoredFiles();
+        }
     }, []);
+
+    useEffect(() => {
+        console.log("authObj has changed", authObj);
+        if (authObj) {
+            getBridgeByUser(authObj.userId);
+        }
+    }, [authObj]);
 
     useEffect(() => {        
         if (!books) {

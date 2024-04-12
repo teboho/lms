@@ -28,11 +28,11 @@ export function makeAxiosInstance(accessToken?:string) {
 }
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
-    const [authState, dispatch] = useReducer(authReducer, AuthContextStateInit);
+    const [state, dispatch] = useReducer(authReducer, AuthContextStateInit);
     const { push } = useRouter();
     const [messageApi, contextHolder] = message.useMessage();
     
-    let accessToken = useMemo(() => Utils.getAccessToken(), []);
+    let accessToken = useMemo(() => state.authObj?.accessToken, [state.authObj]);
     const instance = makeAxiosInstance(accessToken);
 
     useEffect(() => {
@@ -48,7 +48,6 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
             getUserInfo(userId);
             
             console.log("AuthProvider mounts for the first time.");
-            accessToken = Utils.getAccessToken();
         }
     }, []);
 
@@ -123,7 +122,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         }).then(res => res.json())
         .then(data => {
             if (data.success) {
-                const res = data.result;
+                const res: AUTH_RESPONSE_TYPE = data.result;
                 dispatch(postAuthSuccessAction(res));
 
                 localStorage.setItem("accessToken", res.accessToken);
@@ -136,7 +135,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
                 push("/");
             } else {
                 fail();
-                throw new Error();
+                dispatch(postAuthErrorAction());
             }
         })
         .catch(err => {
@@ -215,7 +214,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
      * @returns the user id
      */
     function getUserId(): number {
-        if (authState.authObj) return authState.authObj.userId;
+        if (state.authObj) return state.authObj.userId;
         else {
             const accessToken = Utils.getAccessToken();
             if (accessToken) {
@@ -226,15 +225,15 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     }
 
     function getProfilePic() {
-        return authState?.profilePic;
+        return state?.profilePic;
     }
 
     return (
         <AuthContext.Provider 
             value={{
-                authObj: authState?.authObj, 
-                registerObj: authState.registerObj,
-                userObj: authState.userObj, 
+                authObj: state.authObj, 
+                registerObj: state.registerObj,
+                userObj: state.userObj, 
                 login, 
                 logout, 
                 refreshToken, 

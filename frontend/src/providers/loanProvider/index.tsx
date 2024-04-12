@@ -1,5 +1,5 @@
 "use client"
-import { useContext, useEffect, useReducer, useState } from "react";
+import { useContext, useEffect, useMemo, useReducer, useState } from "react";
 import { LoanContext, LoanType, LoanContextStateInit } from "./context";
 import { clearLoanAction, getLoanErrorAction, getLoanRequestAction, getLoansErrorAction, getLoansRequestAction, getLoansSuccessAction, getLoanSuccessAction, postLoanErrorAction, postLoanRequestAction, postLoanSuccessAction, putLoanErrorAction, putLoanRequestAction, putLoanSuccessAction } from "./actions";
 import { loanReducer } from "./reducer";
@@ -8,16 +8,21 @@ import Utils from "@/utils";
 import { message } from "antd";
 import { jwtDecode } from "jwt-decode";
 import CommunicationContext, { EmailType } from "../communicationProvider/context";
+import AuthContext from "../authProvider/context";
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function LoanProvider({ children }: { children: React.ReactNode }) {
     const [state, dispatch] = useReducer(loanReducer, LoanContextStateInit);
     const [messageApi, contextHolder] = message.useMessage();
-    const accessToken = Utils.getAccessToken();
-    const instance = makeAxiosInstance(accessToken);
     const [emailAdd, setEmailAdd] = useState(null);
     const { sendEmail } = useContext(CommunicationContext);
+    const { authObj } = useContext(AuthContext);
+    
+    let accessToken = useMemo(() => {
+        return authObj?.accessToken;
+    }, [authObj]);
+    let instance = useMemo(() => makeAxiosInstance(accessToken), [accessToken]);
 
     useEffect(() => {
         console.log("Loan Provider is mounted for the first time.");

@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useReducer, useState } from "react";
+import { useContext, useEffect, useReducer, useState } from "react";
 import { bookReducer } from "./reducer";
 import BookContext, { BookContextStateInit } from "./context";
 import { makeAxiosInstance } from "../authProvider";
@@ -16,9 +16,11 @@ import { getBooksErrorAction, getBooksRequestAction, getBooksSuccessAction,
 import { CreateBookType } from "./types";
 import { message } from "antd";
 import Utils from "@/utils";
+import AuthContext from "../authProvider/context";
 
 export default function BookProvider({ children }: { children: React.ReactNode }) {
     // we will make the state with the reducers
+    const { authObj } = useContext(AuthContext);
     const [bookState, dispatch] = useReducer(bookReducer, BookContextStateInit);
     const [messageApi, contextHolder] = message.useMessage();
     const [loading, setLoading] = useState(false);
@@ -26,11 +28,14 @@ export default function BookProvider({ children }: { children: React.ReactNode }
     const accessToken = Utils.getAccessToken();
 
     useEffect(() => {
-        if (accessToken) {
-            getAll();
-        }
         console.log("Book Provider is mounted for first time.")
     }, []);
+
+    useEffect(() => {
+        if (authObj && authObj?.accessToken.length > 0) {
+            getAll();
+        }
+    }, [authObj]);
 
     const instance = makeAxiosInstance(accessToken);
 
