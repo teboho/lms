@@ -11,16 +11,20 @@ import InventoryContext from "@/providers/inventoryProvider/context";
 import AuthorsContext from "@/providers/authorsProvider/context";
 import Image from "next/image";
 import { useSearchParams, usePathname } from "next/navigation";
+import { useStoredFileActions, useStoreFileState } from "@/providers/storedFileProvider";
+import Utils from "@/utils";
 
 const { Content } = Layout;
 const { Option } = Select;
 
 const Page = (): React.ReactNode => {
-    const { userObj } = useContext(AuthContext);
+    const { userObj, authObj } = useContext(AuthContext);
     const { books, getAll: getAllBooks , searchTerm, searchDB } = useContext(BookContext);
     const { getAll } = useContext(InventoryContext);
     const { categories, getAllCategories } = useContext(CategoryContext);
     const { getAuthors } = useContext(AuthorsContext);
+    const { getBridgeByUser, getStoredFiles } = useStoredFileActions();
+    const { userFile } = useStoreFileState();
     const { styles, cx } = useStyles();
     const [isLoading, setIsLoading] = useState(true);
     const [currentBooks, setCurrentBooks] = useState([]);
@@ -44,6 +48,14 @@ const Page = (): React.ReactNode => {
         getAllCategories();
         setCurrentBooks(books);
         setIsLoading(true);
+
+
+        getBridgeByUser(Utils.getUserId());
+
+        // if (userFile) {
+        //     console.log("userFile...", userFile);
+        //     getStoredFiles();
+        // }
     }, []);
 
     useEffect(() => {        
@@ -120,7 +132,10 @@ const Page = (): React.ReactNode => {
                     </Select>    
                 </div>        
             </Flex>
-            {isLoading && <Image src={"/assets/images/book-op.gif"} alt="book" width={350} height={350} style={{margin: "0 auto"}} />}
+            {isLoading && (<Flex justify="center" align="center">
+                <Image src={"/assets/images/book-op.gif"} alt="book" width={350} height={350} style={{margin: "0 auto"}} />
+            </Flex>
+            )}
             {memoBooks && <SearchResults books={memoBooks} searchTerm={searchTerm} /> }
         </Content>
     );

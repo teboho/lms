@@ -14,7 +14,6 @@ import Utils, { TokenProperies } from "@/utils";
 import { useRouter, usePathname } from "next/navigation";
 import { makeAxiosInstance } from "@/providers/authProvider";
 import { useStoredFileActions, useStoreFileState } from "@/providers/storedFileProvider";
-import { URL } from "url";
 
 const outItems: MenuProps['items'] = [
     {
@@ -36,7 +35,7 @@ const { Search } = Input;
 
 const NavBar = (): React.ReactNode => {
     const { logout, userObj, authObj } = useContext(AuthContext);
-    const { getStoredFiles, getBridgeByUser, postUserFile } = useStoredFileActions();
+    const { getStoredFiles, getBridgeByUser, postUserFile, getStoredFile } = useStoredFileActions();
     const { userFile } = useStoreFileState();
     const { styles, cx } = useStyles();
     const [searchTerm, setSearchTerm] = useState("");
@@ -50,7 +49,6 @@ const NavBar = (): React.ReactNode => {
 
     const instance = makeAxiosInstance();
   
-
     useEffect(() => {
         if (userFile) {
             console.log("userFile...", userFile);
