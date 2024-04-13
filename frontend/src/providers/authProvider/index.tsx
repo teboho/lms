@@ -1,12 +1,11 @@
 "use client"
-import { useEffect, useMemo, useReducer } from "react";
+import { useEffect, useMemo, useReducer, useRef } from "react";
 import AuthContext, { AuthContextStateInit, AUTH_REQUEST_TYPE, AUTH_RESPONSE_TYPE, REGISTER_REQUEST_TYPE, UserType } from "./context";
 import { authReducer } from "./reducer";
 import { clearAuthAction, getUserErrorAction, getUserRequestAction, getUserSuccessAction, postAuthErrorAction, postAuthRequestAction, postAuthSuccessAction } from "./actions";
 import { useRouter } from 'next/navigation';
 import { message } from "antd";
 import axios from "axios";
-import Utils from "@/utils";
 import { jwtDecode } from "jwt-decode";
 
 export const baseURL = process.env.NEXT_PUBLIC_API_URL;
@@ -32,26 +31,42 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     const [messageApi, contextHolder] = message.useMessage();
     
     let accessToken = useMemo(() => state.authObj?.accessToken, [state.authObj]);
-    let encryptedAccessToken = useMemo(() => state.authObj?.encryptedAccessToken, [state.authObj]);
-    let expireInSeconds = useMemo(() => state.authObj?.expireInSeconds, [state.authObj]);
     let userId = useMemo(() => state.authObj?.userId, [state.authObj]);
     const instance = makeAxiosInstance(accessToken);
 
     useEffect(() => {
+        accessToken = localStorage.getItem("accessToken");
+        userId = Number.parseInt(localStorage.getItem("userId"));
         const sessionAuthObject: AUTH_RESPONSE_TYPE = {
-            accessToken: sessionStorage.getItem("accessToken"),
-            encryptedAccessToken: sessionStorage.getItem("encryptedAccessToken"),
-            expireInSeconds: Number.parseInt(sessionStorage.getItem("expireInSeconds")),
-            userId: Number.parseInt(sessionStorage.getItem("userId"))
+            accessToken: localStorage.getItem("accessToken"),
+            encryptedAccessToken: localStorage.getItem("encryptedAccessToken"),
+            expireInSeconds: Number.parseInt(localStorage.getItem("expireInSeconds")),
+            userId: Number.parseInt(localStorage.getItem("userId"))
         }
+
         if (accessToken) {
             dispatch(postAuthSuccessAction(sessionAuthObject));
 
             getUserInfo(userId);
             
             console.log("AuthProvider mounts for the first time.");
-        }
+        } 
     }, []);
+
+    useEffect(() => {
+        if (state.authObj?.accessToken) {
+            localStorage.setItem("accessToken", state.authObj.accessToken);
+            localStorage.setItem("encryptedAccessToken", state.authObj.encryptedAccessToken);
+            localStorage.setItem("expireInSeconds", state.authObj.expireInSeconds.toString());
+            localStorage.setItem("userId", state.authObj.userId.toString());
+        }
+    }, [state.authObj]);
+
+    useEffect(() => {
+        if (!state.authObj) {
+            localStorage.clear();
+        }
+    }, [state.authObj]);
 
     const getUserInfo = (id: number): void => {
         const endpoint = `/api/services/app/User/Get?Id=${id}`;
@@ -126,15 +141,6 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
             if (data.success) {
                 const res: AUTH_RESPONSE_TYPE = data.result;
                 dispatch(postAuthSuccessAction(res));
-
-                // localStorage.setItem("accessToken", res.accessToken);
-                sessionStorage.setItem("accessToken", res.accessToken);
-                // localStorage.setItem("encryptedAccessToken", res.encryptedAccessToken);
-                sessionStorage.setItem("encryptedAccessToken", res.encryptedAccessToken);
-                // localStorage.setItem("expireInSeconds", res.expireInSeconds.toString())
-                sessionStorage.setItem("expireInSeconds", res.expireInSeconds.toString());
-                // localStorage.setItem("userId", res.userId.toString());
-                sessionStorage.setItem("userId", res.userId.toString());
 
                 getUserInfo(res.userId);
 

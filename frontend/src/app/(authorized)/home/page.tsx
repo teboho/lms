@@ -34,7 +34,7 @@ const Page = (): React.ReactNode => {
         const decodedToken = Utils.decodedToken(authObj?.accessToken);
         const roleKey = `${TokenProperies.role}`;
         const isPatron = decodedToken[roleKey] === "Patron";
-        if (authObj) {
+        if (authObj?.accessToken) {
             getAllBooks();
             getAll();
             getAuthors();
