@@ -53,11 +53,11 @@ Possibly
 
 ## Use Cases
 
-![Use Cases](/assets/UCD.svg) *Use Cases (Roughly)*
+![Use Cases](assets/UCD.svg) *Use Cases (Roughly)*
 
 ## Domain Model
 
-![Domain Model](/assets/ERD_aka_Domain_Model.svg)
+![Domain Model](assets/ERD_aka_Domain_Model.svg)
 
 To be expanded
 
